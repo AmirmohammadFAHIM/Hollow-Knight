@@ -5,13 +5,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PointMapObject;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
 import com.mygame.game.controller.GameInputProcessor;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.map.MapManager;
 
 public class GameView implements Screen {
     private GameController game;
+    private RoomView currentRoomView;
     private VesselRender vesselRender;
     private SpriteBatch  batch;
     private OrthographicCamera  camera;
@@ -23,9 +29,20 @@ public class GameView implements Screen {
     @Override
     public void show() {
 
-        game = new GameController(new Game());
+        try {
+            MapManager.loadChunk("CityOfTears");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+           game = new GameController(new Game() /* here can be the idea for saves */);
+       }catch (Exception e){
+           System.out.println(e.getMessage());
+           return;
+       }
         GameInputProcessor processor = new GameInputProcessor(game.getGame() , Game.getVessel());
         Gdx.input.setInputProcessor(processor);
+        currentRoomView = new RoomView(MapManager.loadRoom(0));
 
 
 
@@ -33,7 +50,13 @@ public class GameView implements Screen {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(1028, 960,camera);
-        camera.position.set( 80 , 60 , 0);
+        PointMapObject spawnPoint = (PointMapObject) currentRoomView.getMap().getLayers().get("Collision").
+            getProperties().get("spawnPoint");
+        float x = spawnPoint.getProperties().get("x" , Float.class);
+        float y = spawnPoint.getProperties().get("y" , Float.class);
+        camera.position.set( x , y , 0);
+        Game.getVessel().setX(x);
+        Game.getVessel().setY(y);
         camera.update();
       //  batch.setProjectionMatrix(camera.combined);
         //viewport.setScreenPosition(0 , 0);
@@ -52,6 +75,8 @@ public class GameView implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         vesselRender.render(batch , stateTime);
+        camera.position.set( Game.getVessel().getX() , Game.getVessel().getY(), 0);
+        camera.update();
         batch.end();
     }
 

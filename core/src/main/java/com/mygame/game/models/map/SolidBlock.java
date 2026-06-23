@@ -6,12 +6,16 @@ import com.badlogic.gdx.math.Rectangle;
 public class SolidBlock {
     private Rectangle block;
     private boolean lethal;
-    private boolean deadly;
 
-    SolidBlock(RectangleMapObject block , boolean lethal, boolean deadly){
+
+    SolidBlock(RectangleMapObject block , boolean lethal){
         this.block = block.getRectangle();
         this.lethal = lethal;
-        this.deadly = deadly;
+    }
+
+    public SolidBlock(RectangleMapObject block){
+        this.block = block.getRectangle();
+        this.lethal = block.getProperties().get("lethal", Boolean.class);
     }
 
     public Rectangle getBlock() {
@@ -30,11 +34,4 @@ public class SolidBlock {
         this.lethal = lethal;
     }
 
-    public boolean isDeadly() {
-        return deadly;
-    }
-
-    public void setDeadly(boolean deadly) {
-        this.deadly = deadly;
-    }
 }

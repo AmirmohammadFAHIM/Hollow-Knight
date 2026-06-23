@@ -8,12 +8,16 @@ public class GameController {
     private GameInputProcessor  gameInputProcessor;
     public GameController(Game game) {
         this.game = game;
+        gameInputProcessor = new GameInputProcessor(game , Game.getVessel());
+
     }
 
 
     public void Update(float state_time ,float delta){
 
+        game.getCurrent_room().checkCollisions();
         Game.getVessel().update(state_time ,delta);
+
       if(Game.getVessel().getState() != States.DASH)  gameInputProcessor.processInput(delta);
     }
 

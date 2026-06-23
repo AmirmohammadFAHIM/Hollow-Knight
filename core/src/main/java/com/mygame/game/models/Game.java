@@ -1,17 +1,19 @@
 package com.mygame.game.models;
 
 import com.mygame.game.models.map.Chunk;
+import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
 
 public class Game {
     private static Vessel vessel;
-    private Chunk current_chunk;
-    private Room current_room;
+    private static Chunk current_chunk;
+    private static Room current_room;
 
-    public  Game() {
+    public  Game() throws Exception{
         vessel = new Vessel();
         current_chunk = new Chunk();
-        current_room = new Room(); // It will be replaced by a loading method to load the map
+        current_room = new Room(MapManager.loadRoom(0).getLayers() , "CityOfTears");
+
     }
     public static Vessel getVessel() {
         return vessel;

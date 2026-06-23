@@ -1,34 +1,34 @@
 package com.mygame.game.models;
 
 
+import com.badlogic.gdx.math.Rectangle;
 import com.mygame.game.view.VesselRender;
 
 public class Vessel {
-    private static float vertical_speed = 0.1f;
-    private static float horizontal_speed = 0.1f;
+    /// ---------------STATICS-----------------
+    private static float vertical_speed = 20f;
+    private static float horizontal_speed = 20f;
     private static float dash_speed = 0.1f;
     private static float dash_cooldown = 1f;
-    private float remaining_dash_time;
-    private float x = 100;
-    private float y = 100;
-    private float velocity ;
+    /// ---------------FIELDS------------------------
+    private float x ;
+    private float y ;
+    private float velocityY ;
+    private float velocityX ;
+    private Rectangle bounds;
     private float width;
     private float height;
+    private float remaining_dash_time;
     private float hp;
+    /// -----------BOOLEANS--------------------
     private boolean is_ground = true;
     private boolean right = false;
     private boolean double_jump = true;
+    /// -------------STATES--------------------
     private States state = States.IDLE;
     private States previous_state = States.IDLE;
 
 
-    public float getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(float velocity) {
-        this.velocity = velocity;
-    }
 
     public static float getDash_speed() {
         return dash_speed;
@@ -200,12 +200,34 @@ public class Vessel {
 
 
     private void update_physics(float delta){
-        if(state == States.RUNNING){
-           if(right) x += horizontal_speed * delta;
-           else x -= horizontal_speed * delta;
-        }
-        else if(state == States.DASH){
-            x += dash_speed * delta;
-        }
+        x += right ? velocityX * delta : velocityX * delta * -1;
+        y += velocityY * delta;
+        bounds.x = x;
+        bounds.y = y;
+    }
+
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocityY = velocityY;
+    }
+
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(float velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
     }
 }

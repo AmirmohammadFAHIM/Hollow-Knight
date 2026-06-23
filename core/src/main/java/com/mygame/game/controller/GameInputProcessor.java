@@ -75,6 +75,12 @@ public class GameInputProcessor extends InputAdapter {
                 vessel.setState(States.IDLE);
             }
         }
+        else if(keycode ==  Input.Keys.A ||
+            keycode ==  Input.Keys.D){
+            if(vessel.isIs_ground()){
+                vessel.setState(States.IDLE);
+            }
+        }
        return super.keyUp(keycode);
     }
 
