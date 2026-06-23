@@ -86,14 +86,14 @@ public class MainMenuView implements Screen {
             parameter.minFilter = Texture.TextureFilter.Linear;
             style.font =  generator.generateFont(parameter);
             style.downFontColor = Color.CYAN;
-            style.overFontColor =  Color.GRAY;
+            //style.overFontColor =  Color.GRAY;
             //style.font = new BitmapFont(Gdx.files.internal("menus/CENTURY.TTF"));
 
 
 
             // Label label = new Label("Load Game" , null , "Century");
 
-            TextButton newGame  = new TextButton("New Game", style);
+            TextButton newGame  = new TextButton("Start Game", style);
             newGame.addListener(new  ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {

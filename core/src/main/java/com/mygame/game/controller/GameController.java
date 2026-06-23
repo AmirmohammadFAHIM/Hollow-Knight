@@ -6,19 +6,20 @@ import com.mygame.game.models.States;
 public class GameController {
     private Game game;
     private GameInputProcessor  gameInputProcessor;
-    public GameController(Game game) {
+    public GameController(Game game , GameInputProcessor processor) {
         this.game = game;
-        gameInputProcessor = new GameInputProcessor(game , Game.getVessel());
+        this.gameInputProcessor = processor;
 
     }
 
 
     public void Update(float state_time ,float delta){
 
-        game.getCurrent_room().checkCollisions();
         Game.getVessel().update(state_time ,delta);
+        if(Game.getVessel().getState() != States.DASH)  gameInputProcessor.processInput(delta);
 
-      if(Game.getVessel().getState() != States.DASH)  gameInputProcessor.processInput(delta);
+        game.getCurrent_room().checkCollisions();
+
     }
 
     public Game getGame() {

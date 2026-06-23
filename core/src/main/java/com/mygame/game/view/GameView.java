@@ -34,15 +34,15 @@ public class GameView implements Screen {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        try {
-           game = new GameController(new Game() /* here can be the idea for saves */);
-       }catch (Exception e){
-           System.out.println(e.getMessage());
-           return;
-       }
-        GameInputProcessor processor = new GameInputProcessor(game.getGame() , Game.getVessel());
+        GameInputProcessor processor = new GameInputProcessor(Game.getVessel());
+        game = new GameController(new Game() /* here can be the idea for saves */ ,
+            processor);
+        currentRoomView = new RoomView(game.getGame().getCurrent_room());
+        processor.setVessel(Game.getVessel());
         Gdx.input.setInputProcessor(processor);
-        currentRoomView = new RoomView(MapManager.loadRoom(0));
+
+
+            /// here , a vessel is initialized , a room is initialized
 
 
 
@@ -50,13 +50,14 @@ public class GameView implements Screen {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(1028, 960,camera);
-        PointMapObject spawnPoint = (PointMapObject) currentRoomView.getMap().getLayers().get("Collision").
-            getProperties().get("spawnPoint");
+        PointMapObject spawnPoint = (PointMapObject) currentRoomView.getRoom().getMap().getLayers().get("Collisions").
+            getObjects().get("SpawnPoint");
         float x = spawnPoint.getProperties().get("x" , Float.class);
         float y = spawnPoint.getProperties().get("y" , Float.class);
         camera.position.set( x , y , 0);
         Game.getVessel().setX(x);
         Game.getVessel().setY(y);
+        Game.getVessel().updateRect();
         camera.update();
       //  batch.setProjectionMatrix(camera.combined);
         //viewport.setScreenPosition(0 , 0);
@@ -74,6 +75,7 @@ public class GameView implements Screen {
         /// ---------------RENDERING------------------------
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        currentRoomView.render(camera);
         vesselRender.render(batch , stateTime);
         camera.position.set( Game.getVessel().getX() , Game.getVessel().getY(), 0);
         camera.update();

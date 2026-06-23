@@ -2,6 +2,7 @@ package com.mygame.game.models.map;
 
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygame.game.models.Game;
@@ -11,12 +12,14 @@ import java.util.ArrayList;
 public class Room {
     private String name;
     private ArrayList<SolidBlock> blocks;
-    private MapLayers layers;
+    private TiledMap  map;
 
-    public Room( MapLayers layers , String name){
+
+    public Room(TiledMap map , String name){
         this.name = name;
         blocks = new ArrayList<>();
-        MapManager.setBlocks(layers , this);
+        this.map = map;
+        MapManager.setBlocks(map , this);
     }
 
 
@@ -50,5 +53,25 @@ public class Room {
 
     public ArrayList<SolidBlock> getBlocks() {
         return blocks;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBlocks(ArrayList<SolidBlock> blocks) {
+        this.blocks = blocks;
+    }
+
+    public TiledMap getMap() {
+        return map;
+    }
+
+    public void setMap(TiledMap map) {
+        this.map = map;
     }
 }

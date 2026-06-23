@@ -16,9 +16,10 @@ public class MapManager {
     public static TiledMap loadChunk(String chunk) throws Exception{
         MapManager.chunk = new ArrayList<>();
         TmxMapLoader loader = new TmxMapLoader();
-            for (int i = 0; i < 3; i++) {
-                MapManager.chunk.add(loader.load("maps/" + chunk + i + ".tmx"));
+            for (int i = 0; i < 1; i++) {
+                MapManager.chunk.add(loader.load("maps/" + chunk +i+ "/" + chunk + i + ".tmx"));
             }
+        System.out.println(MapManager.chunk.get(0));
         return MapManager.chunk.getFirst();
     }
 
@@ -28,8 +29,8 @@ public class MapManager {
 
 
 
-    public static void setBlocks(MapLayers layers , Room room){
-        for (MapObject obj : layers.get("Collision").getObjects().getByType(
+    public static void setBlocks(TiledMap map , Room room){
+        for (MapObject obj : map.getLayers().get("Collisions").getObjects().getByType(
             RectangleMapObject.class
         )){
 

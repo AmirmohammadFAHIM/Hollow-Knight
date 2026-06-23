@@ -9,10 +9,10 @@ public class Game {
     private static Chunk current_chunk;
     private static Room current_room;
 
-    public  Game() throws Exception{
+    public  Game(){
         vessel = new Vessel();
         current_chunk = new Chunk();
-        current_room = new Room(MapManager.loadRoom(0).getLayers() , "CityOfTears");
+        current_room = new Room(MapManager.loadRoom(0) , "CityOfTears");
 
     }
     public static Vessel getVessel() {

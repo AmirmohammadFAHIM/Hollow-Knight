@@ -15,7 +15,7 @@ public class SolidBlock {
 
     public SolidBlock(RectangleMapObject block){
         this.block = block.getRectangle();
-        this.lethal = block.getProperties().get("lethal", Boolean.class);
+      //  this.lethal = block.getProperties().get("lethal", Boolean.class);
     }
 
     public Rectangle getBlock() {

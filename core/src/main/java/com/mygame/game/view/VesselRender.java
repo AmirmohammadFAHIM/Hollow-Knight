@@ -1,17 +1,20 @@
 package com.mygame.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.Vessel;
 
 public class VesselRender {
     private Vessel vessel;
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Animation<TextureAtlas.AtlasRegion> idle;
     private Animation<TextureAtlas.AtlasRegion> start_run;
     private Animation<TextureAtlas.AtlasRegion> run;
@@ -78,9 +81,14 @@ public class VesselRender {
 
     public void render(SpriteBatch batch , float stateTime){
 
+
        // vessel.update(Gdx.graphics.getDeltaTime());
         update_rendering(Gdx.graphics.getDeltaTime());
-        batch.draw(currentAnimation.getKeyFrame(stateTime,true) , vessel.getX() , vessel.getY());
+
+        TextureAtlas.AtlasRegion frame = getCurrentAnimation().getKeyFrame(stateTime , true);
+        if(vessel.isRight() && !frame.isFlipX()) frame.flip(true,false);
+        else if(!vessel.isRight()  && frame.isFlipX()) frame.flip(false,true);
+        batch.draw(frame , vessel.getX() , vessel.getY());
 
     }
 

@@ -6,9 +6,9 @@ import com.mygame.game.view.VesselRender;
 
 public class Vessel {
     /// ---------------STATICS-----------------
-    private static float vertical_speed = 20f;
-    private static float horizontal_speed = 20f;
-    private static float dash_speed = 0.1f;
+    private static float vertical_speed = 150f;
+    private static float horizontal_speed = 250f;
+    private static float dash_speed = 350f;
     private static float dash_cooldown = 1f;
     /// ---------------FIELDS------------------------
     private float x ;
@@ -16,8 +16,8 @@ public class Vessel {
     private float velocityY ;
     private float velocityX ;
     private Rectangle bounds;
-    private float width;
-    private float height;
+    private float width = 80;
+    private float height = 135;
     private float remaining_dash_time;
     private float hp;
     /// -----------BOOLEANS--------------------
@@ -153,6 +153,7 @@ public class Vessel {
 
     public void update(float state_time , float delta){
 
+
         update_physics(delta);
 
 
@@ -168,6 +169,7 @@ public class Vessel {
                 else {
                     state = States.FALLING; ///dash ended on air
                 }
+                velocityX = 0;
             }
             else return;
         }
@@ -192,6 +194,8 @@ public class Vessel {
        }
 
 
+       if(is_ground) velocityY = 0; /// bro we're on the ground !
+        else velocityY -= 10;
 
 
 
@@ -200,7 +204,7 @@ public class Vessel {
 
 
     private void update_physics(float delta){
-        x += right ? velocityX * delta : velocityX * delta * -1;
+        x += velocityX * delta;
         y += velocityY * delta;
         bounds.x = x;
         bounds.y = y;
@@ -229,5 +233,9 @@ public class Vessel {
 
     public void setBounds(Rectangle bounds) {
         this.bounds = bounds;
+    }
+
+    public void updateRect() {
+        bounds  = new Rectangle(x, y, width, height);
     }
 }
