@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.States;
 
 import java.util.ArrayList;
 
@@ -29,11 +30,17 @@ public class Room {
         for (SolidBlock block : blocks) {
             if(block.getBlock().overlaps(knightBounds)){
                 collision = true;
+                Rectangle groundBounds = block.getBlock();
                 /// TO DO: See how the knight overlaps with the block : vertical or horizontal
-                if(knightBounds.x > block.getBlock().x){
-                    if(knightBounds.getCenter(new Vector2()).y > block.getBlock().y){
+
+                    if(knightBounds.y + knightBounds.height > groundBounds.y + groundBounds.height){
                         Game.getVessel().setIs_ground(true);
-                        Game.getVessel().setVelocityY(0); ///we're on the ground baby
+                        Game.getVessel().setVelocityY(0);
+                    }
+                    else if(knightBounds.x  + knightBounds.width > groundBounds.x + groundBounds.width){
+                        Game.getVessel().setIs_ground(false);
+                        Game.getVessel().setVelocityX(0);
+                        Game.getVessel().setState(States.WALL_SIDE);
                     }
                     else {
                         Game.getVessel().setIs_ground(false);
@@ -42,14 +49,14 @@ public class Room {
                     }
                 }
             }
-        }
+
 
         if(!collision){
             Game.getVessel().setIs_ground(false);
         }
-
-
     }
+
+
 
     public ArrayList<SolidBlock> getBlocks() {
         return blocks;

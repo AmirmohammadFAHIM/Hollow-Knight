@@ -3,12 +3,14 @@ package com.mygame.game.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.mygame.game.models.FireBall;
 import com.mygame.game.models.States;
 import com.mygame.game.models.Vessel;
 import com.mygame.game.models.Game;
 
 public class GameInputProcessor extends InputAdapter {
     private Vessel vessel;
+    private Game game;
 
     public GameInputProcessor( Vessel vessel) {
         this.vessel = vessel;
@@ -21,7 +23,7 @@ public class GameInputProcessor extends InputAdapter {
                 vessel.setState(States.RUNNING);
             }
             vessel.setVelocityX(Vessel.getHorizontal_speed() *
-                (vessel.isIs_ground() ? -1 : 1));
+                (vessel.isRight() ? 1 : -1));
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.F)){
             States state = vessel.getState();
@@ -38,32 +40,40 @@ public class GameInputProcessor extends InputAdapter {
         if(vessel.getState() == States.DASH) return super.keyDown(keycode);
 
          if(keycode == Input.Keys.U){ //Dash state
-             vessel.setPrevious_state(vessel.getState());
+            // vessel.setPrevious_state(vessel.getState());
             vessel.setState(States.DASH);
-            vessel.setVelocityX(Vessel.getDash_speed());
+            vessel.setVelocityX(Vessel.getDash_speed() * (vessel.isRight() ? 1 : -1));
+            vessel.setVelocityY(0);
             vessel.setRemaining_dash_time(Vessel.getDash_cooldown());
         }
         else if(keycode ==  Input.Keys.SPACE){ //Jump & Double Jump
             if(vessel.getState() == States.JUMPING
             || vessel.getState() == States.FALLING && vessel.isDouble_jump()){
-                vessel.setPrevious_state(States.JUMPING);
+              //  vessel.setPrevious_state(States.JUMPING);
+                System.out.println(vessel.getState());
                 vessel.setState(States.DOUBLE_JUMP);
                 vessel.setDouble_jump(false);
                 vessel.setVelocityY(Vessel.getVertical_speed());
             }
             else if(vessel.getState() == States.WALL_SIDE){
-                vessel.setPrevious_state(States.WALL_SIDE);
+              //  vessel.setPrevious_state(States.WALL_SIDE);
                 vessel.setState(States.WALL_JUMP);
             }
             else {
                 vessel.setPrevious_state(vessel.getState());
                 vessel.setState(States.JUMPING);
+                vessel.setVelocityY(Vessel.getVertical_speed());
                 vessel.setIs_ground(false);
             }
 
         }
         else if(keycode ==  Input.Keys.K){
                 vessel.setState(States.SLASH);
+         }
+        else if(keycode == Input.Keys.J){
+            vessel.setState(States.FIREBALL);
+            game.getFireballs().add(new FireBall(vessel.getX() ,
+                vessel.getY() , vessel.isRight()));
          }
 
 
@@ -75,6 +85,7 @@ public class GameInputProcessor extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
+        if(vessel.getState() == States.DASH) return super.keyUp(keycode);
         if(keycode == Input.Keys.F){
             if(vessel.getState() == States.FOCUS ||  vessel.getState() == States.START_FOCUS){
                 vessel.setState(States.IDLE);
@@ -85,12 +96,16 @@ public class GameInputProcessor extends InputAdapter {
             keycode ==  Input.Keys.D){
             if(vessel.isIs_ground()){
                 vessel.setState(States.IDLE);
-                vessel.setVelocityX(0);
             }
+            vessel.setVelocityX(0);
         }
        return super.keyUp(keycode);
     }
 
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
     public void setVessel(Vessel vessel) {
         this.vessel = vessel;

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
 import com.mygame.game.controller.GameInputProcessor;
+import com.mygame.game.models.FireBall;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.map.MapManager;
 
@@ -40,6 +41,7 @@ public class GameView implements Screen {
         currentRoomView = new RoomView(game.getGame().getCurrent_room());
         processor.setVessel(Game.getVessel());
         Gdx.input.setInputProcessor(processor);
+        processor.setGame(game.getGame());
 
 
             /// here , a vessel is initialized , a room is initialized
@@ -70,16 +72,21 @@ public class GameView implements Screen {
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
 
-        /// --------MAIN BRAIN OF THE GAME-----------
-        game.Update(stateTime , delta);
+
         /// ---------------RENDERING------------------------
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         currentRoomView.render(camera);
         vesselRender.render(batch , stateTime);
+       /* for (FireBall x : game.getGame().getFireballs()){
+            x.render(stateTime , batch);
+        }*/
         camera.position.set( Game.getVessel().getX() , Game.getVessel().getY(), 0);
         camera.update();
         batch.end();
+
+        /// --------MAIN BRAIN OF THE GAME-----------
+        game.Update(stateTime , delta);
     }
 
     @Override

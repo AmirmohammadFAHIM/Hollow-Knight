@@ -1,5 +1,6 @@
 package com.mygame.game.controller;
 
+import com.mygame.game.models.FireBall;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.States;
 
@@ -15,11 +16,15 @@ public class GameController {
 
     public void Update(float state_time ,float delta){
 
-        Game.getVessel().update(state_time ,delta);
+
         if(Game.getVessel().getState() != States.DASH)  gameInputProcessor.processInput(delta);
+        Game.getVessel().update(delta);
 
         game.getCurrent_room().checkCollisions();
 
+        /*for (FireBall x : game.getFireballs()){
+            x.move(game);
+        }*/
     }
 
     public Game getGame() {

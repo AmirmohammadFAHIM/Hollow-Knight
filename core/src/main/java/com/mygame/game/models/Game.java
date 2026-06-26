@@ -1,5 +1,6 @@
 package com.mygame.game.models;
 
+import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.map.Chunk;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
@@ -8,6 +9,7 @@ public class Game {
     private static Vessel vessel;
     private static Chunk current_chunk;
     private static Room current_room;
+    private Array<FireBall> fireballs =  new Array<>();
 
     public  Game(){
         vessel = new Vessel();
@@ -31,11 +33,17 @@ public class Game {
         this.current_chunk = current_chunk;
     }
 
-    public Room getCurrent_room() {
+    public static Room getCurrent_room() {
         return current_room;
     }
 
     public void setCurrent_room(Room current_room) {
         this.current_room = current_room;
+    }
+
+
+
+    public Array<FireBall> getFireballs() {
+        return fireballs;
     }
 }

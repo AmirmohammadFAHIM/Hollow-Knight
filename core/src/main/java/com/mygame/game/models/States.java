@@ -13,20 +13,20 @@ public enum States {
     JUMPING(new TextureAtlas("knight/jump.atlas") , "Airborne"
 ),
 
-    DOUBLE_JUMP(new  TextureAtlas("knight/DoubleJump.atlas") ,  "DoubleJump"
+    DOUBLE_JUMP(new  TextureAtlas("knight/DoubleJump.atlas") ,  "Double Jump"
 ),
 
-    DASH(new TextureAtlas("knight/Dash.atlas") , "Dash"
+    DASH(new TextureAtlas("knight/Dash.atlas") , "Dash" , 0.05f
 ),
 
-    SLASH(new  TextureAtlas("knight/SlashAlt.atlas") ,  "SlashAlt"
+    SLASH(new  TextureAtlas("knight/Slash.atlas") ,  "Slash"
 ),
 
    // DOWN_SLASH,
 
    // UP_SLASH,
 
-    START_FOCUS(new  TextureAtlas("knight/FocusStart.atlas") , "FocusStart"
+    START_FOCUS(new  TextureAtlas("knight/FocusStart.atlas") , "Focus Start"
 ),
 
     FOCUS(new  TextureAtlas("knight/Focus.atlas") ,  "Focus"
@@ -38,13 +38,13 @@ public enum States {
     FALLING(new TextureAtlas("knight/Fall.atlas") , "Fall" , Animation.PlayMode.LOOP
 ),
 
-    WALL_JUMP(new  TextureAtlas("knight/WallJump.atlas") , "WallJump" ),
+    WALL_JUMP(new  TextureAtlas("knight/WallJump.atlas") , "Walljump" ),
 
-    WALL_SIDE(new  TextureAtlas("knight/WallSide.atlas") , "WallSide" , Animation.PlayMode.LOOP),
+    WALL_SIDE(new  TextureAtlas("knight/WallSide.atlas") , "Wall Slide" , Animation.PlayMode.LOOP),
 
    // BRAKE,
 
-    FIREBALL(new TextureAtlas("knight/FireballCast.atlas") , "FireballCast"
+    FIREBALL(new TextureAtlas("knight/FireballCast.atlas") , "Fireball Cast"
 ),
 
     Death(new  TextureAtlas("knight/Death.atlas") ,  "Death"
@@ -53,11 +53,15 @@ public enum States {
     Animation<TextureAtlas.AtlasRegion> animation;
 
      States(TextureAtlas atlas ,String regionName , Animation.PlayMode playMode){
-        animation = new Animation<>(0.1f , atlas.findRegions(regionName) , playMode);
+        animation = new Animation<>(0.09f , atlas.findRegions(regionName) , playMode);
     }
 
     States(TextureAtlas atlas , String regionName){
-         animation = new Animation<>(0.1f , atlas.findRegions(regionName) , Animation.PlayMode.NORMAL);
+         animation = new Animation<>(0.09f , atlas.findRegions(regionName) , Animation.PlayMode.NORMAL);
+    }
+
+    States(TextureAtlas atlas , String regionName, float frameTime){
+         animation = new Animation<>(frameTime ,  atlas.findRegions(regionName) , Animation.PlayMode.NORMAL);
     }
 
 

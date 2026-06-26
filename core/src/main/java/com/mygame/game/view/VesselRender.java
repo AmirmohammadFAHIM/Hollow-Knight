@@ -85,10 +85,17 @@ public class VesselRender {
        // vessel.update(Gdx.graphics.getDeltaTime());
         update_rendering(Gdx.graphics.getDeltaTime());
 
-        TextureAtlas.AtlasRegion frame = getCurrentAnimation().getKeyFrame(stateTime , true);
+
+
+
+        TextureAtlas.AtlasRegion frame = (TextureAtlas.AtlasRegion) getCurrentAnimation().getKeyFrame(vessel.getStateTime() , true);
+
+        float drawX = vessel.getX() + frame.offsetX;
+        float drawY = vessel.getY() + frame.offsetY;
+
         if(vessel.isRight() && !frame.isFlipX()) frame.flip(true,false);
-        else if(!vessel.isRight()  && frame.isFlipX()) frame.flip(false,true);
-        batch.draw(frame , vessel.getX() , vessel.getY());
+        else if(!vessel.isRight()  && frame.isFlipX()) frame.flip(true,false);
+        batch.draw(frame , drawX , drawY);
 
     }
 

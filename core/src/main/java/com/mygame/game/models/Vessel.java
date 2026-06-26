@@ -1,15 +1,21 @@
 package com.mygame.game.models;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygame.game.models.map.SolidBlock;
 import com.mygame.game.view.VesselRender;
+
+import java.util.ArrayList;
 
 public class Vessel {
     /// ---------------STATICS-----------------
-    private static float vertical_speed = 150f;
-    private static float horizontal_speed = 250f;
-    private static float dash_speed = 350f;
-    private static float dash_cooldown = 1f;
+    private static float vertical_speed = 650f;
+    private static float horizontal_speed = 350f;
+    private static float dash_speed = 550f;
+    private static float dash_cooldown = 0.4f;
+    private static float gravity = 5f;
+    private float stateTime = 0f;
     /// ---------------FIELDS------------------------
     private float x ;
     private float y ;
@@ -110,12 +116,21 @@ public class Vessel {
         this.height = height;
     }
 
+    public float getStateTime() {
+        return stateTime;
+    }
+
     public States getState() {
         return state;
     }
 
     public void setState(States state) {
-        this.state = state;
+       if(state != this.state){
+           previous_state = this.state;
+           this.state = state;
+           this.stateTime = 0f; ///resetting the state time so animations don't glitch
+       }
+
     }
 
 
@@ -151,18 +166,19 @@ public class Vessel {
         this.previous_state = previous_state;
     }
 
-    public void update(float state_time , float delta){
+    public void update(float delta){
 
+        stateTime += Gdx.graphics.getDeltaTime();
 
-        update_physics(delta);
+        update_physics(delta , Game.getCurrent_room().getBlocks());
 
 
         /// ------------------DASH STATE , MOST PARTICULAR ONE----------------------
 
         if(state == States.DASH){
-            dash_cooldown -= delta;
-            if(dash_cooldown <= 0){
-                dash_cooldown = 1;
+            remaining_dash_time -= delta;
+            if(remaining_dash_time <= 0){
+                remaining_dash_time = dash_cooldown;
                 if(is_ground){
                     state = States.IDLE; ///dash ended on ground
                 }
@@ -178,24 +194,42 @@ public class Vessel {
 
         if(state == States.FALLING && is_ground){ /// falling ended , time to land
             state = States.LANDING;
+            return;
         }
 
-        if(!is_ground && state != States.WALL_SIDE){
+        if(!is_ground && state != States.WALL_SIDE &&
+        state != States.JUMPING && state != States.DOUBLE_JUMP){
             state = States.FALLING;
         }
 
+        if(state == States.DOUBLE_JUMP){
+            if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+                state = previous_state;
+            }
+        }
        if(state == States.LANDING){
-           if(VesselRender.getCurrentAnimation().isAnimationFinished(state_time)){
+           if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
                state = States.IDLE;
            }
        }
        else if(state == States.START_FOCUS){
-          if(VesselRender.getCurrentAnimation().isAnimationFinished(state_time)) state = States.FOCUS;
+          if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)) state = States.FOCUS;
+       }
+       else if (state == States.FIREBALL) {
+           if (VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)) {
+               state = States.IDLE;
+           }
+       }
+       if(state == States.SLASH){
+          if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+              state =  States.IDLE;
+          }
+
        }
 
 
        if(is_ground) velocityY = 0; /// bro we're on the ground !
-        else velocityY -= 10;
+        else velocityY -= gravity;
 
 
 
@@ -203,11 +237,30 @@ public class Vessel {
     }
 
 
-    private void update_physics(float delta){
+    private void update_physics(float delta , ArrayList<SolidBlock> blocks){
+        float copy_x = x;
+        float copy_y = y;
         x += velocityX * delta;
-        y += velocityY * delta;
         bounds.x = x;
+       /* for (SolidBlock x : blocks){
+            if(x.getBlock().overlaps(bounds)){
+                state = States.WALL_SIDE;
+                velocityX = 0;
+                this.x = copy_x;
+                return;
+            }
+        }*/
+
+        y += velocityY * delta;
         bounds.y = y;
+
+        /* for (SolidBlock y : blocks){
+            if(y.getBlock().overlaps(bounds)){
+                state = States.IDLE;
+                velocityY = 0;
+                this.y = copy_y;
+            }
+        }*/
     }
 
 
