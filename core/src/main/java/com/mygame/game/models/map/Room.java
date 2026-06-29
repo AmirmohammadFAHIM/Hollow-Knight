@@ -1,60 +1,32 @@
 package com.mygame.game.models.map;
 
-import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.mygame.game.models.Game;
-import com.mygame.game.models.States;
+import com.mygame.game.models.entities.NPC;
 
 import java.util.ArrayList;
 
 public class Room {
     private String name;
-    private ArrayList<SolidBlock> blocks;
+    private ArrayList<SolidBlock> blocks =  new ArrayList<>();
     private TiledMap  map;
+    private ArrayList<NPC> enemies = new ArrayList<>();
 
 
     public Room(TiledMap map , String name){
         this.name = name;
         blocks = new ArrayList<>();
         this.map = map;
-        MapManager.setBlocks(map , this);
+        //MapManager.setBlocks(map , this);
+    }
+
+    public Room(){
+
     }
 
 
-    public void checkCollisions(){
-        Rectangle knightBounds = Game.getVessel().getBounds();
-        boolean collision = false;
-        for (SolidBlock block : blocks) {
-            if(block.getBlock().overlaps(knightBounds)){
-                collision = true;
-                Rectangle groundBounds = block.getBlock();
-                /// TO DO: See how the knight overlaps with the block : vertical or horizontal
-
-                    if(knightBounds.y + knightBounds.height > groundBounds.y + groundBounds.height){
-                        Game.getVessel().setIs_ground(true);
-                        Game.getVessel().setVelocityY(0);
-                    }
-                    else if(knightBounds.x  + knightBounds.width > groundBounds.x + groundBounds.width){
-                        Game.getVessel().setIs_ground(false);
-                        Game.getVessel().setVelocityX(0);
-                        Game.getVessel().setState(States.WALL_SIDE);
-                    }
-                    else {
-                        Game.getVessel().setIs_ground(false);
-                        Game.getVessel().setVelocityY(0); /*the wall has stopped the knight , so the
-                        gravity will pull it back to the ground*/
-                    }
-                }
-            }
 
 
-        if(!collision){
-            Game.getVessel().setIs_ground(false);
-        }
-    }
+
 
 
 
@@ -80,5 +52,13 @@ public class Room {
 
     public void setMap(TiledMap map) {
         this.map = map;
+    }
+
+    public ArrayList<NPC> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(ArrayList<NPC> enemies) {
+        this.enemies = enemies;
     }
 }

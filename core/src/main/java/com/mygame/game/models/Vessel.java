@@ -3,29 +3,34 @@ package com.mygame.game.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygame.game.models.entities.NPC;
 import com.mygame.game.models.map.SolidBlock;
 import com.mygame.game.view.VesselRender;
 
 import java.util.ArrayList;
 
-public class Vessel {
+public class Vessel{
     /// ---------------STATICS-----------------
-    private static float vertical_speed = 650f;
+    private static float vertical_speed = 580f;
     private static float horizontal_speed = 350f;
     private static float dash_speed = 550f;
     private static float dash_cooldown = 0.4f;
-    private static float gravity = 5f;
+    private static float gravity = 7f;
     private float stateTime = 0f;
+    private float slashWidth = 80;
+    private float slashHeight = 100;
     /// ---------------FIELDS------------------------
-    private float x ;
-    private float y ;
-    private float velocityY ;
-    private float velocityX ;
-    private Rectangle bounds;
-    private float width = 80;
-    private float height = 135;
+   private float x;
+   private float y;
+   private float velocityX;
+   private float velocityY;
+   private Rectangle bounds;
+    private Rectangle slashBounds = new Rectangle();
+    private float width = 70;
+    private float height = 115;
     private float remaining_dash_time;
     private float hp;
+    private float damage = 40;
     /// -----------BOOLEANS--------------------
     private boolean is_ground = true;
     private boolean right = false;
@@ -35,6 +40,11 @@ public class Vessel {
     private States previous_state = States.IDLE;
 
 
+
+    public Vessel(){
+
+
+    }
 
     public static float getDash_speed() {
         return dash_speed;
@@ -98,6 +108,30 @@ public class Vessel {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public float getSlashWidth() {
+        return slashWidth;
+    }
+
+    public void setSlashWidth(float slashWidth) {
+        this.slashWidth = slashWidth;
+    }
+
+    public float getSlashHeight() {
+        return slashHeight;
+    }
+
+    public void setSlashHeight(float slashHeight) {
+        this.slashHeight = slashHeight;
+    }
+
+    public float getDamage() {
+        return damage;
+    }
+
+    public void setDamage(float damage) {
+        this.damage = damage;
     }
 
     public float getWidth() {
@@ -166,15 +200,164 @@ public class Vessel {
         this.previous_state = previous_state;
     }
 
-    public void update(float delta){
+    public void update(float delta , Game game) {
 
         stateTime += Gdx.graphics.getDeltaTime();
 
+        if(vengfull(delta)) return;
         update_physics(delta , Game.getCurrent_room().getBlocks());
-
+        updateSlashBounds();
 
         /// ------------------DASH STATE , MOST PARTICULAR ONE----------------------
 
+       if(Dash(delta)) return;
+       //else if(vengfull(delta)) return;
+
+        /// --------------------OTHER STATES-------------------------
+
+            if(this.state.shouldGoNext(stateTime)){
+                setState(state.nextState);
+            }
+
+        if(state == States.SLASH){
+            if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+                setState(States.IDLE);
+            }
+            else return;
+
+        }
+
+        if(state == States.WALL_SIDE){
+            velocityY = -100;
+        }
+        if(!is_ground && state != States.WALL_SIDE &&
+        state != States.JUMPING && state != States.DOUBLE_JUMP){
+            setState(States.FALLING);
+        }
+
+        if(state == States.DOUBLE_JUMP){
+            if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+                setState(previous_state);
+            }
+        }
+
+
+
+
+
+
+
+        /// -----------------SKILLS : SLASH , VENGFUL SPIRIT----------------
+
+        slash(game);
+
+
+    }
+
+
+    private void update_physics(float delta, ArrayList<SolidBlock> blocks) {
+        // -----------------------------------------------------------------
+        // ۱. حرکت محور X و بررسی دیوارها
+        // -----------------------------------------------------------------
+        if(is_ground) velocityY = 0;
+        else if(state != States.DASH && state != States.FIREBALL) velocityY -= gravity;
+        x += velocityX * delta;
+        bounds.x = x;
+
+        // ترفند حاشیه امن: هیت‌باکس را موقتاً از بالا و پایین ۲ پیکسل کوچیک می‌کنیم.
+        // این کار باعث میشه وقتی روی زمینِ صاف راه میری، خطای اعشاریِ جاوا
+        // تو رو با بلوک‌های کف زمین درگیر نکنه و نرم راه بری.
+        bounds.y = y + 2f;
+        bounds.height = height - 4f;
+
+        for (SolidBlock sb : blocks) {
+            Rectangle blockRect = sb.getBlock();
+            if (blockRect.overlaps(bounds)) {
+                // برخورد افقی قطعی با یک مانع/دیوار
+                if (velocityX > 0) {
+                    x = blockRect.x - width; // مماس شدن با سمت چپ دیوار
+                } else if (velocityX < 0) {
+                    x = blockRect.x + blockRect.width; // مماس شدن با سمت راست دیوار
+                }
+
+                if (!is_ground) {
+                    setState(States.WALL_SIDE);
+                    double_jump = true;
+                }
+
+                velocityX = 0;
+                bounds.x = x; // آپدیت فوری هیت‌باکس برای جلوگیری از تلپورت شدن توسط محور Y
+                break; // <--- دلیل گیر کردن‌های قبلیت نبودِ همین یک کلمه بود! به محض حل شدن برخورد، حلقه باید متوقف بشه.
+            }
+        }
+
+        // برگرداندن هیت‌باکس عمودی به اندازه واقعی برای محاسبات Y
+        bounds.y = y;
+        bounds.height = height;
+
+        // -----------------------------------------------------------------
+        // ۲. حرکت محور Y و بررسی زمین/سقف
+        // -----------------------------------------------------------------
+        y += velocityY * delta;
+        bounds.y = y;
+
+        for (SolidBlock sb : blocks) {
+            Rectangle blockRect = sb.getBlock();
+            if (blockRect.overlaps(bounds)) {
+                if (velocityY < 0) {
+                    // فرود موفقیت‌آمیز روی زمین
+                    y = blockRect.y + blockRect.height;
+
+                    // مدیریت درست وضعیت Landing فقط زمانی که واقعا سقوط کرده باشی
+                    if (state == States.FALLING || state == States.WALL_SIDE) {
+                        setState(States.LANDING);
+                    }
+                    is_ground = true;
+                    double_jump = true;
+                } else if (velocityY > 0) {
+                    // اصابت سر شوالیه به سقف
+                    y = blockRect.y - height;
+                }
+
+                velocityY = 0;
+                bounds.y = y; // آپدیت فوری هیت‌باکس
+                break; // توقف حلقه بعد از تنظیم شدن روی سطح
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // ۳. رادار تشخیص زمین (پالس ۱ پیکسلی به زیر پا)
+        // -----------------------------------------------------------------
+        bounds.y = y - 1f;
+        boolean grounded = false;
+        for (SolidBlock sb : blocks) {
+            if (sb.getBlock().overlaps(bounds)) {
+                grounded = true;
+                break;
+            }
+        }
+        bounds.y = y; // بازگرداندن رادار به جای اصلی
+        is_ground = grounded;
+    }
+
+
+
+    private void slash(Game game){
+
+
+        ArrayList<NPC> enemies = Game.getCurrent_room().getEnemies();
+        for (NPC n : enemies) {
+            if(n.getBounds().overlaps(slashBounds)){
+               /// To Do:Declare that enemy is hit
+                n.setHurt(true);
+                n.setHp(n.getHp() - damage);
+
+            }
+        }
+    }
+
+
+    private boolean Dash(float delta){
         if(state == States.DASH){
             remaining_dash_time -= delta;
             if(remaining_dash_time <= 0){
@@ -187,81 +370,23 @@ public class Vessel {
                 }
                 velocityX = 0;
             }
-            else return;
+            return true;
         }
+        return false;
+    }
 
-        /// --------------------OTHER STATES-------------------------
 
-        if(state == States.FALLING && is_ground){ /// falling ended , time to land
-            state = States.LANDING;
-            return;
-        }
-
-        if(!is_ground && state != States.WALL_SIDE &&
-        state != States.JUMPING && state != States.DOUBLE_JUMP){
-            state = States.FALLING;
-        }
-
-        if(state == States.DOUBLE_JUMP){
+    private boolean vengfull(float delta){
+        if(state == States.FIREBALL){
             if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
                 state = previous_state;
             }
+
+            return true;
         }
-       if(state == States.LANDING){
-           if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
-               state = States.IDLE;
-           }
-       }
-       else if(state == States.START_FOCUS){
-          if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)) state = States.FOCUS;
-       }
-       else if (state == States.FIREBALL) {
-           if (VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)) {
-               state = States.IDLE;
-           }
-       }
-       if(state == States.SLASH){
-          if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
-              state =  States.IDLE;
-          }
-
-       }
-
-
-       if(is_ground) velocityY = 0; /// bro we're on the ground !
-        else velocityY -= gravity;
-
-
-
-
+        return false;
     }
 
-
-    private void update_physics(float delta , ArrayList<SolidBlock> blocks){
-        float copy_x = x;
-        float copy_y = y;
-        x += velocityX * delta;
-        bounds.x = x;
-       /* for (SolidBlock x : blocks){
-            if(x.getBlock().overlaps(bounds)){
-                state = States.WALL_SIDE;
-                velocityX = 0;
-                this.x = copy_x;
-                return;
-            }
-        }*/
-
-        y += velocityY * delta;
-        bounds.y = y;
-
-        /* for (SolidBlock y : blocks){
-            if(y.getBlock().overlaps(bounds)){
-                state = States.IDLE;
-                velocityY = 0;
-                this.y = copy_y;
-            }
-        }*/
-    }
 
 
     public Rectangle getBounds() {
@@ -290,5 +415,52 @@ public class Vessel {
 
     public void updateRect() {
         bounds  = new Rectangle(x, y, width, height);
+    }
+
+    public static float getGravity() {
+        return gravity;
+    }
+
+    public static void setGravity(float gravity) {
+        Vessel.gravity = gravity;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public Rectangle getSlashBounds() {
+        return slashBounds;
+    }
+
+    public void setSlashBounds(Rectangle slashBounds) {
+        this.slashBounds = slashBounds;
+    }
+
+    private void updateSlashBounds() {
+        // فقط وقتی در حالت اسلش هستیم نیازه که هیت‌باکس آپدیت بشه
+        if (state == States.SLASH) {
+            float sx;
+            float sy;
+
+            // محاسبه X بر اساس جهت نگاه کردن
+            if (isRight()) {
+                // اگر راست می‌بینه: هیت‌باکس رو بنداز سمت راستِ هیت‌باکس شوالیه
+                // (میتونی یه مقدار کمی هم ببریش داخل هیت باکس خود کاراکتر که دشمنانی که خیلی چسبیدن هم دمیج بخورن)
+                sx = this.x + this.width;
+            } else {
+                // اگر چپ می‌بینه: هیت‌باکس رو بنداز سمت چپ
+                sx = this.x - slashWidth;
+            }
+
+            // محاسبه Y (وسط چین کردن هیت‌باکس شمشیر نسبت به قد شوالیه)
+            sy = this.y + (this.height / 2f) - (slashHeight / 2f);
+
+            // اعمال مختصات به مستطیل
+            slashBounds.set(sx, sy, slashWidth, slashHeight);
+        } else {
+            // وقتی اسلش نمی‌زنیم، هیت‌باکس رو می‌فرستیم یه جای دور که الکی با چیزی برخورد نکنه
+            slashBounds.set(-1000, -1000, 0, 0);
+        }
     }
 }

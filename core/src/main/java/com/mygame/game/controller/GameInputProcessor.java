@@ -19,7 +19,7 @@ public class GameInputProcessor extends InputAdapter {
     public void processInput(float delta){ /// for holding buttons : A D F
         if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D)){
             vessel.setRight(!Gdx.input.isKeyPressed(Input.Keys.A));
-            if(vessel.isIs_ground()){
+            if(vessel.isIs_ground() && vessel.getState() != States.SLASH){
                 vessel.setState(States.RUNNING);
             }
             vessel.setVelocityX(Vessel.getHorizontal_speed() *
@@ -27,7 +27,7 @@ public class GameInputProcessor extends InputAdapter {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.F)){
             States state = vessel.getState();
-            if(vessel.isIs_ground()){
+            if(vessel.isIs_ground() && state != States.FOCUS && state != States.START_FOCUS){
                 vessel.setState(States.START_FOCUS);
             }
         }
@@ -47,6 +47,9 @@ public class GameInputProcessor extends InputAdapter {
             vessel.setRemaining_dash_time(Vessel.getDash_cooldown());
         }
         else if(keycode ==  Input.Keys.SPACE){ //Jump & Double Jump
+
+            if(!vessel.isDouble_jump()) return super.keyDown(keycode);
+
             if(vessel.getState() == States.JUMPING
             || vessel.getState() == States.FALLING && vessel.isDouble_jump()){
               //  vessel.setPrevious_state(States.JUMPING);
@@ -58,6 +61,7 @@ public class GameInputProcessor extends InputAdapter {
             else if(vessel.getState() == States.WALL_SIDE){
               //  vessel.setPrevious_state(States.WALL_SIDE);
                 vessel.setState(States.WALL_JUMP);
+
             }
             else {
                 vessel.setPrevious_state(vessel.getState());
@@ -74,6 +78,8 @@ public class GameInputProcessor extends InputAdapter {
             vessel.setState(States.FIREBALL);
             game.getFireballs().add(new FireBall(vessel.getX() ,
                 vessel.getY() , vessel.isRight()));
+         }
+        else if(keycode == Input.Keys.F){
          }
 
 

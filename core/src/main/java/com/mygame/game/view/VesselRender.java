@@ -8,70 +8,30 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.States;
 import com.mygame.game.models.Vessel;
 
 public class VesselRender {
     private Vessel vessel;
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Animation<TextureAtlas.AtlasRegion> idle;
-    private Animation<TextureAtlas.AtlasRegion> start_run;
-    private Animation<TextureAtlas.AtlasRegion> run;
-    private Animation<TextureAtlas.AtlasRegion> run_toIdle;
-    private Animation<TextureAtlas.AtlasRegion> jump;
-    private Animation<TextureAtlas.AtlasRegion> slash;
-    private Animation<TextureAtlas.AtlasRegion> down_slash;
-    private Animation<TextureAtlas.AtlasRegion> double_jump;
-    private  Animation<TextureAtlas.AtlasRegion> fall;
-    private Animation<TextureAtlas.AtlasRegion> landing;
-    private Animation<TextureAtlas.AtlasRegion> wall_side;
-    private Animation<TextureAtlas.AtlasRegion> start_focus;
-    private Animation<TextureAtlas.AtlasRegion> focus;
-    private  Animation<TextureAtlas.AtlasRegion> death;
-    private Animation<TextureAtlas.AtlasRegion> dash;
-    private Animation<TextureAtlas.AtlasRegion> fireball;
-    private static Animation<TextureAtlas.AtlasRegion> currentAnimation;
+    private float slashStateTime = 0;
 
+    private static Animation<TextureAtlas.AtlasRegion> currentAnimation;
+    private Animation<TextureAtlas.AtlasRegion> slashEffect;
 
 
     public  VesselRender() {
-        initAnimations();
-        currentAnimation = idle;
         vessel = Game.getVessel();
+        initEffects();
     }
 
-    private void initAnimations() {
-
-
-       /* TextureAtlas x = new TextureAtlas(Gdx.files.internal("knight/Run.atlas"));
-        run = new Animation<>(0.1f, x.findRegions("Run"), Animation.PlayMode.LOOP);
-        x = new TextureAtlas(Gdx.files.internal("knight/Idle.atlas"));
-        idle =  new Animation<>(0.1f, x.findRegions("Idle"), Animation.PlayMode.LOOP);
-        x = new TextureAtlas("knight/startRun.atlas");
-        start_run =  new Animation<>(0.1f, x.findRegions("Run"), Animation.PlayMode.NORMAL);
-        x = new TextureAtlas("knight/jump.atlas");
-        jump  = new Animation<>(0.1f, x.findRegions("Airborne"), Animation.PlayMode.NORMAL);
-        x = new TextureAtlas("knight/Fall.atlas");
-        fall =  new Animation<>(0.1f, x.findRegions("Fall"), Animation.PlayMode.LOOP);
-        x =  new TextureAtlas("knight/Dash.atlas");
-        dash =  new Animation<>(0.1f, x.findRegions("Dash"), Animation.PlayMode.NORMAL);
-        x = new  TextureAtlas("knight/SlashAlt.atlas");
-        slash =  new Animation<>(0.1f, x.findRegions("SlashAlt"), Animation.PlayMode.NORMAL);
-        x = new  TextureAtlas("knight/Landing.atlas");
-        landing = new Animation<>(0.1f, x.findRegions("Landing"), Animation.PlayMode.NORMAL);
-        x = new  TextureAtlas("knight/Death.atlas");
-        death =  new Animation<>(0.1f, x.findRegions("Death"), Animation.PlayMode.NORMAL);
-        x = new  TextureAtlas("knight/FocusStart.atlas");
-        start_focus = new   Animation<>(0.1f, x.findRegions("FocusStart"), Animation.PlayMode.NORMAL);
-        x = new  TextureAtlas("knight/Focus.atlas");
-        focus = new Animation<>(0.1f, x.findRegions("Focus"), Animation.PlayMode.LOOP);
-        x = new  TextureAtlas("knight/DoubleJump.atlas");
-        double_jump = new Animation<>(0.1f, x.findRegions("DoubleJump"), Animation.PlayMode.NORMAL);
-        x = new TextureAtlas("knight/FireballCast.atlas");
-        fireball = new Animation<>(0.1f, x.findRegions("FireballCast"), Animation.PlayMode.NORMAL);
-*/
+    private void initEffects(){
+        TextureAtlas effect = new  TextureAtlas(Gdx.files.internal("knight/SlashEffectAlt.atlas"));
+        slashEffect = new Animation<>(0.06f , effect.findRegions("SlashEffectAlt"));
     }
+
 
 
     private void update_rendering(float delta) {
@@ -90,13 +50,25 @@ public class VesselRender {
 
         TextureAtlas.AtlasRegion frame = (TextureAtlas.AtlasRegion) getCurrentAnimation().getKeyFrame(vessel.getStateTime() , true);
 
-        float drawX = vessel.getX() + frame.offsetX;
-        float drawY = vessel.getY() + frame.offsetY;
+        float drawX = vessel.getX() - (frame.getRegionWidth() - vessel.getWidth()) / 2f;
+        float drawY = vessel.getY();
 
+        checkDir(frame);
+        batch.draw(frame , drawX , drawY);
+        if(vessel.getState() == States.SLASH){
+            slashStateTime += Gdx.graphics.getDeltaTime();
+           Rectangle rect = vessel.getSlashBounds();
+           TextureAtlas.AtlasRegion slashFrame = slashEffect.getKeyFrame(slashStateTime);
+           checkDir(slashFrame);
+           batch.draw(slashFrame,rect.x , rect.y);
+        }
+        else slashStateTime = 0;
+
+    }
+
+    private void checkDir(TextureAtlas.AtlasRegion frame){
         if(vessel.isRight() && !frame.isFlipX()) frame.flip(true,false);
         else if(!vessel.isRight()  && frame.isFlipX()) frame.flip(true,false);
-        batch.draw(frame , drawX , drawY);
-
     }
 
 

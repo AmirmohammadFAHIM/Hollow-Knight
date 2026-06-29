@@ -3,6 +3,7 @@ package com.mygame.game.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.mygame.game.view.VesselRender;
 
 public enum States {
     IDLE(new TextureAtlas(Gdx.files.internal("knight/Idle.atlas")) , "Idle" , Animation.PlayMode.LOOP),
@@ -10,33 +11,46 @@ public enum States {
     RUNNING(new TextureAtlas(Gdx.files.internal("knight/Run.atlas")) , "Run"
         , Animation.PlayMode.LOOP),
 
-    JUMPING(new TextureAtlas("knight/jump.atlas") , "Airborne"
-),
 
-    DOUBLE_JUMP(new  TextureAtlas("knight/DoubleJump.atlas") ,  "Double Jump"
-),
+
+
 
     DASH(new TextureAtlas("knight/Dash.atlas") , "Dash" , 0.05f
-),
+, null , true),
 
-    SLASH(new  TextureAtlas("knight/Slash.atlas") ,  "Slash"
+    SLASH(new  TextureAtlas("knight/SlashAlt.atlas") ,  "SlashAlt"
 ),
 
    // DOWN_SLASH,
 
    // UP_SLASH,
 
-    START_FOCUS(new  TextureAtlas("knight/FocusStart.atlas") , "Focus Start"
-),
+
+    FOCUS_GET(new TextureAtlas("knight/FocusGet.atlas") , "Focus Get"),
 
     FOCUS(new  TextureAtlas("knight/Focus.atlas") ,  "Focus"
+, 0.09f , FOCUS_GET , false){
+
+    },
+
+    START_FOCUS(new  TextureAtlas("knight/FocusStart.atlas") , "Focus Start"
+     , 0.09f , FOCUS , false),
+
+    LANDING(new  TextureAtlas("knight/Landing.atlas") , "Landing" , 0.09f,
+        IDLE , false
 ),
 
-    LANDING(new  TextureAtlas("knight/Landing.atlas") , "Landing"
-),
-
-    FALLING(new TextureAtlas("knight/Fall.atlas") , "Fall" , Animation.PlayMode.LOOP
-),
+    FALLING(new TextureAtlas("knight/Fall.atlas") , "Fall" , 0.09f ,
+        LANDING , false
+){
+        {
+            this.animation.setPlayMode(Animation.PlayMode.LOOP);
+        }
+        @Override
+        boolean shouldGoNext(float stateTime) {
+            return Game.getVessel().isIs_ground();
+        }
+    },
 
     WALL_JUMP(new  TextureAtlas("knight/WallJump.atlas") , "Walljump" ),
 
@@ -45,7 +59,14 @@ public enum States {
    // BRAKE,
 
     FIREBALL(new TextureAtlas("knight/FireballCast.atlas") , "Fireball Cast"
-),
+,0.09f , null , true ),
+
+    JUMPING(new TextureAtlas("knight/jump.atlas") , "Airborne",
+ 0.09f , FALLING , false),
+
+    DOUBLE_JUMP(new  TextureAtlas("knight/DoubleJump.atlas") ,  "Double Jump",
+        0.09f , FALLING , false
+    ),
 
     Death(new  TextureAtlas("knight/Death.atlas") ,  "Death"
 );
@@ -63,6 +84,28 @@ public enum States {
     States(TextureAtlas atlas , String regionName, float frameTime){
          animation = new Animation<>(frameTime ,  atlas.findRegions(regionName) , Animation.PlayMode.NORMAL);
     }
+
+    States(TextureAtlas atlas , String regionName, float frameTime
+    , States nextState , boolean priority ){
+         animation = new Animation<>(frameTime , atlas.findRegions(regionName)
+             , Animation.PlayMode.NORMAL);
+         this.nextState  = nextState;
+         this.priority = priority;
+        // this.once = once;
+    }
+
+    States nextState = null;
+
+     boolean priority = false;
+
+    // boolean once = true;
+
+     boolean shouldGoNext(float stateTime){
+         if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+             return nextState != null;
+         }
+         return false;
+     }
 
 
     public Animation<TextureAtlas.AtlasRegion> getAnimation() {

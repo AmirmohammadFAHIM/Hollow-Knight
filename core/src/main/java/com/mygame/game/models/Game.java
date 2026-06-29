@@ -5,6 +5,8 @@ import com.mygame.game.models.map.Chunk;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
 
+import java.util.Map;
+
 public class Game {
     private static Vessel vessel;
     private static Chunk current_chunk;
@@ -14,7 +16,8 @@ public class Game {
     public  Game(){
         vessel = new Vessel();
         current_chunk = new Chunk();
-        current_room = new Room(MapManager.loadRoom(0) , "CityOfTears");
+        MapManager.loadChunk("CityOfTears");
+        current_room = MapManager.loadRoom(0);
 
     }
     public static Vessel getVessel() {
@@ -30,18 +33,21 @@ public class Game {
     }
 
     public void setCurrent_chunk(Chunk current_chunk) {
-        this.current_chunk = current_chunk;
+        Game.current_chunk = current_chunk;
     }
 
     public static Room getCurrent_room() {
         return current_room;
     }
 
-    public void setCurrent_room(Room current_room) {
-        this.current_room = current_room;
+    public static void setCurrent_room(Room current_room) {
+        Game.current_room = current_room;
     }
 
 
+    public void setFireballs(Array<FireBall> fireballs) {
+        this.fireballs = fireballs;
+    }
 
     public Array<FireBall> getFireballs() {
         return fireballs;

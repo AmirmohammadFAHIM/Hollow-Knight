@@ -3,6 +3,7 @@ package com.mygame.game.controller;
 import com.mygame.game.models.FireBall;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.States;
+import com.mygame.game.models.entities.NPC;
 
 public class GameController {
     private Game game;
@@ -14,17 +15,22 @@ public class GameController {
     }
 
 
+    /// In this function we need to do these things :
+    /*
+    * process the inputs
+    * update the knight : update physics , update states & collisions , do the skills if needed
+    * update the enemies : update physics , update states & collisions , do the skills if needed
+    * */
+
     public void Update(float state_time ,float delta){
 
 
         if(Game.getVessel().getState() != States.DASH)  gameInputProcessor.processInput(delta);
-        Game.getVessel().update(delta);
+        Game.getVessel().update(delta , game);
+        for (NPC c :Game.getCurrent_room().getEnemies()){
+           if(c.isAlive()) c.update(delta , Game.getCurrent_room().getBlocks());
+        }
 
-        game.getCurrent_room().checkCollisions();
-
-        /*for (FireBall x : game.getFireballs()){
-            x.move(game);
-        }*/
     }
 
     public Game getGame() {
