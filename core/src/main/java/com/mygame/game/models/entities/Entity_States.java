@@ -1,12 +1,22 @@
 package com.mygame.game.models.entities;
 
-public enum NPC_States {
+public enum Entity_States {
+
+    IDLE(null),
 
     NORMAL(null),
 
-    ANGRY(null),
+    END_ATTACK(NORMAL),
 
-    COMBAT(null),
+    Attack(END_ATTACK),
+
+    START_ATTACK(Attack),
+
+    END_SKILL(Attack),
+
+    Skill(END_SKILL),
+
+    START_SKILL(Skill),
 
     DEAD_END(null),
 
@@ -17,17 +27,17 @@ public enum NPC_States {
     TURN(NORMAL);
 
 
-    NPC_States nextState;
+    Entity_States nextState;
 
 
-    NPC_States(NPC_States nextState ) {
+    Entity_States(Entity_States nextState ) {
         this.nextState = nextState;
     }
 
     public boolean hasNextState() {
         return nextState != null;
     }
-    public NPC_States getNextState() {
+    public Entity_States getNextState() {
         return nextState;
     }
 }

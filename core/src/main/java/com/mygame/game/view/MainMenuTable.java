@@ -16,8 +16,9 @@ import com.mygame.game.controller.UiManager;
 import java.awt.*;
 
 public class MainMenuTable extends Table {
-
-    public  MainMenuTable(){
+    MainScreen screen;
+    public  MainMenuTable(MainScreen mainScreen){
+        this.screen = mainScreen;
         this.setFillParent(true);
         this.top();
         com.badlogic.gdx.scenes.scene2d.ui.Image title =  new Image(new Texture(Gdx.files.internal("menus/title.png")));
@@ -48,27 +49,43 @@ public class MainMenuTable extends Table {
                 UiManager.setScreen(new GameView());
             }
         });
+
         newGame.setTouchable(Touchable.enabled);
 
-        TextButton loadGame  = new TextButton("Load Game", style);
+        TextButton loadGame  = new TextButton("Achievements", style);
         loadGame.setTouchable(Touchable.enabled);
 
-        TextButton options = new  TextButton("Options", style);
+        TextButton options = new  TextButton("Settings", style);
         options.setTouchable(Touchable.enabled);
 
         TextButton exit = new TextButton("Exit", style);
         exit.setTouchable(Touchable.enabled);
 
+        TextButton guide = new TextButton("Guide", style);
+
 
 
         //  button.setSize(100 , 50);
         this.defaults().padBottom(15);
-        this.setDebug(true);
+
         this.add(newGame).align(Align.center).row();
-        this.add(loadGame).align(Align.center).row();
         this.add(options).align(Align.center).row();
+        this.add(loadGame).align(Align.center).row();
+        this.add(guide).align(Align.center).row();
         this.add(exit).center().row();
 
+        addListener(options , guide , exit );
 
+    }
+
+
+    private void addListener(TextButton options , TextButton guide , TextButton exit ){
+        options.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.getRootTable().clearChildren();
+                screen.getRootTable().addActor(new OptionMenu());
+            }
+        });
     }
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class EntityRenderer {
-    private NPC entity;
+    private Entity entity;
 
     public void render(SpriteBatch batch, OrthographicCamera camera) {
 
@@ -18,11 +18,11 @@ public class EntityRenderer {
         batch.draw(frame , entity.x ,  entity.y);
     }
 
-    public void setEntity(NPC entity) {
+    public void setEntity(Entity entity) {
         this.entity = entity;
     }
 
-    public NPC getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 }

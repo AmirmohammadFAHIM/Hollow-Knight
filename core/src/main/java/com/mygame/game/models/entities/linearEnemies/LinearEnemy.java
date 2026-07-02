@@ -1,13 +1,14 @@
-package com.mygame.game.models.entities;
+package com.mygame.game.models.entities.linearEnemies;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygame.game.models.Game;
+import com.mygame.game.models.entities.Entity;
+import com.mygame.game.models.entities.Entity_States;
 import com.mygame.game.models.map.SolidBlock;
 
 import java.util.ArrayList;
 
-public class LinearEnemy extends NPC{
+public class LinearEnemy extends Entity {
     private float damage;
     private LinearEnemies type;
     private static float vX = 70;
@@ -17,7 +18,7 @@ public class LinearEnemy extends NPC{
         super(type.name() , x , y);
         this.bounds = new Rectangle(x, y, width, height);
         this.type = type;
-        setState(NPC_States.NORMAL);
+        setState(Entity_States.NORMAL);
         velocityX = vX * (right? 1 : -1);
         currentAnimation = type.walk;
         this.x = x;
@@ -28,28 +29,29 @@ public class LinearEnemy extends NPC{
 
 
     @Override
-    public void update(float delta , ArrayList<SolidBlock> blocks){
-        if(state == NPC_States.NORMAL){
+    public void update(float delta , Game game){
+        if(state == Entity_States.NORMAL){
             currentAnimation = type.walk;
         }
-        else if(state == NPC_States.TURN){
+        else if(state == Entity_States.TURN){
             currentAnimation = type.turn;
         }
-        else if(state == NPC_States.DEAD) {
+        else if(state == Entity_States.DEAD) {
             currentAnimation = type.die;
         }
-        else if(state == NPC_States.DEATH_LANDING){
+        else if(state == Entity_States.DEATH_LANDING){
             currentAnimation = type.land;
         }
 
         stateTime += delta;
 
 
-       super.update(delta, blocks);
+       super.update(delta, game);
 
         if(state.hasNextState() && currentAnimation.isAnimationFinished(stateTime)){
             setState(state.getNextState());
         }
+
     }
 
 
@@ -62,8 +64,8 @@ public class LinearEnemy extends NPC{
     }
 
     @Override
-    public void setState(NPC_States state) {
-        if(state == NPC_States.TURN){
+    public void setState(Entity_States state) {
+        if(state == Entity_States.TURN){
             velocityX *= -1;
         }
         super.setState(state);

@@ -5,18 +5,21 @@ import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector2;
+import com.mygame.game.controller.factory.InsectFactory;
 import com.mygame.game.models.Game;
-import com.mygame.game.models.entities.LinearEnemies;
-import com.mygame.game.models.entities.LinearEnemy;
+import com.mygame.game.view.GameView;
+import com.mygame.game.view.RoomView;
 
 import java.util.ArrayList;
 
 public class MapManager {
     private static ArrayList<Room> chunk = new ArrayList<>();
-    public static void loadChunk(String chunk){
+    private static InsectFactory factory = new InsectFactory();
+    public static void loadChunk(String chunk , int roomNumbers){
         MapManager.chunk.clear();
         TmxMapLoader loader = new TmxMapLoader();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < roomNumbers; i++) {
                 Room room = new Room();
                 room.setMap(loader.load("maps/" + chunk +i+ "/" + chunk + i + ".tmx"));
                 room.setName(chunk + i);
@@ -24,51 +27,59 @@ public class MapManager {
              loadEnemies(room);
                 MapManager.chunk.add(room);
             }
-       // System.out.println(MapManager.chunk.get(0));
-        //return MapManager.chunk.getFirst();
+
     }
 
     private static void loadEnemies(Room room){ /// you get the index from the POINT object's fields(transition point)
-        /// TO DO : LOAD ENEMIS ONE BY ONE
+        /// TO DO : LOAD ENEMIES ONE BY ONE
 
-        PointMapObject spawnPoint = (PointMapObject) room.getMap().getLayers().
-            get("Collisions").getObjects().get("tiktik");
-        if(room.getName().equals("CityOfTears0")){
-            LinearEnemy tiktik = new LinearEnemy(LinearEnemies.TIKTIK , spawnPoint.getProperties().get("x" , Float.class) ,
-                spawnPoint.getProperties().get("y" , Float.class));
-            room.getEnemies().add(tiktik);
-        }
+       for (PointMapObject point : room.getMap().getLayers().get("Collisions")
+           .getObjects().getByType(PointMapObject.class)) {
+           if(point.getProperties().get("Class") == "EnemySpawnPoint"){
+               String name = point.getProperties().get("Name").toString();
+               int type = Integer.parseInt(point.getProperties().get("Type").toString());
+               float x = point.getProperties().get("X" , Float.class);
+               float y = point.getProperties().get("Y" , Float.class);
+               Vector2  position = new Vector2(x , y);
+              try {
+                  room.getEnemies().add(factory.createInsect(name, type, position));
+              }catch (Exception e){
+                  System.out.println("Sometimes in the life I'm too competitive.\n" +
+                      "It's good to be competitive");
+              }
+           }
+       }
     }
 
 
 
     private static void setBlocks(TiledMap map , Room room){
-        for (MapObject obj : map.getLayers().get("Collisions").getObjects().getByType(
+        for (RectangleMapObject obj : map.getLayers().get("Collisions").getObjects().getByType(
             RectangleMapObject.class
         )){
 
-            room.getBlocks().add(new SolidBlock((RectangleMapObject) obj));
+            room.getBlocks().add(new SolidBlock(obj));
         }
     }
 
 
 
-    public static Room loadRoom(int index){
-        return  chunk.get(index);
+    public static void loadRoom(int index){
+        Game.setCurrent_room(chunk.get(index));
+       if(GameView.getCurrentRoomView() != null) GameView.setCurrentRoomView(new RoomView(chunk.get(index)));
+    }
+
+    public static InsectFactory getFactory() {
+        return factory;
+    }
+
+    public static void setFactory(InsectFactory factory) {
+        MapManager.factory = factory;
     }
 
     /// when we call this function? when we go into a transition area
 
-   public static void transition(MapObject object){
-        boolean new_chunk = object.getProperties().get("new_chunk", Boolean.class);
-        if(new_chunk){
-            MapManager.loadChunk(object.getProperties().get("new_chunk", String.class));
-            Game.setCurrent_room(loadRoom(0));
-        }
-         else{
-            Game.setCurrent_room(loadRoom(object.getProperties().get("room_index", Integer.class)));
-         }
-    }
+
 
 
 }

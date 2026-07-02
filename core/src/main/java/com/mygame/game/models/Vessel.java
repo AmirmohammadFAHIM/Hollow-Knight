@@ -3,7 +3,7 @@ package com.mygame.game.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygame.game.models.entities.NPC;
+import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.map.SolidBlock;
 import com.mygame.game.view.VesselRender;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Vessel{
     /// ---------------STATICS-----------------
     private static float vertical_speed = 580f;
-    private static float horizontal_speed = 350f;
+    private static float horizontal_speed = 450f;
     private static float dash_speed = 550f;
     private static float dash_cooldown = 0.4f;
     private static float gravity = 7f;
@@ -261,37 +261,39 @@ public class Vessel{
         // -----------------------------------------------------------------
         if(is_ground) velocityY = 0;
         else if(state != States.DASH && state != States.FIREBALL) velocityY -= gravity;
+
         x += velocityX * delta;
         bounds.x = x;
 
-        // ترفند حاشیه امن: هیت‌باکس را موقتاً از بالا و پایین ۲ پیکسل کوچیک می‌کنیم.
-        // این کار باعث میشه وقتی روی زمینِ صاف راه میری، خطای اعشاریِ جاوا
-        // تو رو با بلوک‌های کف زمین درگیر نکنه و نرم راه بری.
+        // رفع باگ تلپورت (باگ شماره ۳):
+        // فقط کف پا را ۲ پیکسل بالا می‌آوریم تا با زمین درگیر نشود.
+        // سقفِ سر (Top) را دست‌نخورده رها می‌کنیم تا بالاتنه کاملاً دیوارها را تشخیص دهد.
         bounds.y = y + 2f;
-        bounds.height = height - 4f;
+        bounds.height = height - 2f; // اینگونه بالای هیت‌باکس دقیقاً سر جایش می‌ماند (y + height)
 
         for (SolidBlock sb : blocks) {
             Rectangle blockRect = sb.getBlock();
             if (blockRect.overlaps(bounds)) {
-                // برخورد افقی قطعی با یک مانع/دیوار
+                // برخورد افقی با دیوار
                 if (velocityX > 0) {
-                    x = blockRect.x - width; // مماس شدن با سمت چپ دیوار
+                    x = blockRect.x - width;
                 } else if (velocityX < 0) {
-                    x = blockRect.x + blockRect.width; // مماس شدن با سمت راست دیوار
+                    x = blockRect.x + blockRect.width;
                 }
 
-                if (!is_ground) {
+                // ورود به حالت وال‌اسلاید (فقط در هوا و در حال سقوط)
+                if (!is_ground && velocityY < 0) {
                     setState(States.WALL_SIDE);
                     double_jump = true;
                 }
 
                 velocityX = 0;
-                bounds.x = x; // آپدیت فوری هیت‌باکس برای جلوگیری از تلپورت شدن توسط محور Y
-                break; // <--- دلیل گیر کردن‌های قبلیت نبودِ همین یک کلمه بود! به محض حل شدن برخورد، حلقه باید متوقف بشه.
+                bounds.x = x;
+                break;
             }
         }
 
-        // برگرداندن هیت‌باکس عمودی به اندازه واقعی برای محاسبات Y
+        // برگرداندن هیت‌باکس به ابعاد واقعی برای محاسبات محور Y
         bounds.y = y;
         bounds.height = height;
 
@@ -308,25 +310,24 @@ public class Vessel{
                     // فرود موفقیت‌آمیز روی زمین
                     y = blockRect.y + blockRect.height;
 
-                    // مدیریت درست وضعیت Landing فقط زمانی که واقعا سقوط کرده باشی
                     if (state == States.FALLING || state == States.WALL_SIDE) {
                         setState(States.LANDING);
                     }
                     is_ground = true;
                     double_jump = true;
                 } else if (velocityY > 0) {
-                    // اصابت سر شوالیه به سقف
+                    // اصابت سر به سقف
                     y = blockRect.y - height;
                 }
 
                 velocityY = 0;
-                bounds.y = y; // آپدیت فوری هیت‌باکس
-                break; // توقف حلقه بعد از تنظیم شدن روی سطح
+                bounds.y = y;
+                break;
             }
         }
 
         // -----------------------------------------------------------------
-        // ۳. رادار تشخیص زمین (پالس ۱ پیکسلی به زیر پا)
+        // ۳. رادار تشخیص زمین و رفع باگ وال‌اسلاید
         // -----------------------------------------------------------------
         bounds.y = y - 1f;
         boolean grounded = false;
@@ -336,8 +337,33 @@ public class Vessel{
                 break;
             }
         }
-        bounds.y = y; // بازگرداندن رادار به جای اصلی
+        bounds.y = y;
         is_ground = grounded;
+
+        // رفع باگ وال‌اسلاید (باگ شماره ۱):
+        // اگر در حالت وال‌اسلاید هستیم، چک می‌کنیم آیا هنوز دیواری در نزدیکی هست؟
+        if (state == States.WALL_SIDE) {
+            boolean wallPresent = false;
+
+            // چک کردن دیوار در سمت چپ (با فاصله ناچیز ۱ پیکسلی)
+            bounds.x = x - 1f;
+            for (SolidBlock sb : blocks) {
+                if (sb.getBlock().overlaps(bounds)) { wallPresent = true; break; }
+            }
+
+            // چک کردن دیوار در سمت راست (با فاصله ناچیز ۱ پیکسلی)
+            bounds.x = x + 1f;
+            for (SolidBlock sb : blocks) {
+                if (sb.getBlock().overlaps(bounds)) { wallPresent = true; break; }
+            }
+
+            bounds.x = x; // برگرداندن موقعیت اصلی هیت‌باکس
+
+            // اگر دیواری نبود یا بازیکن به زمین رسید، از حالت وال‌اسلاید خارج شو
+            if (!wallPresent || is_ground) {
+                setState(States.FALLING);
+            }
+        }
     }
 
 
@@ -345,8 +371,8 @@ public class Vessel{
     private void slash(Game game){
 
 
-        ArrayList<NPC> enemies = Game.getCurrent_room().getEnemies();
-        for (NPC n : enemies) {
+        ArrayList<Entity> enemies = Game.getCurrent_room().getEnemies();
+        for (Entity n : enemies) {
             if(n.getBounds().overlaps(slashBounds)){
                /// To Do:Declare that enemy is hit
                 n.setHurt(true);

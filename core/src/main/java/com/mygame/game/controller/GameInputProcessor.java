@@ -3,10 +3,8 @@ package com.mygame.game.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.mygame.game.models.FireBall;
-import com.mygame.game.models.States;
-import com.mygame.game.models.Vessel;
-import com.mygame.game.models.Game;
+import com.mygame.game.models.*;
+import com.mygame.game.models.skill.Shootable;
 
 public class GameInputProcessor extends InputAdapter {
     private Vessel vessel;
@@ -70,14 +68,14 @@ public class GameInputProcessor extends InputAdapter {
                 vessel.setIs_ground(false);
             }
 
+
         }
         else if(keycode ==  Input.Keys.K){
                 vessel.setState(States.SLASH);
          }
         else if(keycode == Input.Keys.J){
             vessel.setState(States.FIREBALL);
-            game.getFireballs().add(new FireBall(vessel.getX() ,
-                vessel.getY() , vessel.isRight()));
+
          }
         else if(keycode == Input.Keys.F){
          }

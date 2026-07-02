@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.map.Chunk;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
+import com.mygame.game.models.skill.Shootable;
 
 import java.util.Map;
 
@@ -11,13 +12,13 @@ public class Game {
     private static Vessel vessel;
     private static Chunk current_chunk;
     private static Room current_room;
-    private Array<FireBall> fireballs =  new Array<>();
+    private Array<Shootable> shootables =  new Array<>();
 
     public  Game(){
         vessel = new Vessel();
         current_chunk = new Chunk();
-        MapManager.loadChunk("CityOfTears");
-        current_room = MapManager.loadRoom(0);
+        MapManager.loadChunk("CityOfTears" , 1);
+        MapManager.loadRoom(0);
 
     }
     public static Vessel getVessel() {
@@ -44,12 +45,7 @@ public class Game {
         Game.current_room = current_room;
     }
 
-
-    public void setFireballs(Array<FireBall> fireballs) {
-        this.fireballs = fireballs;
-    }
-
-    public Array<FireBall> getFireballs() {
-        return fireballs;
+    public Array<Shootable> getShootables() {
+        return shootables;
     }
 }

@@ -18,7 +18,7 @@ public class Main extends Game {
     @Override
     public void create() {
 
-        manager = new UiManager(this);
+        new UiManager(this);
         setScreen(new MainScreen());
         shapeRenderer = new ShapeRenderer();
     }

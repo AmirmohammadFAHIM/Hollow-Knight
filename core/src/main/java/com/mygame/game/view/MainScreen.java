@@ -25,7 +25,7 @@ import com.mygame.game.controller.UiManager;
 
 public class MainScreen implements Screen {
         private Stage stage;
-        private Table rootTable;
+        private Stack rootTable;
         private Table HomeTable;
         private Table Optiontable;
         private Table Achievementtable;
@@ -84,9 +84,12 @@ public class MainScreen implements Screen {
             stage.addActor(image);
             image.toBack();
             miniators();
-            rootTable = new Table();
+            rootTable = new Stack();
+
             rootTable.setFillParent(true);
-            rootTable.add(HomeTable = new MainMenuTable());
+            //rootTable.center();
+            rootTable.add(HomeTable = new MainMenuTable(this));
+
             stage.addActor(rootTable);
             Gdx.input.setInputProcessor(stage);
 
@@ -153,7 +156,13 @@ public class MainScreen implements Screen {
 
         }
 
-
+    public Stage getStage() {
+        return stage;
     }
+
+    public Stack getRootTable() {
+        return rootTable;
+    }
+}
 
 

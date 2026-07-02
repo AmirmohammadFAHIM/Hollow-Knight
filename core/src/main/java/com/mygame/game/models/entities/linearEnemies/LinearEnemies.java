@@ -1,4 +1,4 @@
-package com.mygame.game.models.entities;
+package com.mygame.game.models.entities.linearEnemies;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,7 +14,7 @@ public enum LinearEnemies {
             this.die = new   Animation<>(0.09f, x.findRegions("Death Air"));
             x = new   TextureAtlas("enemies/tiktik/DeathLand.atlas");
             this.land  = new  Animation<>(0.09f, x.findRegions
-                ("DeathLand"));
+                ("Death Land"));
             x = new   TextureAtlas("enemies/tiktik/Turn.atlas");
             this.turn = new  Animation<>(0.09f, x.findRegions("Turn"));
         }

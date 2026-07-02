@@ -1,24 +1,24 @@
 package com.mygame.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
 import com.mygame.game.controller.GameInputProcessor;
-import com.mygame.game.models.FireBall;
 import com.mygame.game.models.Game;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.mygame.game.models.map.MapManager;
+
 
 public class GameView implements Screen {
     private static GameController game;
@@ -27,25 +27,44 @@ public class GameView implements Screen {
     private SpriteBatch  batch;
     private OrthographicCamera  camera;
     private ExtendViewport  viewport;
+    private ExtendViewport uiViewport;
     private float stateTime = 0f;
-    private ShapeRenderer  shapeRenderer;
-
+    private Stage stage;
+    private Stack mainStack;
 
     @Override
     public void show() {
-        shapeRenderer = new ShapeRenderer();
+        camera = new OrthographicCamera();
+        viewport = new ExtendViewport(1028, 960,camera);
 
-        try {
-            MapManager.loadChunk("CityOfTears");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        uiViewport = new ExtendViewport(1028, 960);
+        stage = new Stage(uiViewport);
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+
+                if (keycode == Input.Keys.ESCAPE) {
+                    if(!GameController.isPaused()){
+                        mainStack.add(new PauseMenu());
+                        GameController.setPaused(true);
+                    }
+                }
+                return super.keyDown(event, keycode);
+            }
+        });
+        mainStack = new Stack();
+        mainStack.setFillParent(true);
+        stage.addActor(mainStack);
+
         GameInputProcessor processor = new GameInputProcessor(Game.getVessel());
         game = new GameController(new Game() /* here can be the idea for saves */ ,
             processor);
         currentRoomView = new RoomView(Game.getCurrent_room());
         processor.setVessel(Game.getVessel());
-        Gdx.input.setInputProcessor(processor);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(processor);
+        Gdx.input.setInputProcessor(multiplexer);
         processor.setGame(game.getGame());
 
 
@@ -55,8 +74,7 @@ public class GameView implements Screen {
 
         vesselRender = new VesselRender();
         batch = new SpriteBatch();
-        camera = new OrthographicCamera();
-        viewport = new ExtendViewport(1028, 960,camera);
+
         PointMapObject spawnPoint = (PointMapObject) currentRoomView.getRoom().getMap().getLayers().get("Collisions").
             getObjects().get("SpawnPoint");
         float x = spawnPoint.getProperties().get("x" , Float.class);
@@ -91,14 +109,18 @@ public class GameView implements Screen {
         camera.update();
         batch.end();
 
+        stage.act(delta);
+        stage.draw();
+
 
         /// --------MAIN BRAIN OF THE GAME-----------
-        game.Update(stateTime , delta);
+      if(!GameController.isPaused())  game.Update(stateTime , delta);
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height , false);
+        uiViewport.update(width, height, false);
     }
 
     @Override
@@ -164,4 +186,12 @@ public class GameView implements Screen {
             camera.update();
         }
 
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public Stack getMainStack() {
+        return mainStack;
+    }
 }

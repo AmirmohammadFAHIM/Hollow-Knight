@@ -1,7 +1,7 @@
 package com.mygame.game.models.map;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.mygame.game.models.entities.NPC;
+import com.mygame.game.models.entities.Entity;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ public class Room {
     private String name;
     private ArrayList<SolidBlock> blocks =  new ArrayList<>();
     private TiledMap  map;
-    private ArrayList<NPC> enemies = new ArrayList<>();
+    private ArrayList<Entity> enemies = new ArrayList<>();
 
 
     public Room(TiledMap map , String name){
@@ -54,11 +54,11 @@ public class Room {
         this.map = map;
     }
 
-    public ArrayList<NPC> getEnemies() {
+    public ArrayList<Entity> getEnemies() {
         return enemies;
     }
 
-    public void setEnemies(ArrayList<NPC> enemies) {
+    public void setEnemies(ArrayList<Entity> enemies) {
         this.enemies = enemies;
     }
 }
