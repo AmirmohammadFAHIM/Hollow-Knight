@@ -1,0 +1,15 @@
+Attack.png
+size: 220, 465
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Attack
+  bounds: 0, 0, 220, 155
+  index: 0
+Attack
+  bounds: 0, 155, 220, 155
+  index: 1
+Attack
+  bounds: 0, 310, 220, 155
+  index: 2

@@ -1,0 +1,18 @@
+Wallside.png
+size: 1396, 186
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Wall Slide
+  bounds: 0, 0, 349, 186
+  index: 0
+Wall Slide
+  bounds: 349, 0, 349, 186
+  index: 1
+Wall Slide
+  bounds: 698, 0, 349, 186
+  index: 2
+Wall Slide
+  bounds: 1047, 0, 349, 186
+  index: 3

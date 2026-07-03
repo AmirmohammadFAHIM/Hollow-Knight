@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygame.game.models.*;
-import com.mygame.game.models.skill.Shootable;
 
 public class GameInputProcessor extends InputAdapter {
     private Vessel vessel;

@@ -4,15 +4,13 @@ import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.map.Chunk;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
-import com.mygame.game.models.skill.Shootable;
-
-import java.util.Map;
+import com.mygame.game.models.skill.Projectile;
 
 public class Game {
     private static Vessel vessel;
     private static Chunk current_chunk;
     private static Room current_room;
-    private Array<Shootable> shootables =  new Array<>();
+    private Array<Projectile> shootables =  new Array<>();
 
     public  Game(){
         vessel = new Vessel();
@@ -45,7 +43,7 @@ public class Game {
         Game.current_room = current_room;
     }
 
-    public Array<Shootable> getShootables() {
+    public Array<Projectile> getShootables() {
         return shootables;
     }
 }

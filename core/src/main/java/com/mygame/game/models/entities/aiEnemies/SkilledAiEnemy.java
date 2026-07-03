@@ -22,7 +22,7 @@ public class SkilledAiEnemy extends AiEnemy{
         }
 
         if(state == Entity_States.Skill){
-            ///  skill.exectue , till it's really executed , cooldown , hitting wall etc ... .
+            ///  attack.exectue , till it's really executed , cooldown , hitting wall etc ... .
         }
         else if(state == Entity_States.Attack){
             combat(game);

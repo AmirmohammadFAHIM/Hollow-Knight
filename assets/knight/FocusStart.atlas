@@ -1,0 +1,15 @@
+FocusStart.png
+size: 1047, 186
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Focus Start
+  bounds: 0, 0, 349, 186
+  index: 0
+Focus Start
+  bounds: 349, 0, 349, 186
+  index: 1
+Focus Start
+  bounds: 698, 0, 349, 186
+  index: 2

@@ -8,7 +8,7 @@ public enum Entity_States {
 
     END_ATTACK(NORMAL),
 
-    Attack(END_ATTACK),
+    Attack(null),
 
     START_ATTACK(Attack),
 

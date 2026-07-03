@@ -24,7 +24,7 @@ public class MapManager {
                 room.setMap(loader.load("maps/" + chunk +i+ "/" + chunk + i + ".tmx"));
                 room.setName(chunk + i);
                 setBlocks(room.getMap() , room);
-             loadEnemies(room);
+                loadEnemies(room);
                 MapManager.chunk.add(room);
             }
 
@@ -35,18 +35,20 @@ public class MapManager {
 
        for (PointMapObject point : room.getMap().getLayers().get("Collisions")
            .getObjects().getByType(PointMapObject.class)) {
-           if(point.getProperties().get("Class") == "EnemySpawnPoint"){
+           System.out.println(point.getProperties());
+           if(point.getProperties().get("type" , String.class).equals("EnemySpawnPoint")){
                String name = point.getProperties().get("Name").toString();
                int type = Integer.parseInt(point.getProperties().get("Type").toString());
-               float x = point.getProperties().get("X" , Float.class);
-               float y = point.getProperties().get("Y" , Float.class);
+               float x = point.getProperties().get("x" , Float.class);
+               float y = point.getProperties().get("y" , Float.class);
                Vector2  position = new Vector2(x , y);
-              try {
+
                   room.getEnemies().add(factory.createInsect(name, type, position));
-              }catch (Exception e){
+                  System.out.println(room.getEnemies().getLast());
+              /*}catch (Exception e){
                   System.out.println("Sometimes in the life I'm too competitive.\n" +
                       "It's good to be competitive");
-              }
+              }*/
            }
        }
     }

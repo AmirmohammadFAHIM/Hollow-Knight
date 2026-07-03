@@ -1,0 +1,30 @@
+Dash.png
+size: 349, 1488
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Dash
+  bounds: 0, 0, 349, 186
+  index: 0
+Dash
+  bounds: 0, 186, 349, 186
+  index: 1
+Dash
+  bounds: 0, 372, 349, 186
+  index: 2
+Dash
+  bounds: 0, 558, 349, 186
+  index: 3
+Dash
+  bounds: 0, 744, 349, 186
+  index: 4
+Dash
+  bounds: 0, 930, 349, 186
+  index: 5
+Dash
+  bounds: 0, 1116, 349, 186
+  index: 6
+Dash
+  bounds: 0, 1302, 349, 186
+  index: 7

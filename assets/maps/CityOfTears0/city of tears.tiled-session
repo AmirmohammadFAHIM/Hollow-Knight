@@ -1,0 +1,459 @@
+{
+    "activeFile": "CityOfTears0.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "BG_far_0002_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "BG_far_0007_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx": {
+            "scale": 0.2353515625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 4096,
+                "y": 1200.331950207469
+            }
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#BG_far_0006_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#BG_far_0009_f": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#BG_far_0013_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#_0022_city_break": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#_0026_city_break": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#antique dealer door": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#antique_r_0002_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#antique_r_0004_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#antique_r_0005_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#antique_r_0007_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#antique_shop_mask_02": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#city_station_mask": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#new_city_entrance_trimmed_0002_3": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_add_doorbg_straight": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_layered_0015_w": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_layered_0057_l": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_layered_0085_l": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_layered_0088_Layer-109": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_layered_0097_ar": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_layered_0100_w": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruin_plat_float_02": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruind_bridge_roof_02": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruind_window_04": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruins_additions_0002_a": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruins_clutter_0002_b": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruins_dark pillar": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruins_resting_extra_bits_0047_Layer-149": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruins_resting_extra_bits_0056_Layer-158": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#ruins_resting_extra_bits_0060_Layer-162": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx#windowrain": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/_0018_city_break.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/antique_r_0010_a.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/book_piles_0004_a.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/new_city_entrance_trimmed_0001_4.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_add_crumble_wall.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_add_wall.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0012_w.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0017_w.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0024_Layer-50.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0026_Layer-52.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0055_w.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0059_Layer-85.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruind_window_05.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruins_fences_0001_a.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruins_layered_0010_Layer-13.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/window_rain.tsx": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 2246,
+                "y": 765
+            }
+        },
+        "CityOfTears0.tmx#BG_far_0006_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#BG_far_0009_f": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#BG_far_0013_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#_0022_city_break": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#_0026_city_break": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#antique dealer door": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#antique_r_0002_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#antique_r_0004_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#antique_r_0005_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#antique_r_0007_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#antique_shop_mask_02": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#city_station_mask": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#new_city_entrance_trimmed_0002_3": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_add_doorbg_straight": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_layered_0015_w": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_layered_0057_l": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_layered_0085_l": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_layered_0088_Layer-109": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_layered_0097_ar": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_layered_0100_w": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruin_plat_float_02": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruind_bridge_roof_02": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruind_window_04": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruins_additions_0002_a": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruins_clutter_0002_b": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruins_dark pillar": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruins_resting_extra_bits_0047_Layer-149": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruins_resting_extra_bits_0056_Layer-158": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#ruins_resting_extra_bits_0060_Layer-162": {
+            "scaleInDock": 1
+        },
+        "CityOfTears0.tmx#windowrain": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "_0018_city_break.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "antique_r_0010_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "book_piles_0004_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "new_city_entrance_trimmed_0001_4.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "room1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 4843,
+                "y": 1139
+            }
+        },
+        "room1.tmx#BG_far_0006_a": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#BG_far_0009_f": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#BG_far_0013_a": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#_0026_city_break": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#antique dealer door": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#antique_r_0004_a": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#antique_r_0005_a": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#antique_r_0007_a": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#antique_shop_mask_02": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#city_station_mask": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#new_city_entrance_trimmed_0002_3": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_add_doorbg_straight": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_layered_0015_w": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_layered_0057_l": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_layered_0085_l": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_layered_0088_Layer-109": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_layered_0097_ar": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_layered_0100_w": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruin_plat_float_02": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruind_window_04": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruins_clutter_0002_b": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruins_dark pillar": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruins_resting_extra_bits_0047_Layer-149": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruins_resting_extra_bits_0056_Layer-158": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#ruins_resting_extra_bits_0060_Layer-162": {
+            "scaleInDock": 1
+        },
+        "room1.tmx#windowrain": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_add_crumble_wall.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_add_wall.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_layered_0012_w.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_layered_0017_w.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_layered_0024_Layer-50.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_layered_0026_Layer-52.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_layered_0055_w.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruin_layered_0059_Layer-85.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruind_window_05.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruins_fences_0001_a.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruins_layered_0010_Layer-13.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ruins_resting_extra_bits_0056_Layer-158.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "window_rain.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "windowrain.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/City of Tears",
+    "map.height": 300,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "map.width": 400,
+    "openFiles": [
+        "CityOfTears0.tmx"
+    ],
+    "project": "city of tears.tiled-project",
+    "recentFiles": [
+        "CityOfTears0.tmx",
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/CityOfTears0.tmx",
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/ruin_layered_0024_Layer-50.tsx",
+        "C:/Users/Administrator/OneDrive/Desktop/Programming/Java/Hollow Knight/assets/maps/CityOfTears0/_0018_city_break.tsx",
+        "room1.tmx",
+        "window_rain.tsx",
+        "windowrain.tsx",
+        "antique_r_0010_a.tsx",
+        "ruins_fences_0001_a.tsx",
+        "ruin_layered_0012_w.tsx",
+        "book_piles_0004_a.tsx",
+        "ruin_layered_0055_w.tsx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    },
+    "tileset.type": 0
+}

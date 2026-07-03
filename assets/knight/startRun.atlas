@@ -1,0 +1,29 @@
+startRun.png
+size: 213, 240
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Run
+  bounds: 1, 148, 76, 122
+  offsets: 130, 3, 349, 186
+  rotate: 90
+  index: 0
+Run
+  bounds: 133, 1, 79, 113
+  offsets: 125, 3, 349, 186
+  index: 1
+Run
+  bounds: 129, 116, 83, 123
+  offsets: 129, 3, 349, 186
+  index: 2
+Run
+  bounds: 1, 69, 77, 126
+  offsets: 135, 4, 349, 186
+  rotate: 90
+  index: 3
+Run
+  bounds: 1, 1, 66, 130
+  offsets: 137, 3, 349, 186
+  rotate: 90
+  index: 4

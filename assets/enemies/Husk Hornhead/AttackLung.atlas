@@ -1,0 +1,42 @@
+AttackLung.png
+size: 478, 1314
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Attack Lunge
+  bounds: 0, 0, 239, 219
+  index: 0
+Attack Lunge
+  bounds: 239, 0, 239, 219
+  index: 1
+Attack Lunge
+  bounds: 0, 219, 239, 219
+  index: 2
+Attack Lunge
+  bounds: 239, 219, 239, 219
+  index: 3
+Attack Lunge
+  bounds: 0, 438, 239, 219
+  index: 4
+Attack Lunge
+  bounds: 239, 438, 239, 219
+  index: 5
+Attack Lunge
+  bounds: 0, 657, 239, 219
+  index: 6
+Attack Lunge
+  bounds: 239, 657, 239, 219
+  index: 7
+Attack Lunge
+  bounds: 0, 876, 239, 219
+  index: 8
+Attack Lunge
+  bounds: 239, 876, 239, 219
+  index: 9
+Attack Lunge
+  bounds: 0, 1095, 239, 219
+  index: 10
+Attack Lunge
+  bounds: 239, 1095, 239, 219
+  index: 11

@@ -51,4 +51,9 @@ public class AirAttack implements Attack {
     public float getCoolDown() {
         return cooldown;
     }
+
+    @Override
+    public boolean isEndless() {
+        return false;
+    }
 }

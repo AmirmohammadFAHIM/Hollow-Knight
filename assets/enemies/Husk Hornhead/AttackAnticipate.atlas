@@ -1,0 +1,21 @@
+AttackAnticipate.png
+size: 1195, 219
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Attack Anticipate
+  bounds: 0, 0, 239, 219
+  index: 0
+Attack Anticipate
+  bounds: 239, 0, 239, 219
+  index: 1
+Attack Anticipate
+  bounds: 478, 0, 239, 219
+  index: 2
+Attack Anticipate
+  bounds: 717, 0, 239, 219
+  index: 3
+Attack Anticipate
+  bounds: 956, 0, 239, 219
+  index: 4

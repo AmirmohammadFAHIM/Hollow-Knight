@@ -1,0 +1,21 @@
+SlashAlt.png
+size: 1396, 186
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+SlashAlt
+  bounds: 0, 0, 349, 186
+  index: 0
+SlashAlt
+  bounds: 349, 0, 349, 186
+  index: 1
+SlashAlt
+  bounds: 698, 0, 349, 186
+  index: 2
+SlashAlt
+  bounds: 1047, 0, 349, 186
+  index: 3
+SlashAlt
+  bounds: 1047, 0, 349, 186
+  index: 4

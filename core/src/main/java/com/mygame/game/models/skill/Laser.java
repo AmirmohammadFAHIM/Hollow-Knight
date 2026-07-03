@@ -7,7 +7,7 @@ import com.mygame.game.models.entities.aiEnemies.AiEnemy;
 import java.util.Random;
 
 public class Laser {
-    Shootable laser;
+    Projectile laser;
     float LaserTime;
     float remainingLaserTime;
     float speedTime;

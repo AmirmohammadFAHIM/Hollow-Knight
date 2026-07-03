@@ -1,0 +1,27 @@
+Evade.png
+size: 1995, 189
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Evade
+  bounds: 0, 0, 285, 189
+  index: 0
+Evade
+  bounds: 285, 0, 285, 189
+  index: 1
+Evade
+  bounds: 570, 0, 285, 189
+  index: 2
+Evade
+  bounds: 855, 0, 285, 189
+  index: 3
+Evade
+  bounds: 1140, 0, 285, 189
+  index: 4
+Evade
+  bounds: 1425, 0, 285, 189
+  index: 5
+Evade
+  bounds: 1710, 0, 285, 189
+  index: 6

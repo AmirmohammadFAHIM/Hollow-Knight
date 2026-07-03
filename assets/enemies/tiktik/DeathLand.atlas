@@ -1,0 +1,15 @@
+DeathLand.png
+size: 345, 105
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Death Land
+  bounds: 0, 0, 115, 105
+  index: 0
+Death Land
+  bounds: 115, 0, 115, 105
+  index: 1
+Death Land
+  bounds: 230, 0, 115, 105
+  index: 2

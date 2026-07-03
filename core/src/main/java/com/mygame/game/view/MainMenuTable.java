@@ -43,13 +43,14 @@ public class MainMenuTable extends Table {
         // Label label = new Label("Load Game" , null , "Century");
 
         TextButton newGame  = new TextButton("Start Game", style);
-        newGame.addListener(new  ClickListener(){
+
+
+        newGame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 UiManager.setScreen(new GameView());
             }
         });
-
         newGame.setTouchable(Touchable.enabled);
 
         TextButton loadGame  = new TextButton("Achievements", style);
@@ -74,17 +75,26 @@ public class MainMenuTable extends Table {
         this.add(guide).align(Align.center).row();
         this.add(exit).center().row();
 
-        addListener(options , guide , exit );
+        //addListener(options , guide , exit , newGame);
 
     }
 
 
-    private void addListener(TextButton options , TextButton guide , TextButton exit ){
+    private void addListener(TextButton options , TextButton guide , TextButton exit ,
+                             TextButton newGame){
         options.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 screen.getRootTable().clearChildren();
                 screen.getRootTable().addActor(new OptionMenu());
+            }
+        });
+
+        newGame.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.getRootTable().clearChildren();
+                screen.getRootTable().add(new LoadingMenu());
             }
         });
     }

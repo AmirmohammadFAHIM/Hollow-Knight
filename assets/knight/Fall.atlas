@@ -1,0 +1,15 @@
+Fall.png
+size: 1047, 186
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Fall
+  bounds: 0, 0, 349, 186
+  index: 3
+Fall
+  bounds: 349, 0, 349, 186
+  index: 4
+Fall
+  bounds: 698, 0, 349, 186
+  index: 5

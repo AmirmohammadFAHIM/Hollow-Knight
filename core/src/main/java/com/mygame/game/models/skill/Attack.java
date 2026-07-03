@@ -11,4 +11,5 @@ public interface Attack {
 
     public float getCoolDown();
 
+    public boolean isEndless();
 }

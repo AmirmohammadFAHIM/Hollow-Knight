@@ -11,6 +11,8 @@ import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
 import com.mygame.game.models.map.MapManager;
 
+import java.util.Objects;
+
 public class GameController {
     private Game game;
     private GameInputProcessor  gameInputProcessor;
@@ -56,7 +58,7 @@ public class GameController {
         MapLayer transitionLayer = Game.getCurrent_room().getMap().getLayers().get("transition");
         for (MapObject mapObject : transitionLayer.getObjects()){
             if(mapObject instanceof RectangleMapObject &&
-            mapObject.getProperties().get("Class" , String.class) == "Door" ){
+                Objects.equals(mapObject.getProperties().get("type", String.class), "Door")){
                 RectangleMapObject rect = (RectangleMapObject) mapObject;
                 if(rect.getRectangle().overlaps(knight.getBounds())){
                     if(mapObject.getProperties().get("newChunk" , Boolean.class)){

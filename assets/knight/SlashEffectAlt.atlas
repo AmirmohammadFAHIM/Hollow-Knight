@@ -1,0 +1,24 @@
+SlashEffectAlt.png
+size: 349, 1116
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+SlashEffectAlt
+  bounds: 0, 0, 349, 186
+  index: 0
+SlashEffectAlt
+  bounds: 0, 186, 349, 186
+  index: 1
+SlashEffectAlt
+  bounds: 0, 372, 349, 186
+  index: 2
+SlashEffectAlt
+  bounds: 0, 558, 349, 186
+  index: 3
+SlashEffectAlt
+  bounds: 0, 744, 349, 186
+  index: 4
+SlashEffectAlt
+  bounds: 0, 930, 349, 186
+  index: 5

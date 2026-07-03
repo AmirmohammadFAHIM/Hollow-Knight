@@ -1,0 +1,33 @@
+WallJump.png
+size: 349, 1674
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Walljump
+  bounds: 0, 0, 349, 186
+  index: 0
+Walljump
+  bounds: 0, 186, 349, 186
+  index: 1
+Walljump
+  bounds: 0, 372, 349, 186
+  index: 2
+Walljump
+  bounds: 0, 558, 349, 186
+  index: 3
+Walljump
+  bounds: 0, 744, 349, 186
+  index: 4
+Walljump
+  bounds: 0, 930, 349, 186
+  index: 5
+Walljump
+  bounds: 0, 1116, 349, 186
+  index: 6
+Walljump
+  bounds: 0, 1302, 349, 186
+  index: 7
+Walljump
+  bounds: 0, 1488, 349, 186
+  index: 8

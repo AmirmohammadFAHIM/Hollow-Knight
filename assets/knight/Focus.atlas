@@ -1,0 +1,27 @@
+Focus.png
+size: 349, 1302
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Focus
+  bounds: 0, 0, 349, 186
+  index: 0
+Focus
+  bounds: 0, 186, 349, 186
+  index: 1
+Focus
+  bounds: 0, 372, 349, 186
+  index: 2
+Focus
+  bounds: 0, 558, 349, 186
+  index: 3
+Focus
+  bounds: 0, 744, 349, 186
+  index: 4
+Focus
+  bounds: 0, 930, 349, 186
+  index: 5
+Focus
+  bounds: 0, 1116, 349, 186
+  index: 6

@@ -7,6 +7,7 @@ import com.mygame.game.models.entities.aiEnemies.AiEnemy;
 public class Rage implements Attack {
     boolean endless;
     final float time;
+    float speed;
     float t;
     public Rage(float speed  , float time) {
         this.time = time;
@@ -19,7 +20,7 @@ public class Rage implements Attack {
         this.endless = endless;
         this.speed = speed;
     }
-    float speed;
+
     @Override
     public boolean attack(AiEnemy self, Game game) {
        if(endless) {
@@ -62,5 +63,10 @@ public class Rage implements Attack {
     @Override
     public float getCoolDown() {
         return 0;
+    }
+
+    @Override
+    public boolean isEndless() {
+        return endless;
     }
 }

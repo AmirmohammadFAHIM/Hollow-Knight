@@ -31,6 +31,6 @@ public class InsectFactory {
 
     private Entity SkilledAiEnemy(String name ,  Vector2 position){
         ENEMIES type =  ENEMIES.valueOf(name.toUpperCase());
-        return new SkilledAiEnemy(type , position.x, position.y);
+        return new SkilledAiEnemy(type , position.x, position.y , type.getSkill());
     }
 }

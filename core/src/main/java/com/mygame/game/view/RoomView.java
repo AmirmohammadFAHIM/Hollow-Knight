@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.EntityRenderer;
 import com.mygame.game.models.entities.Entity; // یا Entity بر اساس پکیج خودت
+import com.mygame.game.models.entities.aiEnemies.AiEnemy;
 import com.mygame.game.models.map.Room;
 
 import java.util.ArrayList;
@@ -110,7 +111,13 @@ public class RoomView {
         // ۵. دوباره باز کردن بتچ برای رسم کاراکترها و انمی‌ها
         batch.begin();
         for (EntityRenderer r : renderers) {
-            r.render(batch, camera);
+           try {
+               r.render(batch, camera);
+           }catch (Exception e) {
+               AiEnemy es= (AiEnemy) r.getEntity();
+               System.out.println(r.getEntity().getState() +
+                  es.getType().name() );
+           }
         }
 
         // در نهایت بتچ رو باز می‌ذاریم بمونه تا کلاس GameView خودش متد end() رو برای پایان فریم صدا بزنه

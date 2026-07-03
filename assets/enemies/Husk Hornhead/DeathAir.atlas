@@ -1,0 +1,8 @@
+DeathAir.png
+size: 239, 219
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Death Air
+  bounds: 0, 0, 239, 219

@@ -15,7 +15,7 @@ public class EntityRenderer {
         if(entity.right && !frame.isFlipX()) frame.flip(true, false);
         else if(!entity.right && frame.isFlipX()) frame.flip(true, false);
 
-        batch.draw(frame , entity.x ,  entity.y);
+        batch.draw(frame , entity.x ,  entity.y - 10);
     }
 
     public void setEntity(Entity entity) {

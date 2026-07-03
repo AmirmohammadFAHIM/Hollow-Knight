@@ -1,0 +1,24 @@
+Idle.png
+size: 1434, 219
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Idle
+  bounds: 0, 0, 239, 219
+  index: 0
+Idle
+  bounds: 239, 0, 239, 219
+  index: 1
+Idle
+  bounds: 478, 0, 239, 219
+  index: 2
+Idle
+  bounds: 717, 0, 239, 219
+  index: 3
+Idle
+  bounds: 956, 0, 239, 219
+  index: 4
+Idle
+  bounds: 1195, 0, 239, 219
+  index: 5

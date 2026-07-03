@@ -212,7 +212,7 @@ public class Entity {
 
         if(currentAnimation.isAnimationFinished(stateTime) &&
         state.hasNextState()){
-            state = state.nextState;
+            setState(state.nextState);
         }
     }
 

@@ -1,0 +1,27 @@
+Walk.png
+size: 1673, 219
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Walk
+  bounds: 0, 0, 239, 219
+  index: 0
+Walk
+  bounds: 239, 0, 239, 219
+  index: 1
+Walk
+  bounds: 478, 0, 239, 219
+  index: 2
+Walk
+  bounds: 717, 0, 239, 219
+  index: 3
+Walk
+  bounds: 956, 0, 239, 219
+  index: 4
+Walk
+  bounds: 1195, 0, 239, 219
+  index: 5
+Walk
+  bounds: 1434, 0, 239, 219
+  index: 6

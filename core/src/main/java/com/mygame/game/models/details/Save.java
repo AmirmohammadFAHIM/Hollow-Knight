@@ -7,6 +7,7 @@ public class Save {
     int roomIndex;
     String chunkName;
     int slotIndex;
+    float progress;
 
     public Vessel getVesel() {
         return vesel;
@@ -38,5 +39,9 @@ public class Save {
 
     public void setSlotIndex(int slotIndex) {
         this.slotIndex = slotIndex;
+    }
+
+    public float getProgress() {
+        return progress;
     }
 }

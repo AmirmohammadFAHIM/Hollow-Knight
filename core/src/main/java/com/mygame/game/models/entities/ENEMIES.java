@@ -2,6 +2,7 @@ package com.mygame.game.models.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.mygame.game.models.entities.aiEnemies.LazyMove;
 import com.mygame.game.models.entities.aiEnemies.Move;
 import com.mygame.game.models.entities.aiEnemies.NormalMove;
 import com.mygame.game.models.skill.Laser;
@@ -15,7 +16,26 @@ public enum ENEMIES {
 
     },
 
-    HUSK_DANDY(100 , 50 , 0 , 0);
+    HUSK_HORNHEAD(300 , 100 , 100 , 190){
+        {
+            move = new LazyMove(3 , 2.5f);
+            attack = new Rage(150 , 4 , true);
+
+            /// Initializing animations
+            TextureAtlas atlas = new TextureAtlas("enemies/Husk Hornhead/Walk.atlas");
+            walk = new Animation<>(0.09f , atlas.findRegions("Walk") , Animation.PlayMode.LOOP);
+            atlas = new TextureAtlas("enemies/Husk Hornhead/Idle.atlas");
+            Idle = new Animation<>(0.09f , atlas.findRegions("Idle") , Animation.PlayMode.LOOP);
+            atlas = new TextureAtlas("enemies/Husk Hornhead/AttackAnticipate.atlas");
+            attackStart = new Animation<>(0.09f , atlas.findRegions("Attack Anticipate"));
+            atlas = new TextureAtlas("enemies/Husk Hornhead/AttackLung.atlas");
+            attackLung = new Animation<>(0.09f , atlas.findRegions("Attack Lunge") , Animation.PlayMode.LOOP);
+            atlas = new TextureAtlas("enemies/Husk Hornhead/DeathAir.atlas");
+            deathAir =  new Animation<>(0.09f , atlas.findRegions("Death Air"));
+            atlas = new TextureAtlas("enemies/Husk Hornhead/DeathLand.atlas");
+            deathLand =  new Animation<>(0.09f , atlas.findRegions("Death Land"));
+        }
+    };
 
 
     ENEMIES(float range , float hp , float width , float height ){
@@ -42,7 +62,7 @@ public enum ENEMIES {
     float hp;
     float width;
     float height;
-    Skill skill;
+    Skill skill = null;
     Attack attack;
     Move move;
     Animation<TextureAtlas.AtlasRegion> walk;
@@ -54,7 +74,7 @@ public enum ENEMIES {
     Animation<TextureAtlas.AtlasRegion> skillEnd;
     Animation<TextureAtlas.AtlasRegion> deathAir;
     Animation<TextureAtlas.AtlasRegion> deathLand;
-
+    Animation<TextureAtlas.AtlasRegion> Idle;
 
 
     public float getRange() {
@@ -79,5 +99,49 @@ public enum ENEMIES {
 
     public Attack getAttack() {
         return attack;
+    }
+
+    public Move getMove() {
+        return move;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getWalk() {
+        return walk;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getAttackStart() {
+        return attackStart;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getAttackLung() {
+        return attackLung;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getAttackEnd() {
+        return attackEnd;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getSkillStart() {
+        return skillStart;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getSkillLung() {
+        return skillLung;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getSkillEnd() {
+        return skillEnd;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getDeathAir() {
+        return deathAir;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getDeathLand() {
+        return deathLand;
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getIdle() {
+        return Idle;
     }
 }
