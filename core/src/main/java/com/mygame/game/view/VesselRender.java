@@ -22,6 +22,8 @@ public class VesselRender {
 
     private static Animation<TextureAtlas.AtlasRegion> currentAnimation;
     private Animation<TextureAtlas.AtlasRegion> slashEffect;
+    private Animation<TextureAtlas.AtlasRegion> upSlashEffect;
+    private Animation<TextureAtlas.AtlasRegion> downSlashEffect;
     private Animation<TextureAtlas.AtlasRegion> blast;
 
 
@@ -31,8 +33,12 @@ public class VesselRender {
     }
 
     private void initEffects(){
-        TextureAtlas effect = new  TextureAtlas(Gdx.files.internal("knight/SlashEffectAlt.atlas"));
-        slashEffect = new Animation<>(0.06f , effect.findRegions("SlashEffectAlt"));
+        TextureAtlas effect = new  TextureAtlas(Gdx.files.internal("knight/SlashEffect.atlas"));
+        slashEffect = new Animation<>(0.06f , effect.findRegions("SlashEffect"));
+        effect = new TextureAtlas("knight/UpSlashEffect.atlas");
+        upSlashEffect = new Animation<>(0.06f , effect.findRegions("UpSlashEffect"));
+        effect = new TextureAtlas("knight/DownSlashEffect.atlas");
+        downSlashEffect = new Animation<>(0.06f , effect.findRegions("DownSlashEffect"));
         effect = new TextureAtlas("knight/Blast.atlas");
         blast = new Animation<>(0.1f , effect.findRegions("Blast"));
     }
@@ -60,15 +66,7 @@ public class VesselRender {
 
         checkDir(frame);
         batch.draw(frame , drawX , drawY);
-        if(vessel.getState() == States.SLASH){
-            slashStateTime += Gdx.graphics.getDeltaTime();
-           Rectangle rect = vessel.getSlashBounds();
-           TextureAtlas.AtlasRegion slashFrame = slashEffect.getKeyFrame(slashStateTime);
-           checkDir(slashFrame);
-           batch.draw(slashFrame,rect.x , rect.y);
-        }
-        else slashStateTime = 0;
-
+        renderSlash(batch);
         renderBlast(batch);
 
 
@@ -108,6 +106,32 @@ public class VesselRender {
         else {
             blastStateTime = 0;
         }
+    }
+
+
+    private void renderSlash(SpriteBatch batch){
+        slashStateTime += Gdx.graphics.getDeltaTime();
+        Rectangle rect = vessel.getSlashBounds();
+        TextureAtlas.AtlasRegion slashFrame;
+        if(vessel.getState() == States.SLASH){
+            slashFrame = slashEffect.getKeyFrame(slashStateTime);
+            checkDir(slashFrame);
+            batch.draw(slashFrame, rect.x, rect.y);
+        }
+        else if(vessel.getState() == States.UP_SLASH){
+            slashFrame = upSlashEffect.getKeyFrame(slashStateTime);
+            checkDir(slashFrame);
+            batch.draw(slashFrame, rect.x, rect.getY());
+        }
+        else if(vessel.getState() == States.DOWN_SLASH){
+            slashFrame = downSlashEffect.getKeyFrame(slashStateTime);
+            checkDir(slashFrame);
+            batch.draw(upSlashEffect.getKeyFrame(slashStateTime), rect.x,   rect.y);
+        }
+        else slashStateTime = 0;
+
+
+
     }
 
     public static Animation<TextureAtlas.AtlasRegion> getCurrentAnimation() {

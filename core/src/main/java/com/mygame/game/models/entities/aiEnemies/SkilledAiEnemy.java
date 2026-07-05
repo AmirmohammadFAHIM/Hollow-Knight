@@ -48,7 +48,6 @@ public class SkilledAiEnemy extends AiEnemy{
         if(state == Entity_States.Skill){
             if(!skill.execute(this , game)){
                 setState(Entity_States.END_SKILL);
-                System.out.println("what the fuck?");
             }
         }
         else if(state == Entity_States.Attack){
@@ -62,7 +61,6 @@ public class SkilledAiEnemy extends AiEnemy{
         if(state.hasNextState() && currentAnimation.isAnimationFinished(stateTime)){
             if (state != Entity_States.Attack && state != Entity_States.Skill) {
 
-                System.out.println("now we change the state from :" + state + " to :" + state.getNextState());
                 if (state == Entity_States.END_SKILL) {
                     setState(Entity_States.START_ATTACK);
                 }

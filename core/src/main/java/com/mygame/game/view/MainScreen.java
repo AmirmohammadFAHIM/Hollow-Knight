@@ -48,7 +48,6 @@ public class MainScreen implements Screen {
           for (Sprite sprite : sprites) {
               sprite.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
           }
-//System.out.println("los");
             glowEffect.start();
 
 

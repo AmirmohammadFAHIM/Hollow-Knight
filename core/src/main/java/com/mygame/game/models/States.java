@@ -18,7 +18,8 @@ public enum States {
     DASH(new TextureAtlas("knight/Dash.atlas") , "Dash" , 0.05f
 , null , true),
 
-    SLASH(new  TextureAtlas("knight/SlashAlt.atlas") ,  "SlashAlt"
+    SLASH(new  TextureAtlas("knight/SlashAlt.atlas") ,  "SlashAlt", 0.09f ,
+        IDLE , false
 ),
 
    DOWN_SLASH(new TextureAtlas("knight/DownSlash.atlas") , "DownSlash" ,0.09f ,IDLE,false),
@@ -100,13 +101,16 @@ public enum States {
 
     // boolean once = true;
 
-     boolean shouldGoNext(float stateTime){
+     boolean shouldGoNext(float stateTime ){
          if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
              return nextState != null;
          }
          return false;
      }
 
+     public boolean getPriority(){
+         return priority;
+     }
 
     public Animation<TextureAtlas.AtlasRegion> getAnimation() {
         return animation;

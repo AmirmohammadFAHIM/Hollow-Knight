@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.map.SolidBlock;
+import com.mygame.game.models.map.Spike;
 import com.mygame.game.view.VesselRender;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class Vessel{
    private float velocityX;
    private float velocityY;
    private Rectangle bounds;
+   /// ---------SAFETY RECORD--------------
+    public record safeLoc(float x , float y){};
+   private safeLoc safeLoc;
+   /// ---------------------------------------
     private Rectangle slashBounds = new Rectangle();
     private float width = 70;
     private float height = 115;
@@ -201,9 +206,9 @@ public class Vessel{
     }
 
     public void update(float delta , Game game) {
-
         stateTime += Gdx.graphics.getDeltaTime();
-
+        death();
+        if(state == States.Death) return;
         if(vengfull(delta)) return;
         update_physics(delta , Game.getCurrent_room().getBlocks());
         updateSlashBounds();
@@ -215,26 +220,17 @@ public class Vessel{
 
         /// --------------------OTHER STATES-------------------------
 
-            if(this.state.shouldGoNext(stateTime)){
+            if(this.state.shouldGoNext(stateTime )){
                 setState(state.nextState);
             }
 
-        if(state == States.SLASH || state == States.DOWN_SLASH ||  state == States.UP_SLASH){
-            if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
-                setState(States.IDLE);
-            }
-            else return;
-
-        }
+        fall();
+        updateSafety();
+        spike();
 
         if(state == States.WALL_SIDE){
             velocityY = -100;
         }
-        if(!is_ground && state != States.WALL_SIDE &&
-        state != States.JUMPING && state != States.DOUBLE_JUMP){
-            setState(States.FALLING);
-        }
-
         if(state == States.DOUBLE_JUMP){
             if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
                 setState(previous_state);
@@ -250,7 +246,7 @@ public class Vessel{
         /// -----------------SKILLS : SLASH , VENGFUL SPIRIT----------------
 
         slash(game);
-        System.out.println(state);;
+
 
 
     }
@@ -381,6 +377,25 @@ public class Vessel{
 
             }
         }
+
+        for (Spike x : Game.getCurrent_room().getSpikes()){
+            if(state == States.DOWN_SLASH &&
+            slashBounds.overlaps(x.getBounds())){
+                velocityY = 200;
+                break;
+            }
+        }
+    }
+
+
+    private void spike(){
+        for (Spike x : Game.getCurrent_room().getSpikes()){
+            if(x.getBounds().overlaps(bounds)){
+               if(state != States.Death) setState(States.Death);
+                /// take one of the masks(every mask should have a clear amount)
+            }
+        }
+
     }
 
 
@@ -390,10 +405,10 @@ public class Vessel{
             if(remaining_dash_time <= 0){
                 remaining_dash_time = dash_cooldown;
                 if(is_ground){
-                    state = States.IDLE; ///dash ended on ground
+                    setState(States.IDLE); ///dash ended on ground
                 }
                 else {
-                    state = States.FALLING; ///dash ended on air
+                    setState(States.FALLING); ///dash ended on air
                 }
                 velocityX = 0;
             }
@@ -412,6 +427,14 @@ public class Vessel{
             return true;
         }
         return false;
+    }
+
+    private void fall(){
+        if(state != States.SLASH && state != States.UP_SLASH && state != States.DOWN_SLASH
+        && state != States.JUMPING && state != States.WALL_JUMP && state != States.WALL_SIDE && state !=
+        States.DOUBLE_JUMP ){
+           if(!is_ground) setState(States.FALLING);
+        }
     }
 
 
@@ -485,9 +508,39 @@ public class Vessel{
 
             // اعمال مختصات به مستطیل
             slashBounds.set(sx, sy, slashWidth, slashHeight);
-        } else {
+        }
+        else if(state == States.UP_SLASH){
+            slashBounds.set(x , y + height , slashWidth ,  slashHeight);
+        }
+        else if(state == States.DOWN_SLASH){
+            slashBounds.set(x , y - slashHeight , slashWidth ,  slashHeight);
+        }
+        else {
             // وقتی اسلش نمی‌زنیم، هیت‌باکس رو می‌فرستیم یه جای دور که الکی با چیزی برخورد نکنه
             slashBounds.set(-1000, -1000, 0, 0);
+        }
+    }
+
+    private final float spawnPoint = 6;
+    private float timer = 0;
+    private void updateSafety(){
+        if(timer <= 0){
+            if(is_ground && state != States.Death){
+                safeLoc = new safeLoc(x , y);
+            }
+            timer = spawnPoint;
+        }
+        else{
+            timer -= Gdx.graphics.getDeltaTime();
+        }
+    }
+
+    private void death(){
+        if(state == States.Death && VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+            System.out.println("here");
+            x = safeLoc.x();
+            y = safeLoc.y();
+            setState(States.IDLE);
         }
     }
 }

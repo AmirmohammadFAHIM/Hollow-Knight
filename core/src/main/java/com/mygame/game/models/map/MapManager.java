@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygame.game.controller.factory.InsectFactory;
 import com.mygame.game.models.Game;
@@ -35,7 +36,6 @@ public class MapManager {
 
        for (PointMapObject point : room.getMap().getLayers().get("Collisions")
            .getObjects().getByType(PointMapObject.class)) {
-           System.out.println(point.getProperties());
            if(point.getProperties().get("type" , String.class).equals("EnemySpawnPoint")){
                String name = point.getProperties().get("Name").toString();
                int type = Integer.parseInt(point.getProperties().get("Type").toString());
@@ -44,7 +44,6 @@ public class MapManager {
                Vector2  position = new Vector2(x , y);
 
                   room.getEnemies().add(factory.createInsect(name, type, position));
-                  System.out.println(room.getEnemies().getLast());
               /*}catch (Exception e){
                   System.out.println("Sometimes in the life I'm too competitive.\n" +
                       "It's good to be competitive");
@@ -61,6 +60,13 @@ public class MapManager {
         )){
 
             room.getBlocks().add(new SolidBlock(obj));
+        }
+
+        for (RectangleMapObject x : map.getLayers().get("Spikes").getObjects()
+            .getByType(RectangleMapObject.class)){
+            //boolean pogo = x.getProperties().get("pogo",  Boolean.class);
+            Rectangle r = x.getRectangle();
+            room.getSpikes().add(new Spike(r));
         }
     }
 

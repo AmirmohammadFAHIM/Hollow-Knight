@@ -18,12 +18,15 @@ import com.mygame.game.controller.GameInputProcessor;
 import com.mygame.game.models.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.mygame.game.models.map.MapManager;
+import com.mygame.game.models.skill.Projectile;
+import com.mygame.game.view.gamePanes.ProjectileRenderer;
 
 
 public class GameView implements Screen {
     private static GameController game;
     private static RoomView currentRoomView;
     private VesselRender vesselRender;
+    private ProjectileRenderer  projectileRenderer;
     private SpriteBatch  batch;
     private OrthographicCamera  camera;
     private ExtendViewport  viewport;
@@ -34,6 +37,7 @@ public class GameView implements Screen {
 
     @Override
     public void show() {
+        projectileRenderer = new ProjectileRenderer();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(1028, 960,camera);
 
@@ -101,10 +105,9 @@ public class GameView implements Screen {
         batch.begin();
         currentRoomView.render(camera , batch);
         vesselRender.render(batch , stateTime);
-       /* for (FireBall x : game.getGame().getFireballs()){
-            x.render(stateTime , batch);
-        }*/
-        //camera.position.set( Game.getVessel().getX() , Game.getVessel().getY(), 0);
+        for (Projectile x : game.getGame().getProjectiles()){
+            projectileRenderer.render(batch , x);
+        }
         updateCamera();
         camera.update();
         batch.end();

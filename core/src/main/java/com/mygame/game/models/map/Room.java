@@ -10,6 +10,7 @@ public class Room {
     private ArrayList<SolidBlock> blocks =  new ArrayList<>();
     private TiledMap  map;
     private ArrayList<Entity> enemies = new ArrayList<>();
+    private ArrayList<Spike> spikes = new ArrayList<>();
 
 
     public Room(TiledMap map , String name){
@@ -60,5 +61,9 @@ public class Room {
 
     public void setEnemies(ArrayList<Entity> enemies) {
         this.enemies = enemies;
+    }
+
+    public ArrayList<Spike> getSpikes() {
+        return spikes;
     }
 }

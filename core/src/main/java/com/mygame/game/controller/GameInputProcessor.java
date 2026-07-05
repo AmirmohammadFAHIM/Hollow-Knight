@@ -36,7 +36,8 @@ public class GameInputProcessor extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) { ///  for pressing buttons : space K U
 
-        if(vessel.getState() == States.DASH) return super.keyDown(keycode);
+        if( vessel.getState().getPriority() ||
+        vessel.getState() == States.Death) return super.keyDown(keycode);
 
          if(keycode == Input.Keys.U){ //Dash state
             // vessel.setPrevious_state(vessel.getState());
@@ -52,7 +53,6 @@ public class GameInputProcessor extends InputAdapter {
             if(vessel.getState() == States.JUMPING
             || vessel.getState() == States.FALLING && vessel.isDouble_jump()){
               //  vessel.setPrevious_state(States.JUMPING);
-                System.out.println(vessel.getState());
                 vessel.setState(States.DOUBLE_JUMP);
                 vessel.setDouble_jump(false);
                 vessel.setVelocityY(Vessel.getVertical_speed());

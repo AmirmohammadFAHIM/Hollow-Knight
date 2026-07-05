@@ -175,6 +175,10 @@ public class Entity {
             if(state == Entity_States.NORMAL){
                 velocityX = LinearEnemy.getvX() * (right ? 1 : -1) ;
             }
+            else if(state == Entity_States.IDLE){
+                velocityX = 0;
+                velocityY = 0;
+            }
         }
 
     }
@@ -205,7 +209,6 @@ public class Entity {
 
 
         if(Hurt(delta)){
-
             return;
         }
 
@@ -288,7 +291,7 @@ public class Entity {
 
                     if (hurt) {
                         setHurt(false);
-                        setState(Entity_States.NORMAL);
+                       if(state != Entity_States.DEATH_LANDING) setState(Entity_States.NORMAL);
                     }
                 }
                 bounds.y = y;

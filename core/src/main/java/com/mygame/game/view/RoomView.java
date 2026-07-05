@@ -29,8 +29,8 @@ public class RoomView {
     private float[] dropLength;
 
     // تفکیک اندیس لایه‌های Tiled Map (این اعداد رو بر اساس لایه‌های مپ خودت تنظیم کن)
-    private int[] backgroundLayers = {0, 1 , 2 , 3}; // لایه‌های آسمان و ساختمان‌های دور
-    private int[] foregroundLayers = { 4 , 5 ,6 , 7 , 8 ,9 , 10}; // لایه‌های زمین، پلتفرم‌ها و دکوراسیون جلو
+    private int[] backgroundLayers = {0, 1 , 2 , 3 }; // لایه‌های آسمان و ساختمان‌های دور
+    private int[] foregroundLayers = { 4 , 5 ,6 , 7 , 8 ,9 , 10 , 11 , 12}; // لایه‌های زمین، پلتفرم‌ها و دکوراسیون جلو
 
     public RoomView(Room room) {
         this.room = room;
@@ -115,8 +115,7 @@ public class RoomView {
                r.render(batch, camera);
            }catch (Exception e) {
                AiEnemy es= (AiEnemy) r.getEntity();
-               System.out.println(r.getEntity().getState() +
-                  es.getType().name() );
+
            }
         }
 

@@ -6,18 +6,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygame.game.models.skill.Projectile;
 
 public class ProjectileRenderer {
-    private Projectile projectile;
-    private float stateTime = 0;
-    private Animation<TextureAtlas.AtlasRegion> start;
-    private Animation<TextureAtlas.AtlasRegion> moving;
-    private Animation<TextureAtlas.AtlasRegion> end;
-    private Animation<TextureAtlas.AtlasRegion> currAnim;
-    public ProjectileRenderer(Projectile projectile) {
-        this.projectile = projectile;
+
+
+    public void render(SpriteBatch batch , Projectile projectile) {
+        TextureAtlas.AtlasRegion frame = projectile.currAnim.getKeyFrame(projectile.stateTime);
+        checkDirRight(frame , projectile.isRight());
+        batch.draw(projectile.currAnim.getKeyFrame(projectile.stateTime) ,
+            projectile.getBounds().x,
+            projectile.getBounds().y);
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(currAnim.getKeyFrame(stateTime), projectile.getBounds().x,  projectile.getBounds().y);
-
+    private void checkDirRight(TextureAtlas.AtlasRegion frame , boolean right){
+        if(right && frame.isFlipX()) frame.flip(true,false);
+        else if(!right  && !frame.isFlipX()) frame.flip(true,false);
     }
 }

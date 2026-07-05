@@ -43,10 +43,13 @@ public class GameController {
 
 
 
-        if(Game.getVessel().getState() != States.DASH)  gameInputProcessor.processInput(delta);
+        if(!Game.getVessel().getState().getPriority())  gameInputProcessor.processInput(delta);
         Game.getVessel().update(delta , game);
         for (Entity c :Game.getCurrent_room().getEnemies()){
            if(c.getState() != Entity_States.DEAD_END) c.update(delta , game);
+        }
+        for (Projectile x : game.getProjectiles()){
+            x.move(game);
         }
 
 

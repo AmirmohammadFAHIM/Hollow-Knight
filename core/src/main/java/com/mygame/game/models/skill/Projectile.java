@@ -1,27 +1,40 @@
 package com.mygame.game.models.skill;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.entities.Entity;
 
 
 public class Projectile {
+    enum States{START , MOVING , END}
+    States state = States.START;
         Rectangle bounds;
         float speed;
         float range;
         boolean right;
         boolean proved = false;
+       public float stateTime = 0;
+    final private Animation<TextureAtlas.AtlasRegion> start;
+    final private Animation<TextureAtlas.AtlasRegion> moving;
+    final private Animation<TextureAtlas.AtlasRegion> end;
+    public Animation<TextureAtlas.AtlasRegion> currAnim;
 
     public Projectile(ProjectileTypes type , boolean right , float x , float y) {
             this.speed = type.speed;
             this.range = type.range;
             this.right = right;
             bounds = new Rectangle(x , y , type.width , type.height);
-
+            start = type.getStart();
+            moving = type.getMoving();
+            end = type.getEnd();
+            currAnim = start;
     }
 
     public void move(Game game){
+            stateTime += Gdx.graphics.getDeltaTime();
             float dx = speed * Gdx.graphics.getDeltaTime();
             range -= dx;
             bounds.x += dx * (right ? 1 : -1);
@@ -30,12 +43,30 @@ public class Projectile {
             }
             checkCollision(game);
 
+            if(proved && state == States.MOVING){
+                stateTime = 0;
+                state = States.END;
+                currAnim = end;
+            }
+            else if(currAnim.isAnimationFinished(stateTime)){
+                if(state == States.END){
+                    game.getProjectiles().removeValue(this, true);
+                }
+                else if(state == States.START){
+                    state = States.MOVING;
+                    currAnim = moving;
+                    stateTime = 0;
+                }
+
+            }
+
     }
 
     private void checkCollision(Game game){
         for (Entity x : Game.getCurrent_room().getEnemies()){
             if(this.bounds.overlaps(x.getBounds())){
                 x.setHurt(true);
+                /// to do : deal the damage to the enemy
                 this.proved = true;
                 break;
             }
