@@ -17,9 +17,12 @@ import com.mygame.game.models.Vessel;
 public class VesselRender {
     private Vessel vessel;
     private float slashStateTime = 0;
+    private float blastStateTime = 0;
+    private ShapeRenderer renderer = new ShapeRenderer();
 
     private static Animation<TextureAtlas.AtlasRegion> currentAnimation;
     private Animation<TextureAtlas.AtlasRegion> slashEffect;
+    private Animation<TextureAtlas.AtlasRegion> blast;
 
 
     public  VesselRender() {
@@ -30,6 +33,8 @@ public class VesselRender {
     private void initEffects(){
         TextureAtlas effect = new  TextureAtlas(Gdx.files.internal("knight/SlashEffectAlt.atlas"));
         slashEffect = new Animation<>(0.06f , effect.findRegions("SlashEffectAlt"));
+        effect = new TextureAtlas("knight/Blast.atlas");
+        blast = new Animation<>(0.1f , effect.findRegions("Blast"));
     }
 
 
@@ -64,6 +69,9 @@ public class VesselRender {
         }
         else slashStateTime = 0;
 
+        renderBlast(batch);
+
+
     }
 
     private void checkDir(TextureAtlas.AtlasRegion frame){
@@ -71,6 +79,36 @@ public class VesselRender {
         else if(!vessel.isRight()  && frame.isFlipX()) frame.flip(true,false);
     }
 
+    private void checkDirRight(TextureAtlas.AtlasRegion frame){
+        if(vessel.isRight() && frame.isFlipX()) frame.flip(true,false);
+        else if(!vessel.isRight()  && !frame.isFlipX()) frame.flip(true,false);
+    }
+
+    private void renderBlast(SpriteBatch batch){
+        if(vessel.getState() == States.FIREBALL){
+            blastStateTime += Gdx.graphics.getDeltaTime();
+
+            // اول فریم رو می‌گیریم تا بتونیم جهت رو اصلاح کنیم و عرض عکس رو داشته باشیم
+            TextureAtlas.AtlasRegion blastFrame = blast.getKeyFrame(blastStateTime);
+            checkDirRight(blastFrame);
+
+            float x;
+            if (vessel.isRight()) {
+                // شلیک به راست: فایربال از لبه‌ی راست نایت شروع به رسم شدن می‌کنه
+                x = vessel.getX() + vessel.getWidth();
+            } else {
+                // شلیک به چپ: نقطه شروعِ رسم رو به اندازه عرض فایربال به عقب می‌بریم
+                x = vessel.getX() - blastFrame.getRegionWidth();
+            }
+
+            float y = vessel.getY();
+
+            batch.draw(blastFrame, x, y - 50);
+        }
+        else {
+            blastStateTime = 0;
+        }
+    }
 
     public static Animation<TextureAtlas.AtlasRegion> getCurrentAnimation() {
         return currentAnimation;

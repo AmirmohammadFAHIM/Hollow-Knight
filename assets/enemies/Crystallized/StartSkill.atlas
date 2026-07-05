@@ -1,0 +1,12 @@
+StartSkill.png
+size: 570, 189
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Shoot
+  bounds: 0, 0, 285, 189
+  index: 0
+Shoot
+  bounds: 285, 0, 285, 189
+  index: 1

@@ -22,8 +22,9 @@ public class Entity {
     protected Rectangle bounds;
     public float defaultSpeed ;
     protected float velocityX;
-    protected float velocityY;
+    protected float velocityY = 0;
     protected float hp;
+    protected boolean flying = false;
     protected boolean right = false;
     protected boolean is_grounded = true;
     protected boolean alive = true;
@@ -199,15 +200,16 @@ public class Entity {
     public void update(float delta , Game game){
         stateTime += delta;
         ArrayList<SolidBlock> blocks = Game.getCurrent_room().getBlocks();
-        if (!is_grounded) {
-            velocityY -= 5;
-        }
+
         update_physics(delta, blocks);
+
 
         if(Hurt(delta)){
 
             return;
         }
+
+        if(state == Entity_States.DEAD || state == Entity_States.DEATH_LANDING) return;
 
 
         if(currentAnimation.isAnimationFinished(stateTime) &&
@@ -225,7 +227,7 @@ public class Entity {
             if (!is_grounded) velocityY -= 7f;
         } else {
             // اعمال جاذبه معمولی برای انمی در صورتی که روی زمین نباشد
-            if (!is_grounded) velocityY -= 7f;
+            if (!is_grounded && !flying) velocityY -= 7f;
             else velocityY = 0;
         }
 
@@ -249,14 +251,16 @@ public class Entity {
                     x = blockRect.x - width;
                     right = false;
                     velocityX = -Math.abs(velocityX); // سرعت منفی می‌شود
+                    setState(Entity_States.TURN);
                 } else if (velocityX < 0) {
                     // برخورد با دیوار سمت چپ -> هل دادن به جلو و تغییر جهت به راست
                     x = blockRect.x + blockRect.width;
                     right = true;
                     velocityX = Math.abs(velocityX); // سرعت مثبت می‌شود
+                    setState(Entity_States.TURN);
                 }
 
-                setState(Entity_States.TURN);
+
                 hitWall = true;
                 bounds.x = x; // بروزرسانی موقعیت هیت‌باکس بعد از اصلاح جابجایی
                 break;

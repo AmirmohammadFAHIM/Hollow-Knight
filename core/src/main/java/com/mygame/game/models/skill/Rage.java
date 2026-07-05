@@ -43,6 +43,7 @@ public class Rage implements Attack {
 
     private boolean timer(AiEnemy  self) {
         if(t <= 0){
+            setTime();
             return false;
         }
         else {

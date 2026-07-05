@@ -1,0 +1,9 @@
+SoulBallStart.png
+size: 317, 143
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+SoulBall
+  bounds: 0, 0, 317, 143
+  index: 0

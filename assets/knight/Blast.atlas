@@ -1,0 +1,27 @@
+Blast.png
+size: 306, 2023
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Blast
+  bounds: 0, 0, 306, 289
+  index: 1
+Blast
+  bounds: 0, 289, 306, 289
+  index: 2
+Blast
+  bounds: 0, 578, 306, 289
+  index: 3
+Blast
+  bounds: 0, 867, 306, 289
+  index: 4
+Blast
+  bounds: 0, 1156, 306, 289
+  index: 5
+Blast
+  bounds: 0, 1445, 306, 289
+  index: 6
+Blast
+  bounds: 0, 1734, 306, 289
+  index: 7

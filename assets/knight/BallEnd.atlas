@@ -1,0 +1,15 @@
+BallEnd.png
+size: 951, 143
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Ball End
+  bounds: 0, 0, 317, 143
+  index: 0
+Ball End
+  bounds: 317, 0, 317, 143
+  index: 1
+Ball End
+  bounds: 634, 0, 317, 143
+  index: 2

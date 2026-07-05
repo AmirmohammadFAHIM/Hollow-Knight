@@ -1,0 +1,15 @@
+Turn.png
+size: 855, 189
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Turn
+  bounds: 0, 0, 285, 189
+  index: 0
+Turn
+  bounds: 285, 0, 285, 189
+  index: 1
+Turn
+  bounds: 570, 0, 285, 189
+  index: 2

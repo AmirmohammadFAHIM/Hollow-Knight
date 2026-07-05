@@ -1,0 +1,24 @@
+UpSlashEffect.png
+size: 1014, 192
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+UpSlashEffect
+  bounds: 0, 0, 169, 192
+  index: 0
+UpSlashEffect
+  bounds: 169, 0, 169, 192
+  index: 1
+UpSlashEffect
+  bounds: 338, 0, 169, 192
+  index: 2
+UpSlashEffect
+  bounds: 507, 0, 169, 192
+  index: 3
+UpSlashEffect
+  bounds: 676, 0, 169, 192
+  index: 4
+UpSlashEffect
+  bounds: 845, 0, 169, 192
+  index: 5

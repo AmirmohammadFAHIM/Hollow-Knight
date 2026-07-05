@@ -23,10 +23,11 @@ public class AiEnemy extends Entity {
         this.bounds = new Rectangle(x, y, width, height);
         this.state = Entity_States.NORMAL;
         this.currentAnimation = type.getWalk();
+        this.flying = type.isFlying();
 
     }
     ENEMIES type;
-    private float range;
+    protected float range;
     Attack attack;
     float cooldown;
     float remaining;
@@ -50,22 +51,25 @@ public class AiEnemy extends Entity {
 
 
 
-
     }
 
     public void detect(){
-        if(state == Entity_States.START_ATTACK || state == Entity_States.Attack){
+        // ۱. دیوار دفاعی: اگر انمی وسط پروسه حمله‌ست، رادار کلاً خاموش میشه
+        if (state == Entity_States.START_ATTACK || state == Entity_States.Attack ||
+            state == Entity_States.START_SKILL || state == Entity_States.Skill) {
             return;
         }
+
+        // ۲. رادار (همونطور که صحبت کردیم، 50 رو به range تغییر بده که تو محور Y هم نایت رو ببینه)
         if(Math.abs(Game.getVessel().getX() - this.x) < range &&
-        Math.abs(Game.getVessel().getY() - this.y) < 5){
-           if(remaining <= 0) setState(Entity_States.START_ATTACK);
-           else remaining -= Gdx.graphics.getDeltaTime();
+            Math.abs(Game.getVessel().getY() - this.y) < (flying ? range : 50)){
+
+            if(remaining <= 0) setState(Entity_States.START_ATTACK);
+            else remaining -= Gdx.graphics.getDeltaTime();
         }
         else{
-            if((state == Entity_States.Attack || state == Entity_States.START_ATTACK
-            || state == Entity_States.Skill ||
-            state == Entity_States.START_SKILL) && !attack.isEndless()) setState(Entity_States.NORMAL);
+            // با وجود دیوار دفاعی بالا، این خط فقط وقتی اجرا میشه که انمی واقعاً تو حالت عادیه و بازیکن دور شده
+            if(!attack.isEndless()) setState(Entity_States.NORMAL);
         }
     }
 
@@ -80,7 +84,7 @@ public class AiEnemy extends Entity {
     }
 
 
-    private void setAnimation(){
+    protected void setAnimation(){
         switch (state){
             case NORMAL:
                 currentAnimation = type.getWalk();
@@ -124,5 +128,6 @@ public class AiEnemy extends Entity {
             velocityX = 0;
             velocityY = 0;
         }
+
     }
 }

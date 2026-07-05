@@ -1,0 +1,24 @@
+DownSlashEffect.png
+size: 1092, 209
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+DownSlashEffect
+  bounds: 0, 0, 182, 209
+  index: 0
+DownSlashEffect
+  bounds: 182, 0, 182, 209
+  index: 1
+DownSlashEffect
+  bounds: 364, 0, 182, 209
+  index: 2
+DownSlashEffect
+  bounds: 546, 0, 182, 209
+  index: 3
+DownSlashEffect
+  bounds: 728, 0, 182, 209
+  index: 4
+DownSlashEffect
+  bounds: 910, 0, 182, 209
+  index: 5

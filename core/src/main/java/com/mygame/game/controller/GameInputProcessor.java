@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.mygame.game.models.*;
+import com.mygame.game.models.skill.Projectile;
+import com.mygame.game.models.skill.ProjectileTypes;
 
 public class GameInputProcessor extends InputAdapter {
     private Vessel vessel;
@@ -70,14 +72,26 @@ public class GameInputProcessor extends InputAdapter {
 
         }
         else if(keycode ==  Input.Keys.K){
-                vessel.setState(States.SLASH);
+            if(Gdx.input.isKeyPressed(Input.Keys.W)){
+                vessel.setState(States.UP_SLASH);
+            }
+            else if(Gdx.input.isKeyPressed(Input.Keys.S)){
+                vessel.setState(States.DOWN_SLASH);
+            }
+            else vessel.setState(States.SLASH);
          }
         else if(keycode == Input.Keys.J){
             vessel.setState(States.FIREBALL);
+            float x;
+             if (vessel.isRight()) {
+                 x = vessel.getX() + vessel.getWidth();
+             } else {
+                 x = vessel.getX() - 260;
+             }
+             float y = vessel.getY();
+            game.getProjectiles().add(new Projectile( ProjectileTypes.VENGFUL_SPIRIT,vessel.isRight() ,x,y ));
+         }
 
-         }
-        else if(keycode == Input.Keys.F){
-         }
 
 
 

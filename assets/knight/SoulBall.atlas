@@ -1,0 +1,15 @@
+SoulBall.png
+size: 951, 143
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+SoulBall
+  bounds: 0, 0, 317, 143
+  index: 1
+SoulBall
+  bounds: 317, 0, 317, 143
+  index: 2
+SoulBall
+  bounds: 634, 0, 317, 143
+  index: 3
