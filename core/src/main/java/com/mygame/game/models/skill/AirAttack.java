@@ -2,11 +2,12 @@ package com.mygame.game.models.skill;
 
 import com.badlogic.gdx.Gdx;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.aiEnemies.AiEnemy;
 
 public class AirAttack implements Attack {
 
-    final float cooldown;
+    final float cooldown = 4;
     float MaxSpeed;
     float delay;
     float remaining;
@@ -16,8 +17,9 @@ public class AirAttack implements Attack {
     float y;
 
 
-    public AirAttack(float cooldown) {
-        this.cooldown = cooldown;
+    public AirAttack(float delay , float maxSpeed) {
+        this.delay = delay;
+        this.MaxSpeed = maxSpeed;
     }
     @Override
     public boolean attack(AiEnemy self, Game game) {
@@ -30,14 +32,10 @@ public class AirAttack implements Attack {
         else{
             dx = x - self.getX();
             dy = y - self.getY();
-            boolean a = Math.abs(dx) > Math.abs(dy);
-            float vX = a ? MaxSpeed : MaxSpeed * dx / dy * (dx > 0 ? 1 : -1 );
-            float vY = a ?  MaxSpeed : MaxSpeed * dy / dx * (dy > 0 ? 1 : -1);
-            self.setVelocityX(vX);
-            self.setVelocityY(vY);
-            if(Math.abs(self.getX() - x) < 3 &&  Math.abs(self.getY() - y) < 3){
-                return false;
-            }
+
+            setSpeeds(self , dx , dy);
+            boolean reached = (Math.abs(self.getX() - x) < 12) && (Math.abs(self.getY() - y) < 12);
+            return !reached;
         }
         return true;
     }
@@ -55,5 +53,16 @@ public class AirAttack implements Attack {
     @Override
     public boolean isEndless() {
         return false;
+    }
+
+    private void setSpeeds(AiEnemy self, float dx , float dy){
+        // محاسبه فاصله کل بین پشه و نایت
+        float distance = (float) Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 0) {
+            // محاسبه سرعت استاندارد در هر دو جهت
+            self.setVelocityX((dx / distance) * MaxSpeed);
+            self.setVelocityY((dy / distance) * MaxSpeed);
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.mygame.game.models.Vessel;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
 import com.mygame.game.models.map.MapManager;
+import com.mygame.game.models.skill.Projectile;
 
 import java.util.Objects;
 
@@ -47,6 +48,8 @@ public class GameController {
         for (Entity c :Game.getCurrent_room().getEnemies()){
            if(c.getState() != Entity_States.DEAD_END) c.update(delta , game);
         }
+
+
 
         transition();
     }
@@ -102,5 +105,11 @@ public class GameController {
 
     public void setGameInputProcessor(GameInputProcessor gameInputProcessor) {
         this.gameInputProcessor = gameInputProcessor;
+    }
+
+    private void updateProjectiles(){
+        for (Projectile p : game.getProjectiles()){
+            p.move(game);
+        }
     }
 }

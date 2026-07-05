@@ -10,7 +10,7 @@ public class Game {
     private static Vessel vessel;
     private static Chunk current_chunk;
     private static Room current_room;
-    private Array<Projectile> shootables =  new Array<>();
+    private final Array<Projectile> projectiles =  new Array<>();
 
     public  Game(){
         vessel = new Vessel();
@@ -43,7 +43,7 @@ public class Game {
         Game.current_room = current_room;
     }
 
-    public Array<Projectile> getShootables() {
-        return shootables;
+    public Array<Projectile> getProjectiles() {
+        return projectiles;
     }
 }

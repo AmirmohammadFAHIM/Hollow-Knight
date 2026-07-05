@@ -219,7 +219,7 @@ public class Vessel{
                 setState(state.nextState);
             }
 
-        if(state == States.SLASH){
+        if(state == States.SLASH || state == States.DOWN_SLASH ||  state == States.UP_SLASH){
             if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
                 setState(States.IDLE);
             }
@@ -250,6 +250,7 @@ public class Vessel{
         /// -----------------SKILLS : SLASH , VENGFUL SPIRIT----------------
 
         slash(game);
+        System.out.println(state);;
 
 
     }
@@ -473,7 +474,7 @@ public class Vessel{
             if (isRight()) {
                 // اگر راست می‌بینه: هیت‌باکس رو بنداز سمت راستِ هیت‌باکس شوالیه
                 // (میتونی یه مقدار کمی هم ببریش داخل هیت باکس خود کاراکتر که دشمنانی که خیلی چسبیدن هم دمیج بخورن)
-                sx = this.x + this.width;
+                sx = this.x + this.width/2;
             } else {
                 // اگر چپ می‌بینه: هیت‌باکس رو بنداز سمت چپ
                 sx = this.x - slashWidth;

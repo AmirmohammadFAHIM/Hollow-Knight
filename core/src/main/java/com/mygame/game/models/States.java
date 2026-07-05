@@ -21,9 +21,9 @@ public enum States {
     SLASH(new  TextureAtlas("knight/SlashAlt.atlas") ,  "SlashAlt"
 ),
 
-   // DOWN_SLASH,
+   DOWN_SLASH(new TextureAtlas("knight/DownSlash.atlas") , "DownSlash" ,0.09f ,IDLE,false),
 
-   // UP_SLASH,
+   UP_SLASH(new TextureAtlas("knight/UpSlash.atlas") , "UpSlash",0.09f ,IDLE,false),
 
 
     FOCUS_GET(new TextureAtlas("knight/FocusGet.atlas") , "Focus Get"),
