@@ -43,7 +43,7 @@ public class GameController {
 
 
 
-        if(!Game.getVessel().getState().getPriority())  gameInputProcessor.processInput(delta);
+        if(!Game.getVessel().getState().getPriority() || !Game.getVessel().hurt)  gameInputProcessor.processInput(delta);
         Game.getVessel().update(delta , game);
         for (Entity c :Game.getCurrent_room().getEnemies()){
            if(c.getState() != Entity_States.DEAD_END) c.update(delta , game);

@@ -37,7 +37,7 @@ public class GameInputProcessor extends InputAdapter {
     public boolean keyDown(int keycode) { ///  for pressing buttons : space K U
 
         if( vessel.getState().getPriority() ||
-        vessel.getState() == States.Death) return super.keyDown(keycode);
+        vessel.getState() == States.Death || vessel.hurt) return super.keyDown(keycode);
 
          if(keycode == Input.Keys.U){ //Dash state
             // vessel.setPrevious_state(vessel.getState());

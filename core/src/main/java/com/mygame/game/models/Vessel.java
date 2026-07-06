@@ -34,12 +34,13 @@ public class Vessel{
     private float width = 70;
     private float height = 115;
     private float remaining_dash_time;
-    private float hp;
+    private float hp = 5;
     private float damage = 40;
     /// -----------BOOLEANS--------------------
     private boolean is_ground = true;
     private boolean right = false;
     private boolean double_jump = true;
+    public boolean hurt = false;
     /// -------------STATES--------------------
     private States state = States.IDLE;
     private States previous_state = States.IDLE;
@@ -73,6 +74,9 @@ public class Vessel{
 
     public void setHp(float hp) {
         this.hp = hp;
+        if(hp <= 0){
+            setState(States.Death);
+        }
     }
 
     public boolean isDouble_jump() {
@@ -210,11 +214,15 @@ public class Vessel{
         death();
         if(state == States.Death) return;
         if(vengfull(delta)) return;
-        update_physics(delta , Game.getCurrent_room().getBlocks());
+      if(freeze <= 0 && !hurt)  update_physics(delta , Game.getCurrent_room().getBlocks());
         updateSlashBounds();
 
         /// ------------------DASH STATE , MOST PARTICULAR ONE----------------------
 
+        if(hurt){
+            hurt(delta);
+            return;
+        }
        if(Dash(delta)) return;
        //else if(vengfull(delta)) return;
 
@@ -391,8 +399,10 @@ public class Vessel{
     private void spike(){
         for (Spike x : Game.getCurrent_room().getSpikes()){
             if(x.getBounds().overlaps(bounds)){
-               if(state != States.Death) setState(States.Death);
-                /// take one of the masks(every mask should have a clear amount)
+               if(state != States.Death){
+                   setHurt(true);
+                   setHp(hp - 1);
+               }
             }
         }
 
@@ -537,10 +547,28 @@ public class Vessel{
 
     private void death(){
         if(state == States.Death && VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
-            System.out.println("here");
+            hp = 5;
             x = safeLoc.x();
             y = safeLoc.y();
             setState(States.IDLE);
         }
+    }
+
+
+    float freeze = 0;
+    private void hurt(float delta){
+        if(freeze <= 0){
+            velocityY = 700;
+            //velocityX = 400 * (right? -1 : 1);
+            hurt = false;
+        }
+        else{
+            freeze -= delta;
+        }
+    }
+
+    public void setHurt(boolean hurt) {
+        freeze = 0.4f;
+        this.hurt = hurt;
     }
 }

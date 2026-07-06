@@ -15,6 +15,7 @@ public class AirAttack implements Attack {
     float dy;
     float x;
     float y;
+    boolean isAttacking = false;
 
 
     public AirAttack(float delay , float maxSpeed) {
@@ -28,21 +29,24 @@ public class AirAttack implements Attack {
             x = Game.getVessel().getX();
             y = Game.getVessel().getY();
             remaining -= Gdx.graphics.getDeltaTime();
+            self.setVelocityX(0);
+            self.setVelocityY(0);
+            return true;
         }
-        else{
-            dx = x - self.getX();
-            dy = y - self.getY();
-
+        else if(!isAttacking){
+            isAttacking = true;
+            dx = x + Game.getVessel().getWidth()/2 - self.getX();
+            dy = y + Game.getVessel().getHeight()/2 - self.getY();
             setSpeeds(self , dx , dy);
-            boolean reached = (Math.abs(self.getX() - x) < 12) && (Math.abs(self.getY() - y) < 12);
-            return !reached;
         }
-        return true;
+        boolean reached = (Math.abs(self.getX() - x) < 16) && (Math.abs(self.getY() - y) < 16);
+        return !reached;
     }
 
     @Override
-    public void setTime() {
+    public void reset() {
         remaining = delay;
+        isAttacking = false;
     }
 
     @Override
@@ -63,6 +67,7 @@ public class AirAttack implements Attack {
             // محاسبه سرعت استاندارد در هر دو جهت
             self.setVelocityX((dx / distance) * MaxSpeed);
             self.setVelocityY((dy / distance) * MaxSpeed);
+
         }
     }
 }

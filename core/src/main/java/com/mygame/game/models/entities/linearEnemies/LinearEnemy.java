@@ -15,7 +15,7 @@ public class LinearEnemy extends Entity {
     private static float vY = 300;
 
     public LinearEnemy(LinearEnemies type, float x, float y) {
-        super(type.name() , x , y);
+        super(type.name() , x , y , LinearEnemy.getvX());
         this.bounds = new Rectangle(x, y, width, height);
         this.type = type;
         setState(Entity_States.NORMAL);

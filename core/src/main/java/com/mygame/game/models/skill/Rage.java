@@ -43,7 +43,7 @@ public class Rage implements Attack {
 
     private boolean timer(AiEnemy  self) {
         if(t <= 0){
-            setTime();
+            reset();
             return false;
         }
         else {
@@ -57,7 +57,7 @@ public class Rage implements Attack {
         }
     }
     @Override
-    public void setTime() {
+    public void reset() {
             t = time;
     }
 

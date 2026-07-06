@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.skill.Projectile;
 import com.mygame.game.view.gamePanes.ProjectileRenderer;
+import com.mygame.game.view.healthBar.HUD;
 
 
 public class GameView implements Screen {
@@ -34,9 +35,11 @@ public class GameView implements Screen {
     private float stateTime = 0f;
     private Stage stage;
     private Stack mainStack;
+    private HUD hud;
 
     @Override
     public void show() {
+
         projectileRenderer = new ProjectileRenderer();
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(1028, 960,camera);
@@ -60,9 +63,12 @@ public class GameView implements Screen {
         mainStack.setFillParent(true);
         stage.addActor(mainStack);
 
+
         GameInputProcessor processor = new GameInputProcessor(Game.getVessel());
         game = new GameController(new Game() /* here can be the idea for saves */ ,
             processor);
+        hud = new HUD();
+        stage.addActor(hud);
         currentRoomView = new RoomView(Game.getCurrent_room());
         processor.setVessel(Game.getVessel());
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -70,6 +76,7 @@ public class GameView implements Screen {
         multiplexer.addProcessor(processor);
         Gdx.input.setInputProcessor(multiplexer);
         processor.setGame(game.getGame());
+
 
 
             /// here , a vessel is initialized , a room is initialized

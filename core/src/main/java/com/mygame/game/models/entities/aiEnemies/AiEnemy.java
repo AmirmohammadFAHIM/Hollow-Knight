@@ -11,7 +11,7 @@ import com.mygame.game.models.skill.Attack;
 public class AiEnemy extends Entity {
 
     public AiEnemy(ENEMIES type , float x , float y){
-        super(type.name() , x , y);
+        super(type.name() , x , y , type.getSpeed());
         this.attack = type.getAttack();
         this.type = type;
         range = type.getRange();
@@ -42,6 +42,7 @@ public class AiEnemy extends Entity {
         detect();
 
     if(state == Entity_States.Attack){
+
         combat(game);
     }
     else if(state == Entity_States.NORMAL || state == Entity_States.IDLE){
@@ -56,7 +57,8 @@ public class AiEnemy extends Entity {
     public void detect(){
         // ۱. دیوار دفاعی: اگر انمی وسط پروسه حمله‌ست، رادار کلاً خاموش میشه
         if (state == Entity_States.START_ATTACK || state == Entity_States.Attack ||
-            state == Entity_States.START_SKILL || state == Entity_States.Skill) {
+            state == Entity_States.START_SKILL || state == Entity_States.Skill ||
+        state == Entity_States.END_ATTACK ||  state == Entity_States.END_SKILL) {
             return;
         }
 
@@ -64,7 +66,9 @@ public class AiEnemy extends Entity {
         if(Math.abs(Game.getVessel().getX() - this.x) < range &&
             Math.abs(Game.getVessel().getY() - this.y) < (flying ? range : 50)){
 
-            if(remaining <= 0) setState(Entity_States.START_ATTACK);
+            if(remaining <= 0){
+                setState(Entity_States.START_ATTACK);
+            }
             else remaining -= Gdx.graphics.getDeltaTime();
         }
         else{
@@ -77,7 +81,8 @@ public class AiEnemy extends Entity {
     protected void combat(Game game) {
         boolean done = attack.attack(this , game);
         if(!done){
-            attack.setTime();
+            System.out.println("Rey");
+            attack.reset();
             setState(Entity_States.NORMAL);
             remaining = attack.getCoolDown();
         }
@@ -124,10 +129,9 @@ public class AiEnemy extends Entity {
     @Override
     public void setState(Entity_States state) {
         super.setState(state);
-        if(state == Entity_States.IDLE){
+        if(state == Entity_States.START_ATTACK){
             velocityX = 0;
             velocityY = 0;
         }
-
     }
 }

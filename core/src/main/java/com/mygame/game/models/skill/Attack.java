@@ -7,7 +7,7 @@ public interface Attack {
 
     public boolean attack(AiEnemy enemy , Game game);
 
-    public void setTime();
+    public void reset();
 
     public float getCoolDown();
 

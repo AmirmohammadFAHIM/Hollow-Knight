@@ -39,6 +39,7 @@ public enum ENEMIES {
             spriteSheet = new TextureAtlas("enemies/Crystallized/DeathLand.atlas");
             deathLand = new  Animation<>(0.09f , spriteSheet.findRegions("Death Land"));
 
+            speed = 60;
         }
     },
 
@@ -60,6 +61,8 @@ public enum ENEMIES {
             deathAir =  new Animation<>(0.09f , atlas.findRegions("Death Air"));
             atlas = new TextureAtlas("enemies/Husk Hornhead/DeathLand.atlas");
             deathLand =  new Animation<>(0.09f , atlas.findRegions("Death Land"));
+
+            speed = 60;
         }
     },
 
@@ -83,6 +86,7 @@ public enum ENEMIES {
             deathLand = new Animation<>(0.09f , spriteSheet.findRegions("Death Land"));
 
             flying = true;
+            speed = 80;
         }
     };
 
@@ -198,5 +202,11 @@ public enum ENEMIES {
 
     public Animation<TextureAtlas.AtlasRegion> getIdle() {
         return Idle;
+    }
+
+    float speed;
+
+    public float getSpeed() {
+        return speed;
     }
 }

@@ -31,10 +31,11 @@ public class Entity {
     protected boolean hurt = false;
     protected Entity_States state = Entity_States.NORMAL;
     protected Animation<TextureAtlas.AtlasRegion> currentAnimation;
-    public Entity(String name, float x, float y) {
+    public Entity(String name, float x, float y , float defaultSpeed) {
         this.name = name;
         this.x = x;
         this.y = y;
+        this.defaultSpeed = defaultSpeed;
     }
 
     public Entity(){
@@ -173,7 +174,8 @@ public class Entity {
             this.state = state;
             stateTime = 0;
             if(state == Entity_States.NORMAL){
-                velocityX = LinearEnemy.getvX() * (right ? 1 : -1) ;
+                velocityX = defaultSpeed * (right ? 1 : -1) ;
+                velocityY = 0;
             }
             else if(state == Entity_States.IDLE){
                 velocityX = 0;
@@ -231,7 +233,7 @@ public class Entity {
         } else {
             // اعمال جاذبه معمولی برای انمی در صورتی که روی زمین نباشد
             if (!is_grounded && !flying) velocityY -= 7f;
-            else velocityY = 0;
+            else if(!flying) velocityY = 0;
         }
 
         // -----------------------------------------------------------------
@@ -260,7 +262,7 @@ public class Entity {
                     x = blockRect.x + blockRect.width;
                     right = true;
                     velocityX = Math.abs(velocityX); // سرعت مثبت می‌شود
-                    setState(Entity_States.TURN);
+                   if(state != Entity_States.Attack) setState(Entity_States.TURN);
                 }
 
 
