@@ -44,8 +44,9 @@ public class GameView implements Screen {
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(1028, 960,camera);
 
-        uiViewport = new ExtendViewport(1028, 960);
+        uiViewport = new ExtendViewport(1280, 960);
         stage = new Stage(uiViewport);
+
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -54,6 +55,10 @@ public class GameView implements Screen {
                     if(!GameController.isPaused()){
                         mainStack.add(new PauseMenu());
                         GameController.setPaused(true);
+                    }
+                    else{
+                        GameController.setPaused(false);
+                        mainStack.clearChildren();
                     }
                 }
                 return super.keyDown(event, keycode);
@@ -130,7 +135,7 @@ public class GameView implements Screen {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height , false);
-        uiViewport.update(width, height, false);
+        uiViewport.update(width, height, true);
     }
 
     @Override

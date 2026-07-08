@@ -26,7 +26,7 @@ public class SkilledAiEnemy extends AiEnemy{
 
 
     @Override
-    public void update(float delta, Game game) {
+    public boolean update(float delta, Game game) {
 
         // ۱. کلید حل مشکل: به جریان انداختن زمان برای انیمیشن‌ها!
         stateTime += delta;
@@ -34,11 +34,20 @@ public class SkilledAiEnemy extends AiEnemy{
         // ۲. تنظیم انیمیشنِ درست برای همین فریم
         setAnimation();
 
+
+
         // ۳. آپدیت فیزیک
-        super.update_physics(delta , Game.getCurrent_room().getBlocks());
+        if(state == Entity_States.DEATH_LANDING && is_grounded){
+            setState(Entity_States.DEAD_END);
+            return false;
+        }
+       if(state == Entity_States.DEATH_LANDING){
+           super.update_physics(delta , Game.getCurrent_room().getBlocks());
+           return false;
+       }
 
         if(Hurt(delta)){
-            return;
+            return true;
         }
 
         // ۴. روشن کردن رادار
@@ -70,6 +79,8 @@ public class SkilledAiEnemy extends AiEnemy{
 
             }
         }
+
+        return true;
     }
 
 

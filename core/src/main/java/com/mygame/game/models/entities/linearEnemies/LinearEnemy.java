@@ -29,7 +29,7 @@ public class LinearEnemy extends Entity {
 
 
     @Override
-    public void update(float delta , Game game){
+    public boolean update(float delta , Game game){
         if(state == Entity_States.NORMAL){
             currentAnimation = type.walk;
         }
@@ -46,12 +46,15 @@ public class LinearEnemy extends Entity {
         stateTime += delta;
 
 
-       super.update(delta, game);
+       if(!super.update(delta, game)){
+           return false;
+       }
 
         if(state.hasNextState() && currentAnimation.isAnimationFinished(stateTime)){
             setState(state.getNextState());
         }
 
+        return true;
     }
 
 

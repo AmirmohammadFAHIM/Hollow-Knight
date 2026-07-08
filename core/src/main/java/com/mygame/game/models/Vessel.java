@@ -16,7 +16,7 @@ public class Vessel{
     private static float horizontal_speed = 450f;
     private static float dash_speed = 550f;
     private static float dash_cooldown = 0.4f;
-    private static float gravity = 7f;
+    public static float gravity = 7f;
     private float stateTime = 0f;
     private float slashWidth = 80;
     private float slashHeight = 100;
@@ -172,7 +172,12 @@ public class Vessel{
            previous_state = this.state;
            this.state = state;
            this.stateTime = 0f; ///resetting the state time so animations don't glitch
+            if(state == States.IDLE){
+                velocityX = 0f;
+                velocityY = 0f;
+            }
        }
+
 
     }
 
@@ -228,6 +233,7 @@ public class Vessel{
 
         /// --------------------OTHER STATES-------------------------
 
+            heal(delta);
             if(this.state.shouldGoNext(stateTime )){
                 setState(state.nextState);
             }
@@ -378,7 +384,7 @@ public class Vessel{
 
         ArrayList<Entity> enemies = Game.getCurrent_room().getEnemies();
         for (Entity n : enemies) {
-            if(n.getBounds().overlaps(slashBounds)){
+            if(n.getBounds().overlaps(slashBounds) && n.isAlive()){
                /// To Do:Declare that enemy is hit
                 n.setHurt(true);
                 n.setHp(n.getHp() - damage);
@@ -556,10 +562,11 @@ public class Vessel{
 
 
     float freeze = 0;
+    float knockBackTime = 1.2f;
     private void hurt(float delta){
         if(freeze <= 0){
             velocityY = 700;
-            //velocityX = 400 * (right? -1 : 1);
+            velocityX = 450 * (right? -1 : 1);
             hurt = false;
         }
         else{
@@ -569,6 +576,13 @@ public class Vessel{
 
     public void setHurt(boolean hurt) {
         freeze = 0.4f;
+        knockBackTime = 1.2f;
         this.hurt = hurt;
+    }
+
+    public void heal(float delta){
+        if(state == States.FOCUS_GET && VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
+            setHp(hp + 1);
+        }
     }
 }

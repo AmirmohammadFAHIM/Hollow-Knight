@@ -47,6 +47,7 @@ public class GameController {
         Game.getVessel().update(delta , game);
         for (Entity c :Game.getCurrent_room().getEnemies()){
            if(c.getState() != Entity_States.DEAD_END) c.update(delta , game);
+
         }
         for (Projectile x : game.getProjectiles()){
             x.move(game);
@@ -93,6 +94,8 @@ public class GameController {
         Game.getVessel().setX(x);
         Game.getVessel().setY(y);
     }
+
+
 
     public Game getGame() {
         return game;

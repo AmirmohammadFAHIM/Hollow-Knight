@@ -11,7 +11,9 @@ import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.EntityRenderer;
 import com.mygame.game.models.entities.Entity; // یا Entity بر اساس پکیج خودت
 import com.mygame.game.models.entities.aiEnemies.AiEnemy;
+import com.mygame.game.models.entities.boss.FalseKnight;
 import com.mygame.game.models.map.Room;
+import com.mygame.game.view.gamePanes.FalseKnightRenderer;
 
 import java.util.ArrayList;
 
@@ -35,9 +37,15 @@ public class RoomView {
     public RoomView(Room room) {
         this.room = room;
         for (Entity c : room.getEnemies()) {
-            EntityRenderer x = new EntityRenderer();
-            x.setEntity(c);
-            renderers.add(x);
+           if(c instanceof FalseKnight){
+               FalseKnightRenderer r = new FalseKnightRenderer((FalseKnight) c);
+               renderers.add(r);
+           }
+           else{
+               EntityRenderer r = new EntityRenderer();
+               r.setEntity(c);
+               renderers.add(r);
+           }
         }
         renderer = new OrthogonalTiledMapRenderer(room.getMap());
 
@@ -111,12 +119,9 @@ public class RoomView {
         // ۵. دوباره باز کردن بتچ برای رسم کاراکترها و انمی‌ها
         batch.begin();
         for (EntityRenderer r : renderers) {
-           try {
-               r.render(batch, camera);
-           }catch (Exception e) {
-               AiEnemy es= (AiEnemy) r.getEntity();
 
-           }
+               r.render(batch);
+
         }
 
         // در نهایت بتچ رو باز می‌ذاریم بمونه تا کلاس GameView خودش متد end() رو برای پایان فریم صدا بزنه

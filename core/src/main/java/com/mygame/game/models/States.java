@@ -30,7 +30,7 @@ public enum States {
     FOCUS_GET(new TextureAtlas("knight/FocusGet.atlas") , "Focus Get"),
 
     FOCUS(new  TextureAtlas("knight/Focus.atlas") ,  "Focus"
-, 0.09f , FOCUS_GET , false){
+, 0.1f , FOCUS_GET , false){
 
     },
 

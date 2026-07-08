@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class EntityRenderer {
     private Entity entity;
 
-    public void render(SpriteBatch batch, OrthographicCamera camera) {
+    public void render(SpriteBatch batch) {
 
 
         TextureAtlas.AtlasRegion frame = entity.currentAnimation.getKeyFrame(entity.stateTime);

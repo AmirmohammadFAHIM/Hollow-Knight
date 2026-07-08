@@ -5,6 +5,7 @@ import com.mygame.game.models.entities.ENEMIES;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.aiEnemies.AiEnemy;
 import com.mygame.game.models.entities.aiEnemies.SkilledAiEnemy;
+import com.mygame.game.models.entities.boss.FalseKnight;
 import com.mygame.game.models.entities.linearEnemies.LinearEnemies;
 import com.mygame.game.models.entities.linearEnemies.LinearEnemy;
 
@@ -15,6 +16,7 @@ public class InsectFactory {
             case 0 -> LinearEnemy(name, position);
             case 1 -> AiEnemy(name, position);
             case 2 -> SkilledAiEnemy(name, position);
+            case 3 -> boss(position);
             default -> null;
         };
     }
@@ -32,5 +34,11 @@ public class InsectFactory {
     private Entity SkilledAiEnemy(String name ,  Vector2 position){
         ENEMIES type =  ENEMIES.valueOf(name.toUpperCase());
         return new SkilledAiEnemy(type , position.x, position.y);
+    }
+
+    private Entity  boss(Vector2 position){
+        Entity e = new FalseKnight(position.x, position.y);
+
+        return e;
     }
 }

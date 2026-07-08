@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygame.game.controller.factory.InsectFactory;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.entities.boss.FalseKnight;
 import com.mygame.game.view.GameView;
 import com.mygame.game.view.RoomView;
 
@@ -64,7 +65,6 @@ public class MapManager {
 
         for (RectangleMapObject x : map.getLayers().get("Spikes").getObjects()
             .getByType(RectangleMapObject.class)){
-            //boolean pogo = x.getProperties().get("pogo",  Boolean.class);
             Rectangle r = x.getRectangle();
             room.getSpikes().add(new Spike(r));
         }

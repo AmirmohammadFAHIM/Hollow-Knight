@@ -21,9 +21,10 @@ public class HUD extends Table {
       }
       this.setFillParent(true);
       this.top().left();
-      this.defaults().padRight(15);
+      this.defaults().padRight(5);
+      this.debug();
       for (Mask mask : masks) {
-          this.add(mask).size(120 , 120);
+          this.add(mask).size(120 , 140);
       }
     }
 

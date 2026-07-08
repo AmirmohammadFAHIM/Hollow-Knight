@@ -34,10 +34,15 @@ public class AiEnemy extends Entity {
     Move movingLogic;
 
     @Override
-    public void update(float delta, Game game) {
+    public boolean update(float delta, Game game) {
         setAnimation();
 
-        super.update(delta, game);
+
+        if(!super.update(delta, game)){
+            return false;
+        }
+
+
 
         detect();
 
@@ -49,7 +54,7 @@ public class AiEnemy extends Entity {
         movingLogic.move(this);
     }
 
-
+return true;
 
 
     }

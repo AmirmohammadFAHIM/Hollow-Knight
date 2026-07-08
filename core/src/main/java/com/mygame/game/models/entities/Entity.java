@@ -181,17 +181,26 @@ public class Entity {
                 velocityX = 0;
                 velocityY = 0;
             }
+            else if(state == Entity_States.DEATH_LANDING){
+
+                velocityX = 0;
+            }
         }
 
     }
 
+    float hurtTime = 1;
     public boolean Hurt(float delta){
         if(hurt){
-           if(is_grounded){
-               setState(Entity_States.NORMAL);
+           if(hurtTime <= 0){
+               velocityX = defaultSpeed * (right ? 1 : -1);
+               velocityY = 0;
+               hurtTime = 1;
            }
            else {
                velocityX += 5 * (right ? 1 : -1);
+               if(flying) velocityY = 4;
+               hurtTime -= delta;
            }
             return true;
         }
@@ -203,24 +212,32 @@ public class Entity {
 
 
 
-    public void update(float delta , Game game){
+    public boolean update(float delta , Game game){
         stateTime += delta;
         ArrayList<SolidBlock> blocks = Game.getCurrent_room().getBlocks();
 
+        if(state == Entity_States.DEATH_LANDING && is_grounded){
+            setState(Entity_States.DEAD_END);
+        }
+        if(state == Entity_States.DEATH_LANDING || state == Entity_States.DEAD){
+            update_physics(delta , blocks);
+            return false;
+        }
         update_physics(delta, blocks);
 
 
         if(Hurt(delta)){
-            return;
+            return true;
         }
 
-        if(state == Entity_States.DEAD || state == Entity_States.DEATH_LANDING) return;
 
 
         if(currentAnimation.isAnimationFinished(stateTime) &&
         state.hasNextState()){
             setState(state.nextState);
         }
+
+        return true;
     }
 
 
@@ -293,7 +310,12 @@ public class Entity {
 
                     if (hurt) {
                         setHurt(false);
-                       if(state != Entity_States.DEATH_LANDING) setState(Entity_States.NORMAL);
+                       if(state != Entity_States.DEATH_LANDING
+                           && state != Entity_States.DEAD_END &&
+                       isAlive()){
+                           setState(Entity_States.NORMAL);
+
+                       }
                     }
                 }
                 bounds.y = y;
@@ -332,5 +354,13 @@ public class Entity {
                 setState(Entity_States.TURN); // تغییر وضعیت به چرخش (که رادار را در فریم بعدی خاموش میکند)
             }
         }
+    }
+
+    public Animation<TextureAtlas.AtlasRegion> getCurrentAnimation() {
+        return currentAnimation;
+    }
+
+    public void setCurrentAnimation(Animation<TextureAtlas.AtlasRegion> currentAnimation) {
+        this.currentAnimation = currentAnimation;
     }
 }
