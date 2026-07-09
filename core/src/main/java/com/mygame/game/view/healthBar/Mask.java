@@ -30,6 +30,7 @@ public class Mask extends Actor {
         currAnimation = shine;
         this.state = state;
         this.setSize(120 , 140);
+
     }
 
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygame.game.controller.factory.InsectFactory;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.boss.FalseKnight;
 import com.mygame.game.view.GameView;
 import com.mygame.game.view.RoomView;
@@ -44,7 +45,8 @@ public class MapManager {
                float y = point.getProperties().get("y" , Float.class);
                Vector2  position = new Vector2(x , y);
 
-                  room.getEnemies().add(factory.createInsect(name, type, position));
+               Entity e = factory.createInsect(name, type, position);
+                if(e != null)  room.getEnemies().add(e);
               /*}catch (Exception e){
                   System.out.println("Sometimes in the life I'm too competitive.\n" +
                       "It's good to be competitive");

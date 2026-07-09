@@ -20,26 +20,30 @@ public class AirAttack implements Attack {
 
     public AirAttack(float delay , float maxSpeed) {
         this.delay = delay;
+        remaining = delay;
         this.MaxSpeed = maxSpeed;
     }
     @Override
     public boolean attack(AiEnemy self, Game game) {
 
         if(remaining > 0){
-            x = Game.getVessel().getX();
-            y = Game.getVessel().getY();
+            x = Game.getVessel().getX() + Game.getVessel().getWidth()/2;
+            y = Game.getVessel().getY()  + Game.getVessel().getHeight()/2;
             remaining -= Gdx.graphics.getDeltaTime();
             self.setVelocityX(0);
             self.setVelocityY(0);
             return true;
         }
         else if(!isAttacking){
+            System.out.println("Locked! mission : \n" +
+                "x : " + x + " \ny : " + y);
             isAttacking = true;
-            dx = x + Game.getVessel().getWidth()/2 - self.getX();
-            dy = y + Game.getVessel().getHeight()/2 - self.getY();
+            dx = x - self.getX();
+            dy = y - self.getY();
             setSpeeds(self , dx , dy);
         }
-        boolean reached = (Math.abs(self.getX() - x) < 16) && (Math.abs(self.getY() - y) < 16);
+        System.out.println("dx " + Math.abs(self.getX() - x) + " dy " + Math.abs(self.getY() - y));
+        boolean reached = (Math.abs(self.getX() - x) < 30) && (Math.abs(self.getY() - y) < 30);
         return !reached;
     }
 

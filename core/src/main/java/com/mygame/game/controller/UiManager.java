@@ -17,12 +17,14 @@ public class UiManager {
     private static GameView gameView;
     public static Skin  style;
     public static TextButton.TextButtonStyle skin;
+    public static FreeTypeFontGenerator generator;
+    public static FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     static {
 
         skin = new TextButton.TextButtonStyle();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
+         generator = new FreeTypeFontGenerator(
             Gdx.files.internal("menus/trajan.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 24;
         parameter.color = com.badlogic.gdx.graphics.Color.WHITE;
         parameter.magFilter = Texture.TextureFilter.Linear;

@@ -16,7 +16,9 @@ public enum States {
 
 
     DASH(new TextureAtlas("knight/Dash.atlas") , "Dash" , 0.05f
-, null , true),
+, IDLE , true){
+
+    },
 
     SLASH(new  TextureAtlas("knight/SlashAlt.atlas") ,  "SlashAlt", 0.09f ,
         IDLE , false
@@ -30,8 +32,10 @@ public enum States {
     FOCUS_GET(new TextureAtlas("knight/FocusGet.atlas") , "Focus Get"),
 
     FOCUS(new  TextureAtlas("knight/Focus.atlas") ,  "Focus"
-, 0.1f , FOCUS_GET , false){
-
+, 0.1f , null , false){
+        {
+            this.animation.setPlayMode(Animation.PlayMode.LOOP);
+        }
     },
 
     START_FOCUS(new  TextureAtlas("knight/FocusStart.atlas") , "Focus Start"

@@ -40,7 +40,7 @@ public class VesselRender {
         effect = new TextureAtlas("knight/DownSlashEffect.atlas");
         downSlashEffect = new Animation<>(0.06f , effect.findRegions("DownSlashEffect"));
         effect = new TextureAtlas("knight/Blast.atlas");
-        blast = new Animation<>(0.1f , effect.findRegions("Blast"));
+        blast = new Animation<>(0.06f , effect.findRegions("Blast"));
     }
 
 
@@ -113,6 +113,10 @@ public class VesselRender {
         slashStateTime += Gdx.graphics.getDeltaTime();
         Rectangle rect = vessel.getSlashBounds();
         TextureAtlas.AtlasRegion slashFrame;
+        currentAnimation.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.072f : 0.09f);
+        slashEffect.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.048f : 0.06f);
+        upSlashEffect.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.048f : 0.06f);
+        downSlashEffect.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.048f : 0.06f);
         if(vessel.getState() == States.SLASH){
             slashFrame = slashEffect.getKeyFrame(slashStateTime);
             checkDir(slashFrame);

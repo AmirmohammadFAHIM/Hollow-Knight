@@ -3,19 +3,21 @@ package com.mygame.game.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygame.game.models.charms.Charm;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.map.SolidBlock;
 import com.mygame.game.models.map.Spike;
 import com.mygame.game.view.VesselRender;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Vessel{
     /// ---------------STATICS-----------------
     private static float vertical_speed = 580f;
     private static float horizontal_speed = 450f;
     private static float dash_speed = 550f;
-    private static float dash_cooldown = 0.4f;
+    private static float dash_cooldown = 0.9f;
     public static float gravity = 7f;
     private float stateTime = 0f;
     private float slashWidth = 80;
@@ -26,7 +28,16 @@ public class Vessel{
    private float velocityX;
    private float velocityY;
    private Rectangle bounds;
-   /// ---------SAFETY RECORD--------------
+
+    public HashMap<String, Charm> getCharms() {
+        return charms;
+    }
+
+    public void setCharms(HashMap<String, Charm> charms) {
+        this.charms = charms;
+    }
+
+    /// ---------SAFETY RECORD--------------
     public record safeLoc(float x , float y){};
    private safeLoc safeLoc;
    /// ---------------------------------------
@@ -36,6 +47,9 @@ public class Vessel{
     private float remaining_dash_time;
     private float hp = 5;
     private float damage = 40;
+    private float soul = 0;
+    private HashMap<String, Charm> charms = new HashMap<>();
+    public static int notches = 3;
     /// -----------BOOLEANS--------------------
     private boolean is_ground = true;
     private boolean right = false;
@@ -222,21 +236,28 @@ public class Vessel{
       if(freeze <= 0 && !hurt)  update_physics(delta , Game.getCurrent_room().getBlocks());
         updateSlashBounds();
 
-        /// ------------------DASH STATE , MOST PARTICULAR ONE----------------------
+        updateCooldowns(delta);
+        /// ------------------HURT----------------------
 
         if(hurt){
             hurt(delta);
             return;
         }
-       if(Dash(delta)) return;
+
        //else if(vengfull(delta)) return;
 
         /// --------------------OTHER STATES-------------------------
 
             heal(delta);
             if(this.state.shouldGoNext(stateTime )){
+                if(state == States.DASH){
+                    if(is_ground) setState(States.IDLE);
+                    else setState(States.FALLING);
+                    return;
+                }
                 setState(state.nextState);
             }
+            if(state.priority) return;
 
         fall();
         updateSafety();
@@ -381,11 +402,13 @@ public class Vessel{
 
     private void slash(Game game){
 
+        damage = charms.containsKey("Unbreakable Strength") ? 30 : 20;
 
         ArrayList<Entity> enemies = Game.getCurrent_room().getEnemies();
         for (Entity n : enemies) {
             if(n.getBounds().overlaps(slashBounds) && n.isAlive()){
                /// To Do:Declare that enemy is hit
+                setSoul(soul + (charms.containsKey("Soul Catcher") ? 17 : 11));
                 n.setHurt(true);
                 n.setHp(n.getHp() - damage);
 
@@ -580,9 +603,39 @@ public class Vessel{
         this.hurt = hurt;
     }
 
+    public float healing_time = 1.5f;
     public void heal(float delta){
-        if(state == States.FOCUS_GET && VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
-            setHp(hp + 1);
+        if(state == States.FOCUS){
+            if(healing_time <= 0){
+                setHp(hp + 1);
+                setState(States.FOCUS_GET);
+            }
+            else{
+                healing_time -= delta;
+            }
         }
     }
+
+    public void setSoul(float soul) {
+        if(soul >= 99) soul = 99;
+        else if(soul <= 0) soul = 0;
+        this.soul = soul;
+    }
+
+    public float getSoul() {
+        return soul;
+    }
+
+
+    public float slash_cooldown = 0.8f;
+    private void updateCooldowns(float delta){
+        if(remaining_dash_time > 0){
+            remaining_dash_time -= delta;
+        }
+        if(slash_cooldown > 0){
+            slash_cooldown -= delta;
+        }
+
+    }
+
 }
