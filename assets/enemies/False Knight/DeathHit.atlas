@@ -1,0 +1,15 @@
+DeathHit.png
+size: 3285, 636
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+DeathHit
+  bounds: 0, 0, 1095, 636
+  index: 0
+DeathHit
+  bounds: 1095, 0, 1095, 636
+  index: 1
+DeathHit
+  bounds: 2190, 0, 1095, 636
+  index: 2

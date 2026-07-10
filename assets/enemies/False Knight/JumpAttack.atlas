@@ -1,0 +1,30 @@
+JumpAttack.png
+size: 3285, 1908
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Jump Attack
+  bounds: 0, 0, 1095, 636
+  index: 0
+Jump Attack
+  bounds: 1095, 0, 1095, 636
+  index: 1
+Jump Attack
+  bounds: 2190, 0, 1095, 636
+  index: 2
+Jump Attack
+  bounds: 0, 636, 1095, 636
+  index: 3
+Jump Attack
+  bounds: 1095, 636, 1095, 636
+  index: 4
+Jump Attack
+  bounds: 2190, 636, 1095, 636
+  index: 5
+Jump Attack
+  bounds: 0, 1272, 1095, 636
+  index: 6
+Jump Attack
+  bounds: 1095, 1272, 1095, 636
+  index: 7

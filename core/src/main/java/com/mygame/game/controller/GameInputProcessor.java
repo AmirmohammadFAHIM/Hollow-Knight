@@ -54,7 +54,7 @@ public class GameInputProcessor extends InputAdapter {
         }
         else if(keycode ==  Input.Keys.SPACE){ //Jump & Double Jump
 
-            if(!vessel.isDouble_jump()) return super.keyDown(keycode);
+            if(vessel.getState() == States.DOUBLE_JUMP) return super.keyDown(keycode);
 
             if(vessel.getState() == States.JUMPING
             || vessel.getState() == States.FALLING && vessel.isDouble_jump()){
@@ -116,7 +116,8 @@ public class GameInputProcessor extends InputAdapter {
     public boolean keyUp(int keycode) {
         if(vessel.getState() == States.DASH) return super.keyUp(keycode);
         if(keycode == Input.Keys.F){
-            if(vessel.getState() == States.FOCUS ||  vessel.getState() == States.START_FOCUS){
+            if(vessel.getState() == States.FOCUS ||  vessel.getState() == States.START_FOCUS ||
+            vessel.getState() == States.FOCUS_GET){
                 vessel.setState(States.IDLE);
                 vessel.healing_time = vessel.getCharms().containsKey("Quick Focus") ? 1.2f : 1.5f;
             }

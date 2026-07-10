@@ -1,0 +1,21 @@
+Run.png
+size: 3285, 1272
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Run
+  bounds: 0, 0, 1095, 636
+  index: 0
+Run
+  bounds: 1095, 0, 1095, 636
+  index: 1
+Run
+  bounds: 2190, 0, 1095, 636
+  index: 2
+Run
+  bounds: 0, 636, 1095, 636
+  index: 3
+Run
+  bounds: 1095, 636, 1095, 636
+  index: 4

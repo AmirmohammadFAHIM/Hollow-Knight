@@ -1,0 +1,21 @@
+Body.png
+size: 3285, 1272
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Body
+  bounds: 0, 0, 1095, 636
+  index: 0
+Body
+  bounds: 1095, 0, 1095, 636
+  index: 1
+Body
+  bounds: 2190, 0, 1095, 636
+  index: 2
+Body
+  bounds: 0, 636, 1095, 636
+  index: 3
+Body
+  bounds: 1095, 636, 1095, 636
+  index: 4

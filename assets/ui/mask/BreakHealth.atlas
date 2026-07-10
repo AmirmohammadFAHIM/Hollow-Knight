@@ -1,0 +1,26 @@
+BreakHealth.png
+size: 126, 1169
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+BreakHealth
+  bounds: 0, 0, 126, 167
+  index: 0
+BreakHealth
+  bounds: 0, 167, 126, 167
+  index: 1
+BreakHealth
+  bounds: 0, 334, 126, 167
+  index: 2
+BreakHealth
+  bounds: 0, 501, 126, 167
+  index: 3
+BreakHealth
+  bounds: 0, 668, 126, 167
+  index: 4
+BreakHealth
+  bounds: 0, 835, 126, 167
+  index: 5
+EmptyHealth
+  bounds: 0, 1002, 126, 167

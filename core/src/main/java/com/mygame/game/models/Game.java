@@ -12,13 +12,19 @@ public class Game {
     private static Room current_room;
     private final Array<Projectile> projectiles =  new Array<>();
 
+    public Game(int index , Vessel vesel){
+        Game.vessel = vesel;
+        MapManager.loadRoom(index);
+
+    }
+
     public  Game(){
         vessel = new Vessel();
         current_chunk = new Chunk();
-        MapManager.loadChunk("CityOfTears" , 1);
+       MapManager.loadChunk("CityOfTears" , 1); //we commented it because the saveManager has done the loading
         MapManager.loadRoom(0);
-
     }
+
     public static Vessel getVessel() {
         return vessel;
     }

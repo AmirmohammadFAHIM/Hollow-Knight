@@ -195,6 +195,8 @@ public class Entity {
            if(hurtTime <= 0){
                velocityX = defaultSpeed * (right ? 1 : -1);
                velocityY = 0;
+               setHurt(false);
+              // setState(Entity_States.NORMAL);
                hurtTime = 1;
            }
            else {

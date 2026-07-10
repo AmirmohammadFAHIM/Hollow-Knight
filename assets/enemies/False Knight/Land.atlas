@@ -1,0 +1,21 @@
+Land.png
+size: 3285, 1272
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+Land
+  bounds: 0, 0, 1095, 636
+  index: 0
+Land
+  bounds: 1095, 0, 1095, 636
+  index: 1
+Land
+  bounds: 2190, 0, 1095, 636
+  index: 2
+Land
+  bounds: 0, 636, 1095, 636
+  index: 3
+Land
+  bounds: 1095, 636, 1095, 636
+  index: 4

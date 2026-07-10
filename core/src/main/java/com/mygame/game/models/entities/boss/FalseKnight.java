@@ -2,6 +2,7 @@ package com.mygame.game.models.entities.boss;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.mygame.game.models.Game;
+import com.mygame.game.models.States;
 import com.mygame.game.models.Vessel;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
@@ -17,7 +18,7 @@ public class FalseKnight extends Entity {
         this.x = x;
         this.y = y;
         this.width = 330;
-        this.hp = 370;
+        this.hp = 500;
         this.bounds = new Rectangle(x, y, width, height);
         setAction(Action.IDLE);
     }
@@ -67,16 +68,22 @@ public class FalseKnight extends Entity {
     }
 
 
-    float stunTimer = 5;
+    float stunTimer = 7;
     private boolean Death(float delta){
         if(!alive){
             return true;
         }
 
         if(action == Action.DEAD){
-            if(stunTimer <= 0){
-                stunTimer = 5;
+            if(stunTimer <= 0 || DeathHitTimes >= 4){
+                phase = 2;
+                stunTimer = 7;
                 setAction(Action.IDLE);
+                if(DeathHitTimes >= 4){
+                    hp = 500;
+                    phase = 1;
+                }
+                DeathHitTimes = 0;
                 return false;
             }
             else{
@@ -90,11 +97,27 @@ public class FalseKnight extends Entity {
     }
 
 
+    Rectangle HeatBox =  new Rectangle();
+    private int DeathHitTimes;
+    private void DeathHit(){
+
+        HeatBox.set(right ? this.x - 120 : this.x + this.width , 0 , 120 , 120);
+        if(Game.getVessel().getState() == States.SLASH && this.action == Action.DEAD && alive){
+            /// the hitbox
+            if(Game.getVessel().getSlashBounds().overlaps(HeatBox)){
+                setHurt(true);
+            }
+
+        }
+    }
+
+
 
     public boolean turnPalse = false;
     public boolean turned = false;
     @Override
     public boolean update(float delta , Game game){
+        System.out.println(hp);
         update_physics(delta, game);
         if(!alive){
             return false;
@@ -133,7 +156,6 @@ public class FalseKnight extends Entity {
             decide(delta, game);
         }
         else if(action == Action.IDLE){
-            System.out.println(cooldown + " action" + action);
             cooldown -= delta;
             if(cooldown <= 0.6 && !turned){
                 whereIsKnight();

@@ -120,7 +120,7 @@ public class FalseKnightRenderer extends EntityRenderer {
         TextureAtlas.AtlasRegion frame = this.animS.animation.getKeyFrame(stateTime);
         if(frame.isFlipX() && !boss.isRight()) frame.flip(true , false);
         else if(!frame.isFlipX() && boss.isRight()) frame.flip(true , false);
-        batch.draw(frame , boss.getX(), boss.getY() - 30);
+        batch.draw(frame , boss.getX() - 400, boss.getY() - 35);
 
         /// rendering the animation and flipping it according to boss' direction
     }

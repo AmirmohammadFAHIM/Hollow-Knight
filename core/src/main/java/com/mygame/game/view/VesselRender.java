@@ -1,6 +1,8 @@
 package com.mygame.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -25,6 +27,9 @@ public class VesselRender {
     private Animation<TextureAtlas.AtlasRegion> upSlashEffect;
     private Animation<TextureAtlas.AtlasRegion> downSlashEffect;
     private Animation<TextureAtlas.AtlasRegion> blast;
+    private Sound slashSound;
+    private Sound focusGet;
+    private Music focusCharging;
 
 
     public  VesselRender() {
@@ -41,12 +46,29 @@ public class VesselRender {
         downSlashEffect = new Animation<>(0.06f , effect.findRegions("DownSlashEffect"));
         effect = new TextureAtlas("knight/Blast.atlas");
         blast = new Animation<>(0.06f , effect.findRegions("Blast"));
+
+
+        slashSound = Gdx.audio.newSound(Gdx.files.internal("sfx/knight/slash.wav"));
+        focusGet = Gdx.audio.newSound(Gdx.files.internal("sfx/knight/focusGet.wav"));
+        focusCharging = Gdx.audio.newMusic(Gdx.files.internal("sfx/knight/focusCharging.wav"));
     }
 
 
 
     private void update_rendering(float delta) {
+        if(currentAnimation != vessel.getState().getAnimation()){
+            if(vessel.getState() == States.SLASH || vessel.getState() == States.UP_SLASH ||
+            vessel.getState() == States.DOWN_SLASH) slashSound.play();
+             if(vessel.getState() == States.FOCUS && !focusCharging.isPlaying()){
+                 focusCharging.play();
+             }
+             else{
+                 focusCharging.stop();
+             }
+             if(vessel.getState() == States.FOCUS_GET) focusGet.play();
+        }
       currentAnimation =  vessel.getState().getAnimation();
+
 
     }
 
@@ -68,6 +90,7 @@ public class VesselRender {
         batch.draw(frame , drawX , drawY);
         renderSlash(batch);
         renderBlast(batch);
+
 
 
     }
@@ -113,7 +136,8 @@ public class VesselRender {
         slashStateTime += Gdx.graphics.getDeltaTime();
         Rectangle rect = vessel.getSlashBounds();
         TextureAtlas.AtlasRegion slashFrame;
-        currentAnimation.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.072f : 0.09f);
+        if(vessel.getState() == States.SLASH ||
+            vessel.getState() == States.UP_SLASH || vessel.getState() == States.DOWN_SLASH)  currentAnimation.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.072f : 0.09f);
         slashEffect.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.048f : 0.06f);
         upSlashEffect.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.048f : 0.06f);
         downSlashEffect.setFrameDuration(vessel.getCharms().containsKey("Quick Slash") ? 0.048f : 0.06f);
@@ -133,9 +157,19 @@ public class VesselRender {
             batch.draw(upSlashEffect.getKeyFrame(slashStateTime), rect.x,   rect.y);
         }
         else slashStateTime = 0;
+    }
 
 
+    private void sound(){
+        if(vessel.getState() == States.SLASH){
+            slashSound.play();
+        }
+    }
 
+    public void dispose(){
+        slashSound.dispose();
+        focusCharging.dispose();
+        focusGet.dispose();
     }
 
     public static Animation<TextureAtlas.AtlasRegion> getCurrentAnimation() {

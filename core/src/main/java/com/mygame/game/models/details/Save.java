@@ -44,4 +44,10 @@ public class Save {
     public float getProgress() {
         return progress;
     }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
+
+
 }

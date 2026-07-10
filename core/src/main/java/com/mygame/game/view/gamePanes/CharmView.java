@@ -3,6 +3,7 @@ package com.mygame.game.view.gamePanes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,37 +24,50 @@ import java.util.HashMap;
 public class CharmView extends Table {
     private Button button;
     private final String name;
+    private boolean equipped = false;
+    Label.LabelStyle labelS;
+    Label equip ;
+
 
     public CharmView(String name){
-
-        this.name=name;
+        this.name = name;
         Label.LabelStyle[] labelStyle = makeStyles();
+        labelS = labelStyle[1];
         Label CharmName = new Label(name, labelStyle[0]);
-        boolean equipped = Game.getVessel().getCharms().containsKey(name);
-        Label equip = new  Label(equipped ? "equipped" : "not equipped", labelStyle[1]);
-        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        TextureRegionDrawable up = new
-            TextureRegionDrawable(new Texture("charms/" + name + ".png"));
-        TextureRegionDrawable down = (TextureRegionDrawable) up.tint(new Color(1,1,1,0.5f));
+
+         equipped = Game.getVessel().getCharms().containsKey(name);
+
+        // ۱. ساخت دروابل اصلی برای حالت عادی
+        TextureRegionDrawable up = new TextureRegionDrawable(new Texture("charms/" + name + ".png"));
+
+        // ۲. تغییر نوع متغیر به Drawable عمومی (این خط ارور کامپایل و ران‌تایم را کاملاً حل می‌کند)
+        com.badlogic.gdx.scenes.scene2d.utils.Drawable down = up.tint(new Color(1f, 1f, 1f, 0.5f));
+
+        // ۳. ست کردن روی فیلدهای تصویری استایل دکمه (imageUp و imageDown)
         ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = up;
-        imageButtonStyle.down = down;
-        ImageButton imageButton = new ImageButton(imageButtonStyle);
+        imageButtonStyle.imageUp = up;     // عکس شارپ در حالت عادی
+        imageButtonStyle.imageDown = down; // عکس کم‌رنگ شده در حالت فشردن
+
+         equip = new Label(equipped ? "equipped" : "not equipped", labelStyle[1]);
+
+        ImageButton imageButton
+            = new ImageButton(imageButtonStyle);
         addListener(imageButton);
+
+        // چیدمان جدول
         this.top();
         this.defaults().padBottom(7);
         this.add(CharmName).row();
         this.add(imageButton).row();
         this.add(equip);
-
-
     }
 
     private Label.LabelStyle[] makeStyles(){
         Label.LabelStyle labelStyleBig = new Label.LabelStyle();
         labelStyleBig.fontColor = Color.WHITE;
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/hollow_knight_font.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("menus/trajan.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
 
         parameter.size = 22;
         BitmapFont topFont = generator.generateFont(parameter);
@@ -67,15 +81,35 @@ public class CharmView extends Table {
         return  new Label.LabelStyle[]{topTextStyle, bottomTextStyle};
     }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if(Game.getVessel().getCharms().containsKey(name)){
+            equipped = true;
+        }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        equip.setText(equipped ? "equipped" : "not equipped");
+
+    }
+
     private void addListener(ImageButton charm){
         charm.addListener(new  ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 HashMap<String , Charm> charms = Game.getVessel().getCharms();
-                if(charms.size() < 3){
+                if(charms.size() < 3 && !equipped){
+                    equipped = true;
                     charms.put(name , new Charm(Charm.Type.valueOf
                         (name.replaceAll(" " , "_").toUpperCase())));
+                }
+                else if(equipped){
+                    equipped = false;
+                    charms.remove(name);
                 }
             }
         });

@@ -1,15 +1,21 @@
 package com.mygame.game.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Scaling;
 import com.mygame.game.controller.UiManager;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.details.Save;
 
 public class LoadCard extends Table {
@@ -18,6 +24,7 @@ public class LoadCard extends Table {
     private Image background;
     private float progress;
     public LoadCard(int slot , boolean New){
+        System.out.println(New);
         this.New = New;
         this.slot = slot;
         this.setSize(270 , 85);
@@ -33,6 +40,29 @@ public class LoadCard extends Table {
         this.add(label).left();
         this.add(load).right();
 
+        this.setTouchable(Touchable.enabled);
+        this.debug();
+
+
+        this.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                LoadCard This = (LoadCard) event.getListenerActor();
+                System.out.println("kikiki");
+                super.clicked(event, x, y);
+                GameView gameView;
+
+                if(New){
+                    gameView = new GameView();
+                    SaveManager.save = new Save();
+                    SaveManager.save.setSlotIndex(This.slot);
+                }
+                else{
+                    gameView = new GameView(SaveManager.load(This.slot));
+                }
+                UiManager.setScreen(gameView);
+            }
+        });
 
     }
 
@@ -43,9 +73,14 @@ public class LoadCard extends Table {
         }
 
         JsonReader reader = new JsonReader();
-        JsonValue chunk = reader.parse("saves/save" +slot+".json");
+
+
+        FileHandle file = Gdx.files.local("data/save" + slot + ".json");
+
+        JsonValue chunk = reader.parse(file);
+
         String chunkName = chunk.getString("chunkName");
-        background = new Image(new Texture("Area_" + chunkName + ".png"));
+        background = new Image(new Texture("Area save art/Area_" + chunkName + ".png"));
     }
 
     private void LoadProgress(){
@@ -53,10 +88,16 @@ public class LoadCard extends Table {
             progress = 0;
             return;
         }
+
         JsonReader reader = new JsonReader();
-        JsonValue field = reader.parse("saves/save" +slot+".json");
+
+        FileHandle file = Gdx.files.local("data/save" + slot + ".json");
+
+        JsonValue field = reader.parse(file);
+
         progress = field.getFloat("progress");
     }
+
 
 
 }

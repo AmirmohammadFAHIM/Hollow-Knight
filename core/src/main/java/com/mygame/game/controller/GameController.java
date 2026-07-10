@@ -4,9 +4,11 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.States;
 import com.mygame.game.models.Vessel;
+import com.mygame.game.models.details.Save;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
 import com.mygame.game.models.map.MapManager;
@@ -54,6 +56,7 @@ public class GameController {
         }
 
 
+        SaveManager.achievements.observe(game);/// observing achievements
 
         transition();
     }

@@ -19,13 +19,16 @@ import com.mygame.game.models.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.skill.Projectile;
+import com.mygame.game.view.gamePanes.Inventory;
 import com.mygame.game.view.gamePanes.ProjectileRenderer;
 import com.mygame.game.view.healthBar.HUD;
 
 
 public class GameView implements Screen {
-    private static GameController game;
-    private static RoomView currentRoomView;
+    private static GameController game; /// save
+    private GameInputProcessor processor;
+    ///
+    private static RoomView currentRoomView; /// save
     private VesselRender vesselRender;
     private ProjectileRenderer  projectileRenderer;
     private SpriteBatch  batch;
@@ -36,6 +39,18 @@ public class GameView implements Screen {
     private Stage stage;
     private Stack mainStack;
     private HUD hud;
+
+    public GameView(Game game){
+         processor = new GameInputProcessor(Game.getVessel());
+        GameView.game = new GameController(game , processor);
+    }
+
+    public GameView(){
+         processor = new GameInputProcessor(Game.getVessel());
+        GameView.game = new GameController(new Game(),processor);
+    }
+
+
 
     @Override
     public void show() {
@@ -61,6 +76,16 @@ public class GameView implements Screen {
                         mainStack.clearChildren();
                     }
                 }
+                else if(keycode == Input.Keys.I){
+                    if(!GameController.isPaused()){
+                        mainStack.add(new Inventory());
+                        GameController.setPaused(true);
+                    }
+                    else{
+                        GameController.setPaused(false);
+                        mainStack.clearChildren();
+                    }
+                }
                 return super.keyDown(event, keycode);
             }
         });
@@ -69,9 +94,6 @@ public class GameView implements Screen {
         stage.addActor(mainStack);
 
 
-        GameInputProcessor processor = new GameInputProcessor(Game.getVessel());
-        game = new GameController(new Game() /* here can be the idea for saves */ ,
-            processor);
         hud = new HUD();
         stage.addActor(hud);
         currentRoomView = new RoomView(Game.getCurrent_room());
@@ -91,14 +113,7 @@ public class GameView implements Screen {
         vesselRender = new VesselRender();
         batch = new SpriteBatch();
 
-        PointMapObject spawnPoint = (PointMapObject) currentRoomView.getRoom().getMap().getLayers().get("Collisions").
-            getObjects().get("SpawnPoint");
-        float x = spawnPoint.getProperties().get("x" , Float.class);
-        float y = spawnPoint.getProperties().get("y" , Float.class);
-        camera.position.set( x , y , 0);
-        Game.getVessel().setX(x);
-        Game.getVessel().setY(y);
-        Game.getVessel().updateRect();
+
         camera.update();
       //  batch.setProjectionMatrix(camera.combined);
         //viewport.setScreenPosition(0 , 0);
@@ -155,6 +170,7 @@ public class GameView implements Screen {
 
     @Override
     public void dispose() {
+        vesselRender.dispose();
 
     }
 
@@ -209,4 +225,6 @@ public class GameView implements Screen {
     public Stack getMainStack() {
         return mainStack;
     }
+
+
 }

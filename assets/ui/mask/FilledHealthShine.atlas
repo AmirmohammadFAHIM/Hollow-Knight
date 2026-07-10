@@ -1,0 +1,21 @@
+FilledHealthShine.png
+size: 126, 835
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+FilledHealthShine
+  bounds: 0, 0, 126, 167
+  index: 0
+FilledHealthShine
+  bounds: 0, 167, 126, 167
+  index: 1
+FilledHealthShine
+  bounds: 0, 334, 126, 167
+  index: 2
+FilledHealthShine
+  bounds: 0, 501, 126, 167
+  index: 3
+FilledHealthShine
+  bounds: 0, 668, 126, 167
+  index: 4

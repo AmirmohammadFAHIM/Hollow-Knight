@@ -12,13 +12,13 @@ public class LoadingMenu extends Table {
     private LoadCard slot3;
     private LoadCard slot4;
     public LoadingMenu() {
-        FileHandle file = new FileHandle("saves/save1.json");
+        FileHandle file = new FileHandle("data/save1.json");
         slot1 = new LoadCard(1 , !file.exists());
-        file =  new FileHandle("saves/save2.json");
+        file =  new FileHandle("data/save2.json");
         slot2 = new LoadCard(2 , !file.exists());
-        file =  new FileHandle("saves/save3.json");
+        file =  new FileHandle("data/save3.json");
         slot3 = new LoadCard(3 , !file.exists());
-        file =  new FileHandle("saves/save4.json");
+        file =  new FileHandle("data/save4.json");
         slot4 = new LoadCard(4 , !file.exists());
 
         this.setFillParent(true);

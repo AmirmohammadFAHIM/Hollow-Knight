@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygame.game.models.charms.Charm;
 import com.mygame.game.models.entities.Entity;
+import com.mygame.game.models.entities.boss.FalseKnight;
 import com.mygame.game.models.map.SolidBlock;
 import com.mygame.game.models.map.Spike;
 import com.mygame.game.view.VesselRender;
@@ -38,8 +39,7 @@ public class Vessel{
     }
 
     /// ---------SAFETY RECORD--------------
-    public record safeLoc(float x , float y){};
-   private safeLoc safeLoc;
+   private SafeLock safeLoc;
    /// ---------------------------------------
     private Rectangle slashBounds = new Rectangle();
     private float width = 70;
@@ -253,6 +253,7 @@ public class Vessel{
                 if(state == States.DASH){
                     if(is_ground) setState(States.IDLE);
                     else setState(States.FALLING);
+                    velocityX = 0;
                     return;
                 }
                 setState(state.nextState);
@@ -402,15 +403,17 @@ public class Vessel{
 
     private void slash(Game game){
 
-        damage = charms.containsKey("Unbreakable Strength") ? 30 : 20;
+        damage = charms.containsKey("Unbreakable Strength") ? 45 : 35;
 
         ArrayList<Entity> enemies = Game.getCurrent_room().getEnemies();
         for (Entity n : enemies) {
-            if(n.getBounds().overlaps(slashBounds) && n.isAlive()){
+            if(n.getBounds().overlaps(slashBounds) && n.isAlive() && !n.isHurt()){
                /// To Do:Declare that enemy is hit
                 setSoul(soul + (charms.containsKey("Soul Catcher") ? 17 : 11));
                 n.setHurt(true);
                 n.setHp(n.getHp() - damage);
+
+
 
             }
         }
@@ -563,9 +566,13 @@ public class Vessel{
     private final float spawnPoint = 6;
     private float timer = 0;
     private void updateSafety(){
+        if(safeLoc == null){
+            safeLoc = new SafeLock(this.x , this.y);
+        }
         if(timer <= 0){
             if(is_ground && state != States.Death){
-                safeLoc = new safeLoc(x , y);
+                safeLoc.setX(this.x);
+                safeLoc.setY(this.y);
             }
             timer = spawnPoint;
         }
@@ -577,8 +584,8 @@ public class Vessel{
     private void death(){
         if(state == States.Death && VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
             hp = 5;
-            x = safeLoc.x();
-            y = safeLoc.y();
+            x = safeLoc.getX();
+            y = safeLoc.getY();
             setState(States.IDLE);
         }
     }

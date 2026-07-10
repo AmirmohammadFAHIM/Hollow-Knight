@@ -45,16 +45,10 @@ public class MainMenuTable extends Table {
         TextButton newGame  = new TextButton("Start Game", style);
 
 
-        newGame.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                UiManager.setScreen(new GameView());
-            }
-        });
         newGame.setTouchable(Touchable.enabled);
 
-        TextButton loadGame  = new TextButton("Achievements", style);
-        loadGame.setTouchable(Touchable.enabled);
+        TextButton achievements  = new TextButton("Achievements", style);
+        achievements.setTouchable(Touchable.enabled);
 
         TextButton options = new  TextButton("Settings", style);
         options.setTouchable(Touchable.enabled);
@@ -71,17 +65,17 @@ public class MainMenuTable extends Table {
 
         this.add(newGame).align(Align.center).row();
         this.add(options).align(Align.center).row();
-        this.add(loadGame).align(Align.center).row();
+        this.add(achievements).align(Align.center).row();
         this.add(guide).align(Align.center).row();
         this.add(exit).center().row();
 
-        //addListener(options , guide , exit , newGame);
+        addListener(options , guide , exit , newGame, achievements);
 
     }
 
 
     private void addListener(TextButton options , TextButton guide , TextButton exit ,
-                             TextButton newGame){
+                             TextButton newGame , TextButton achievements){
         options.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -95,6 +89,14 @@ public class MainMenuTable extends Table {
             public void clicked(InputEvent event, float x, float y) {
                 screen.getRootTable().clearChildren();
                 screen.getRootTable().add(new LoadingMenu());
+            }
+        });
+
+        achievements.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.getRootTable().clearChildren();
+                screen.getRootTable().add(new AchievementsTable());
             }
         });
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygame.game.controller.UiManager;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.view.MainScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -21,6 +22,7 @@ public class Main extends Game {
         new UiManager(this);
         setScreen(new MainScreen());
         shapeRenderer = new ShapeRenderer();
+        SaveManager.loadAchievements();
     }
 
     @Override

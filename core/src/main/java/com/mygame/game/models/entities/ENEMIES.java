@@ -86,7 +86,7 @@ public enum ENEMIES {
             deathLand = new Animation<>(0.09f , spriteSheet.findRegions("Death Land"));
 
             flying = true;
-            speed = 80;
+            speed = 40;
         }
     };
 

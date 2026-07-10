@@ -1,0 +1,15 @@
+DeathFall.png
+size: 3285, 636
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+DeathFall
+  bounds: 0, 0, 1095, 636
+  index: 0
+DeathFall
+  bounds: 1095, 0, 1095, 636
+  index: 1
+DeathFall
+  bounds: 2190, 0, 1095, 636
+  index: 2
