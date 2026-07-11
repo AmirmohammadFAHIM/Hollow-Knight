@@ -37,7 +37,8 @@ public class FalseKnightRenderer extends EntityRenderer {
         TURN(IDLE,new TextureAtlas("enemies/False Knight/Turn.atlas"),"Turn",false){
 
         },
-        JUMP_ATTACK(IDLE , new TextureAtlas("enemies/False Knight/JumpAttack.atlas"),"Jump Attack",false);
+        JUMP_ATTACK(IDLE , new TextureAtlas("enemies/False Knight/JumpAttack.atlas"),
+            "Jump Attack",false, 0.116f);
 
     AnimationState next;
     Animation<TextureAtlas.AtlasRegion> animation;
@@ -46,6 +47,12 @@ public class FalseKnightRenderer extends EntityRenderer {
         this.animation = new Animation<>(0.09f , spriteSheet.findRegions(regionName),
             loop ? Animation.PlayMode.LOOP : Animation.PlayMode.NORMAL);
     }
+        AnimationState(AnimationState next , TextureAtlas spriteSheet,String regionName,boolean loop,
+                       float frameDuration) {
+            this.next = next;
+            this.animation = new Animation<>(frameDuration , spriteSheet.findRegions(regionName),
+                loop ? Animation.PlayMode.LOOP : Animation.PlayMode.NORMAL);
+        }
     void goNext(float stateTime , FalseKnightRenderer renderer){
             if(next != null && renderer.animS.animation.isAnimationFinished(stateTime)){
                 renderer.setAnimS(next);

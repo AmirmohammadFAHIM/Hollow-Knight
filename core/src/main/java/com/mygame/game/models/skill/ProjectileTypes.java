@@ -15,7 +15,21 @@ public enum ProjectileTypes {
             spriteSheet = new TextureAtlas("knight/BallEnd.atlas");
             end = new Animation<>(0.09f , spriteSheet.findRegions("Ball End"));
         }
+    },
+
+    SHOCKWAVE(700 , 200 , 150 , 500){
+        {
+            TextureAtlas spriteSheet = new TextureAtlas("enemies/False Knight/ShockWaveStart.atlas");
+            start = new Animation<>(0.09f , spriteSheet.getRegions());
+            end = new Animation<>(0.03f , spriteSheet.getRegions());
+            spriteSheet = new TextureAtlas("enemies/False Knight/ShockWaveStart.atlas");
+            moving = new Animation<>(0.09f , spriteSheet.getRegions(),
+                Animation.PlayMode.LOOP);
+        }
     };
+
+
+
 
 
     float range;

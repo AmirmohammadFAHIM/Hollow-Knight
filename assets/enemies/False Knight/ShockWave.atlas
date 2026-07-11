@@ -1,30 +1,21 @@
 ShockWave.png
-size: 1696, 217
+size: 1060, 217
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 pma: false
 Shockwave
   bounds: 0, 0, 212, 217
-  index: 0
-Shockwave
-  bounds: 212, 0, 212, 217
-  index: 1
-Shockwave
-  bounds: 424, 0, 212, 217
-  index: 2
-Shockwave
-  bounds: 636, 0, 212, 217
   index: 3
 Shockwave
-  bounds: 848, 0, 212, 217
+  bounds: 212, 0, 212, 217
   index: 4
 Shockwave
-  bounds: 1060, 0, 212, 217
+  bounds: 424, 0, 212, 217
   index: 5
 Shockwave
-  bounds: 1272, 0, 212, 217
+  bounds: 636, 0, 212, 217
   index: 6
 Shockwave
-  bounds: 1484, 0, 212, 217
+  bounds: 848, 0, 212, 217
   index: 7

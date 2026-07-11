@@ -7,6 +7,8 @@ import com.mygame.game.models.Vessel;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
 import com.mygame.game.models.map.SolidBlock;
+import com.mygame.game.models.skill.Projectile;
+import com.mygame.game.models.skill.ProjectileTypes;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -188,7 +190,7 @@ public class FalseKnight extends Entity {
         }
         else if(near && phase == 2 && spam != Action.JUMP_KNOCK){
             /// jump knock function
-        knock(delta, game);
+        jump_knock(delta, game);
         }
         else if(near && spam != Action.KNOCK) {
             knock(delta, game);
@@ -211,7 +213,7 @@ public class FalseKnight extends Entity {
             System.out.println("We about to make a random decision :  " + cooldown +" " + action);
             if(underIntenseAttack  && phase == 2){
                 /// jump knock function
-            knock(delta, game);
+            jump_knock(delta, game);
             }
             else if(near){
                 run(delta, game);
@@ -355,6 +357,28 @@ public class FalseKnight extends Entity {
         return true;
     }
 
+    float jumpTimer = 0.928f;
+    private boolean jump_knock(float delta , Game game){
+        if(action == Action.IDLE){
+            System.out.println("jump_knock");
+            setAction(Action.JUMP_KNOCK);
+            return  true;
+        }
+
+        if(jumpTimer <= 0){
+            jumpTimer = 0.928f;
+            System.out.println("over : J");
+            return false;
+        }
+        jumpTimer -= delta;
+        if(jumpTimer <= 0.2f){
+            float x = this.x + (right ? this.width : -200);
+            game.getProjectiles().add(new Projectile(ProjectileTypes.SHOCKWAVE,this.right,x,0));
+        }
+        return true;
+
+    }
+
     public void setAction(Action action){
        if(this.action != action) {
            if (action != Action.IDLE) last2action.addFirst(action);
@@ -393,7 +417,7 @@ public class FalseKnight extends Entity {
 
     public void update_physics(float delta, Game game) {
         if (!is_grounded) {
-            velocityY -= 7f;
+            velocityY -= 7f * delta;
         }
 
         x += velocityX * delta;
