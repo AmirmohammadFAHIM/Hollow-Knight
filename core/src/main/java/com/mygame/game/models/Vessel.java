@@ -411,6 +411,11 @@ public class Vessel{
                /// To Do:Declare that enemy is hit
                 setSoul(soul + (charms.containsKey("Soul Catcher") ? 17 : 11));
                 n.setHurt(true);
+                if(n instanceof FalseKnight){
+                    FalseKnight f =  (FalseKnight) n;
+                    if(f.action != FalseKnight.Action.DEAD) n.setHp(n.getHp() - damage);
+                    continue;
+                }
                 n.setHp(n.getHp() - damage);
 
 

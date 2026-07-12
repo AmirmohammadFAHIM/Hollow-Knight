@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
@@ -18,6 +19,7 @@ import com.mygame.game.controller.GameInputProcessor;
 import com.mygame.game.models.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.mygame.game.models.map.MapManager;
+import com.mygame.game.models.map.Room;
 import com.mygame.game.models.skill.Projectile;
 import com.mygame.game.view.gamePanes.Inventory;
 import com.mygame.game.view.gamePanes.ProjectileRenderer;
@@ -59,7 +61,7 @@ public class GameView implements Screen {
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(1028, 960,camera);
 
-        uiViewport = new ExtendViewport(1280, 960);
+        uiViewport = new ExtendViewport(1080, 960);
         stage = new Stage(uiViewport);
 
         stage.addListener(new InputListener() {
@@ -120,24 +122,38 @@ public class GameView implements Screen {
 
     }
 
+    float winScreenTime = 8;
     @Override
     public void render(float delta) {
        Gdx.gl.glClearColor(0, 0, 0, 1);
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
 
+        if(Game.getCurrent_room().currentState == Room.State.VICTORY && winScreenTime==8){
+            mainStack.add(new VictoryMenu());
+        }
+        else if(Game.getCurrent_room().currentState == Room.State.VICTORY){
+          if(winScreenTime <= 0){
+              mainStack.clearChildren();
+              Game.getCurrent_room().currentState = Room.State.NORMAL;
+              winScreenTime = 8;
+          }
+          else winScreenTime -= delta;
+        }
 
         /// ---------------RENDERING------------------------
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        currentRoomView.render(camera , batch);
+        currentRoomView.renderBackGround(camera,batch);
         vesselRender.render(batch , stateTime);
         for (Projectile x : game.getGame().getProjectiles()){
             projectileRenderer.render(batch , x);
         }
+        batch.end();
+        currentRoomView.renderForeground(camera);
         updateCamera();
         camera.update();
-        batch.end();
+
 
         stage.act(delta);
         stage.draw();
@@ -214,8 +230,13 @@ public class GameView implements Screen {
 
             // ۵. اعمال مختصات جدید به دوربین
             camera.position.set(clampedX, clampedY, 0);
+            if(Game.getCurrent_room().currentState == Room.State.BOSS_FIGHT){
+                Rectangle rect = Game.getCurrent_room().bossArea;
+                camera.position.x = rect.x + rect.width / 2f;
+            }
             camera.update();
         }
+
 
 
     public Stage getStage() {

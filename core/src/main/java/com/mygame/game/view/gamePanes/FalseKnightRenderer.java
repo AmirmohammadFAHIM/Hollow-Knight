@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.entities.EntityRenderer;
 import com.mygame.game.models.entities.boss.FalseKnight;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FalseKnightRenderer extends EntityRenderer {
     FalseKnight boss;
@@ -21,7 +25,7 @@ public class FalseKnightRenderer extends EntityRenderer {
         ,JUMP(null,new TextureAtlas("enemies/False Knight/Jump.atlas"),"Jump",false)
         ,BODY(null,new TextureAtlas("enemies/False Knight/Body.atlas"),"Body",true)
         ,STUN_RECOVER(IDLE,new TextureAtlas("enemies/False Knight/StunRecover.atlas"),"Stun Recover",false)
-        ,DEATH_LAND(BODY,new TextureAtlas("enemies/False Knight/DeathLand.atlas"),"Death Land",false)
+        ,DEATH_LAND(BODY,new TextureAtlas("enemies/False Knight/DeathLand.atlas"),"DeathLand",false)
         ,DEATH_HIT(BODY,new TextureAtlas("enemies/False Knight/DeathHit.atlas"),"DeathHit",false){
             @Override
             void goNext(float stateTime, FalseKnightRenderer renderer) {
@@ -50,12 +54,13 @@ public class FalseKnightRenderer extends EntityRenderer {
         AnimationState(AnimationState next , TextureAtlas spriteSheet,String regionName,boolean loop,
                        float frameDuration) {
             this.next = next;
-            this.animation = new Animation<>(frameDuration , spriteSheet.findRegions(regionName),
+            this.animation = new Animation<>(frameDuration , spriteSheet.getRegions(),
                 loop ? Animation.PlayMode.LOOP : Animation.PlayMode.NORMAL);
         }
     void goNext(float stateTime , FalseKnightRenderer renderer){
             if(next != null && renderer.animS.animation.isAnimationFinished(stateTime)){
                 renderer.setAnimS(next);
+                System.out.println(next);
                 //renderer.currAnime = next.animation;
             }
         }
@@ -72,6 +77,12 @@ public class FalseKnightRenderer extends EntityRenderer {
         }
     }
 
+    private void jump_attackAnimation(){
+        if(boss.action == FalseKnight.Action.JUMP_KNOCK && animS == AnimationState.IDLE){
+            setAnimS(AnimationState.JUMP_ATTACK);
+        }
+    }
+
     private void landAndJumpAnimation(){
         FalseKnight.Action action = boss.action;
         if (animS == AnimationState.IDLE && (action == FalseKnight.Action.AGGRESSIVE_JUMP ||
@@ -83,9 +94,12 @@ public class FalseKnightRenderer extends EntityRenderer {
         }
     }
 
+    ArrayList<AnimationState> deaths = new ArrayList<>(Arrays.asList(AnimationState.DEATH_AIR,
+        AnimationState.DEATH_LAND, AnimationState.DEATH_HIT,AnimationState.BODY));
+
     private void DeathAnimation(){
         FalseKnight.Action action = boss.action;
-        if(animS != AnimationState.DEATH_AIR && action == FalseKnight.Action.DEAD){
+        if(!deaths.contains(animS) && action == FalseKnight.Action.DEAD){
             setAnimS(AnimationState.DEATH_AIR);
         }
         else if(animS == AnimationState.BODY && boss.isHurt()){
@@ -121,6 +135,7 @@ public class FalseKnightRenderer extends EntityRenderer {
         DeathAnimation();
         landAndJumpAnimation();
         attackAnimation();
+        jump_attackAnimation();
         Run();
         Turn();
         animS.goNext(stateTime,this);

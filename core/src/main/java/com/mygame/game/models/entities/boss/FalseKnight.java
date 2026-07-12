@@ -38,6 +38,7 @@ public class FalseKnight extends Entity {
         DEAD;
 
     }
+    final float gravity = 1000f;
     int phase = 1;
     record phaseOneConstants(float velocityX , float cooldown){}
     record phaseTwoConstants(float velocityX , float cooldown){}
@@ -90,6 +91,7 @@ public class FalseKnight extends Entity {
             }
             else{
                 stunTimer -= delta;
+                DeathHit();
                 return  true;
             }
         }
@@ -114,6 +116,15 @@ public class FalseKnight extends Entity {
     }
 
 
+    private void update_hurt(float delta){
+        if(!hurt) return;
+        if(hurtRemaining > 0){
+            hurtRemaining -= delta;
+        }else{
+            setHurt(false);
+            hurtRemaining = 1f;
+        }
+    }
 
     public boolean turnPalse = false;
     public boolean turned = false;
@@ -121,33 +132,25 @@ public class FalseKnight extends Entity {
     public boolean update(float delta , Game game){
         System.out.println(hp);
         update_physics(delta, game);
-        if(!alive){
+        if(!alive || Math.abs(Game.getVessel().getX() - this.x) > 1800){
             return false;
         }
 
         if(Death(delta)){
             return  false;
         }
+        update_hurt(delta);
 
         boolean done = true;
         resetRecentDamages(delta);
-        switch(action){
-            case RUN :
-                done = run(delta, game);
-                break;
-            case  JUMP_KNOCK :
-               done = knock(delta, game);
-                break;
-            case  DEFENSIVE_JUMP :
-                done = defensive_jump(delta, game);
-                break;
-            case  AGGRESSIVE_JUMP :
-                done = aggressive_jump(delta, game);
-                break;
-            case  KNOCK :
-                done = knock(delta, game);
-                break;
-        }
+        done = switch (action) {
+            case RUN -> run(delta, game);
+            case JUMP_KNOCK -> jump_knock(delta, game);
+            case DEFENSIVE_JUMP -> defensive_jump(delta, game);
+            case AGGRESSIVE_JUMP -> aggressive_jump(delta, game);
+            case KNOCK -> knock(delta, game);
+            default -> true;
+        };
         if(!done && action != Action.IDLE){
             setAction(Action.IDLE);
             cooldown = phase == 1 ? one.cooldown() : two.cooldown();
@@ -166,7 +169,7 @@ public class FalseKnight extends Entity {
                     right = knightDirection;
                 }
                 turned = true;
-                System.out.println("turn? " + turned);
+
             }
 
         }
@@ -188,7 +191,7 @@ public class FalseKnight extends Entity {
         if(underIntenseAttack && spam != Action.DEFENSIVE_JUMP){
             defensive_jump(delta, game);
         }
-        else if(near && phase == 2 && spam != Action.JUMP_KNOCK){
+        else if(phase == 2 && spam != Action.JUMP_KNOCK){
             /// jump knock function
         jump_knock(delta, game);
         }
@@ -210,13 +213,14 @@ public class FalseKnight extends Entity {
         private void randomDecide(float delta,Game game,
                                   boolean underIntenseAttack, boolean near , boolean far){
 
-            System.out.println("We about to make a random decision :  " + cooldown +" " + action);
+          //  System.out.println("We about to make a random decision :  " + cooldown +" " + action);
             if(underIntenseAttack  && phase == 2){
                 /// jump knock function
             jump_knock(delta, game);
             }
             else if(near){
-                run(delta, game);
+                if(phase == 2) jump_knock(delta, game);
+                else run(delta, game);
             }
             else if(far){
                 aggressive_jump(delta, game);
@@ -226,7 +230,7 @@ public class FalseKnight extends Entity {
                 int random = rand.nextInt(5);
                 switch (random){
                     case 0:
-                        if(phase == 2) setAction(Action.JUMP_KNOCK);
+                        if(phase == 2) jump_knock(delta, game);
                         else knock(delta, game);
                         break;
                     case 1:
@@ -279,7 +283,7 @@ public class FalseKnight extends Entity {
             return true;
         }
 
-        System.out.println("boss direction = " + right);
+        //System.out.println("boss direction = " + right);
 
 
 
@@ -298,8 +302,7 @@ public class FalseKnight extends Entity {
             destinationY = 0;
             velocityX = (phase == 1 ? one.velocityX() : two.velocityX()) * (knightDirection ? 1 : -1);
             float dx = destinationX - this.x;
-            //velocityY = Math.abs((7f * dx) / (2f * (phase == 1 ? one.velocityX() : two.velocityX())));
-            velocityY = 750;
+            velocityY = Math.abs((gravity * dx) / (2f * (phase == 1 ? one.velocityX() : two.velocityX())));
             is_grounded = false;
             return  true;
         }
@@ -318,7 +321,7 @@ public class FalseKnight extends Entity {
             setAction(Action.DEFENSIVE_JUMP);
             velocityX = (phase == 1 ? one.velocityX() : two.velocityX()) * (right ? -1 : 1) * 0.5f;
             float dx = phase == 1 ? 250  : 450;
-            velocityY = Math.abs(7f * dx / velocityX * 2);
+            velocityY = Math.abs((gravity * dx) / (2f * (phase == 1 ? one.velocityX() : two.velocityX())));
             is_grounded = false;
             return true;
         }
@@ -373,7 +376,7 @@ public class FalseKnight extends Entity {
         jumpTimer -= delta;
         if(jumpTimer <= 0.2f){
             float x = this.x + (right ? this.width : -200);
-            game.getProjectiles().add(new Projectile(ProjectileTypes.SHOCKWAVE,this.right,x,0));
+            game.getProjectiles().add(new Projectile(ProjectileTypes.SHOCKWAVE,this.right,x,this.y));
         }
         return true;
 
@@ -385,16 +388,25 @@ public class FalseKnight extends Entity {
            if (last2action.size() > 2) last2action.removeLast();
            this.action = action;
            stateTime = 0;
-           if (action == Action.IDLE) {
+           if (action == Action.IDLE || action == Action.DEAD) {
                velocityY = 0;
                velocityX = 0;
            }
+
        }
     }
 
 
-
-
+    @Override
+    public void setHp(float hp) {
+        super.setHp(hp);
+        if(hp <= 250 && phase == 1){
+            setAction(Action.DEAD);
+        }
+        if(hp <= 0){
+            setAction(Action.DEAD);
+        }
+    }
 
     @Override
     public void setHurt(boolean hurt) {
@@ -417,7 +429,8 @@ public class FalseKnight extends Entity {
 
     public void update_physics(float delta, Game game) {
         if (!is_grounded) {
-            velocityY -= 7f * delta;
+            //System.out.println(velocityY);
+            velocityY -= gravity * delta;
         }
 
         x += velocityX * delta;
@@ -455,4 +468,6 @@ public class FalseKnight extends Entity {
         }
 
     }
+
+
 }

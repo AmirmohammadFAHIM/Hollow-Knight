@@ -35,7 +35,7 @@ public class SaveManager {
         Game game;
         if(file.exists()){
             save = json.fromJson(Save.class, file.readString());
-            MapManager.loadChunk(save.getChunkName() , save.getChunkName().equals("CityOfTears") ? 1 : 2);
+            MapManager.loadChunk(save.getChunkName() , 1);
             game = new Game(save.getRoomIndex() , save.getVesel());
         }
         else{
@@ -66,9 +66,9 @@ public class SaveManager {
 
 
         FileHandle achievement = Gdx.files.local("save/achievements.json");
-        if(achievement.exists()){
+
             achievement.writeString(json.toJson(achievements), false);
-        }
+
 
     }
 

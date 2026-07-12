@@ -14,6 +14,7 @@ public enum ProjectileTypes {
                 Animation.PlayMode.LOOP);
             spriteSheet = new TextureAtlas("knight/BallEnd.atlas");
             end = new Animation<>(0.09f , spriteSheet.findRegions("Ball End"));
+            enemy = true;
         }
     },
 
@@ -25,6 +26,7 @@ public enum ProjectileTypes {
             spriteSheet = new TextureAtlas("enemies/False Knight/ShockWaveStart.atlas");
             moving = new Animation<>(0.09f , spriteSheet.getRegions(),
                 Animation.PlayMode.LOOP);
+
         }
     };
 
@@ -32,6 +34,8 @@ public enum ProjectileTypes {
 
 
 
+    boolean enemy =  false;
+    TextureAtlas spriteSheet;
     float range;
     float width;
     float height;

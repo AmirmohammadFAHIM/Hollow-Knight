@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.States;
@@ -11,7 +12,9 @@ import com.mygame.game.models.Vessel;
 import com.mygame.game.models.details.Save;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
+import com.mygame.game.models.map.Door;
 import com.mygame.game.models.map.MapManager;
+import com.mygame.game.models.map.Room;
 import com.mygame.game.models.skill.Projectile;
 
 import java.util.Objects;
@@ -51,14 +54,13 @@ public class GameController {
            if(c.getState() != Entity_States.DEAD_END) c.update(delta , game);
 
         }
-        for (Projectile x : game.getProjectiles()){
-            x.move(game);
-        }
+        updateProjectiles();
 
 
         SaveManager.achievements.observe(game);/// observing achievements
 
         transition();
+        BossRoom(game);
     }
 
 
@@ -66,9 +68,16 @@ public class GameController {
     private void transition(){
         Vessel knight = Game.getVessel();
         MapLayer transitionLayer = Game.getCurrent_room().getMap().getLayers().get("transition");
+        if(transitionLayer == null) return;
+
+
         for (MapObject mapObject : transitionLayer.getObjects()){
+            System.out.println(mapObject.getProperties().get("type"));
             if(mapObject instanceof RectangleMapObject &&
-                Objects.equals(mapObject.getProperties().get("type", String.class), "Door")){
+            mapObject.getProperties().get("type") != null && mapObject.getProperties()
+                .get("type").equals("Door")){
+
+                System.out.println("here");
                 RectangleMapObject rect = (RectangleMapObject) mapObject;
                 if(rect.getRectangle().overlaps(knight.getBounds())){
                     if(mapObject.getProperties().get("newChunk" , Boolean.class)){
@@ -92,8 +101,8 @@ public class GameController {
     public void spawn(){
         PointMapObject spawnPoint = (PointMapObject) Game.getCurrent_room().getMap().getLayers()
             .get("Collisions").getObjects().get("SpawnPoint");
-        float x = spawnPoint.getProperties().get("X", Float.class);
-        float y = spawnPoint.getProperties().get("Y", Float.class);
+        float x = spawnPoint.getProperties().get("x", Float.class);
+        float y = spawnPoint.getProperties().get("y", Float.class);
         Game.getVessel().setX(x);
         Game.getVessel().setY(y);
     }
@@ -119,6 +128,29 @@ public class GameController {
     private void updateProjectiles(){
         for (Projectile p : game.getProjectiles()){
             p.move(game);
+        }
+    }
+
+
+    private void BossRoom(Game game){
+        Vessel vessel = Game.getVessel();
+        Rectangle bossRoom = Game.getCurrent_room().bossArea;
+        if(bossRoom != null){
+            if(vessel.getX() > bossRoom.x + 450 &&
+                Game.getCurrent_room().currentState == Room.State.NORMAL){
+                Game.getCurrent_room().currentState = Room.State.BOSS_FIGHT;
+                for (Door x : Game.getCurrent_room().getDoors()){
+                    x.setOpen(false);
+                }
+            }
+            else if(vessel.getX() < bossRoom.x){
+                Game.getCurrent_room().currentState = Room.State.NORMAL;
+            }
+
+        }
+
+        for (Door door : Game.getCurrent_room().getDoors()){
+            door.collision();
         }
     }
 }

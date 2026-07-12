@@ -16,6 +16,7 @@ public class Projectile {
         float range;
         boolean right;
         boolean proved = false;
+        boolean enemy;
        public float stateTime = 0;
     final private Animation<TextureAtlas.AtlasRegion> start;
     final private Animation<TextureAtlas.AtlasRegion> moving;
@@ -31,6 +32,7 @@ public class Projectile {
             moving = type.getMoving();
             end = type.getEnd();
             currAnim = start;
+            this.enemy = type.enemy;
     }
 
     public void move(Game game){
@@ -63,14 +65,25 @@ public class Projectile {
     }
 
     private void checkCollision(Game game){
-        for (Entity x : Game.getCurrent_room().getEnemies()){
-            if(this.bounds.overlaps(x.getBounds())){
-                x.setHurt(true);
-                /// to do : deal the damage to the enemy
-                this.proved = true;
-                break;
-            }
-        }
+       if(enemy) {
+           for (Entity x : Game.getCurrent_room().getEnemies()) {
+               if (this.bounds.overlaps(x.getBounds())) {
+                   x.setHurt(true);
+                   /// to do : deal the damage to the enemy
+                   this.proved = true;
+                   break;
+               }
+           }
+       }
+       else{
+          if(!Game.getVessel().hurt){
+              bounds.overlaps(Game.getVessel().getBounds());
+           Game.getVessel().setHurt(true);
+           Game.getVessel().setHp(Game.getVessel().getHp() - 1);
+           this.proved = true;
+          }
+
+       }
     }
 
     public Rectangle getBounds() {

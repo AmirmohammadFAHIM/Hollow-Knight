@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.EntityRenderer;
 import com.mygame.game.models.entities.Entity; // یا Entity بر اساس پکیج خودت
@@ -18,23 +20,25 @@ import com.mygame.game.view.gamePanes.FalseKnightRenderer;
 import java.util.ArrayList;
 
 public class RoomView {
-    private Room room;
-    private OrthogonalTiledMapRenderer renderer;
-    private ArrayList<EntityRenderer> renderers = new ArrayList<>();
+    private final Room room;
+    private final OrthogonalTiledMapRenderer renderer;
+    private final ArrayList<EntityRenderer> renderers = new ArrayList<>();
 
-    // --- سیستم باران اختصاصی تیک‌تیک ---
+
     private Texture rainTexture;
-    private int maxDrops = 250; // تعداد قطرات باران در صفحه
+    private final int maxDrops = 250;
     private float[] dropX;
     private float[] dropY;
     private float[] dropSpeed;
     private float[] dropLength;
 
-    // تفکیک اندیس لایه‌های Tiled Map (این اعداد رو بر اساس لایه‌های مپ خودت تنظیم کن)
-    private int[] backgroundLayers = {0, 1 , 2 , 3 }; // لایه‌های آسمان و ساختمان‌های دور
-    private int[] foregroundLayers = { 4 , 5 ,6 , 7 , 8 ,9 , 10 , 11 , 12}; // لایه‌های زمین، پلتفرم‌ها و دکوراسیون جلو
+    private int[] back;
+    private  int[] fore;
 
     public RoomView(Room room) {
+        ArrayList<Integer> backgroundLayers = new ArrayList<>();
+        ArrayList<Integer> foregroundLayers =  new ArrayList<>();
+
         this.room = room;
         for (Entity c : room.getEnemies()) {
            if(c instanceof FalseKnight){
@@ -49,45 +53,91 @@ public class RoomView {
         }
         renderer = new OrthogonalTiledMapRenderer(room.getMap());
 
-        // راه‌اندازی سیستم باران
+        for (int i = 0; true; i++) {
+            backgroundLayers.add(i);
+          if(room.getMap().getLayers().get(i).getName().equals("main")) break;
+        }
+        int layers = room.getMap().getLayers().size();
+        for (int i = backgroundLayers.getLast() + 1; i < layers ; i++) {
+            foregroundLayers.add(i);
+        }
+        back = new int[backgroundLayers.size()];
+        for (int i = 0; i < back.length; i++) {
+            back[i] =  backgroundLayers.get(i);
+        }
+        fore = new int[foregroundLayers.size()];
+        for (int i = 0; i < foregroundLayers.size(); i++) {
+            fore[i] = foregroundLayers.get(i);
+        }
         initRainSystem();
     }
 
     private void initRainSystem() {
-        // ساخت یک بافت ۱در۱ پیکسل سفید در حافظه (بدون نیاز به لود کردن عکس)
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         rainTexture = new Texture(pixmap);
-        pixmap.dispose(); // آزاد کردن حافظه موقت
+        pixmap.dispose();
 
         dropX = new float[maxDrops];
         dropY = new float[maxDrops];
         dropSpeed = new float[maxDrops];
         dropLength = new float[maxDrops];
 
-        // پخش کردن قطرات به صورت تصادفی در فضای اولیه کادر
         for (int i = 0; i < maxDrops; i++) {
             dropX[i] = (float) Math.random() * Gdx.graphics.getWidth();
             dropY[i] = (float) Math.random() * Gdx.graphics.getHeight();
-            dropSpeed[i] = 700f + (float) Math.random() * 300f; // سرعت سقوط
-            dropLength[i] = 20f + (float) Math.random() * 25f;  // طول قطره باران
+            dropSpeed[i] = 700f + (float) Math.random() * 300f;
+            dropLength[i] = 20f + (float) Math.random() * 25f;
         }
     }
 
     public void render(OrthographicCamera camera, SpriteBatch batch) {
-        // ۱. اگر بتچ از کلاس GameView باز مونده، موقتاً می‌بندیمش تا تداخلی با مپ نداشته باشه
+        renderer.setView(camera);
+
+        if(room.getName().contains("CityOfTears")){
+            renderRain(camera, batch);
+        }
+        else{
+            renderer.render();
+        }
+
+
+
+
+
+    }
+
+    public void renderBackGround(OrthographicCamera camera,  SpriteBatch batch) {
+        renderer.setView(camera);
+       renderer.render(back);
+       if(room.getName().contains("CityOfTears")){
+           renderRain(camera, batch);
+       }
+        for (EntityRenderer r : renderers) {
+
+            r.render(batch);
+
+        }
+    }
+    public void renderForeground(OrthographicCamera camera){
+        renderer.setView(camera);
+        renderer.render(fore);
+    }
+
+
+    public void renderRain(OrthographicCamera camera, SpriteBatch batch) {
         boolean wasDrawing = batch.isDrawing();
         if (wasDrawing) {
-            batch.end();
+
         }
 
         // ۲. ست کردن دوربین و رسم لایه‌های پس‌زمینه (City of Tears دوردست)
-        renderer.setView(camera);
-        renderer.render(backgroundLayers);
+
+
+
 
         // ۳. باز کردن بتچ اختصاصی برای رسم باران
-        batch.begin();
 
         float camX = camera.position.x - camera.viewportWidth / 2f;
         float camY = camera.position.y - camera.viewportHeight / 2f;
@@ -111,20 +161,10 @@ public class RoomView {
 
         // --- خط جادویی رفع باگ ---
         // بتچ رو همینجا می‌بندیم تا تمام قطرات باران همون لحظه روی صفحه (روی پس‌زمینه) چاپ بشن!
-        batch.end();
+
 
         // ۴. رسم لایه‌های پیش‌زمینه (پلتفرم‌ها حالا دقیقاً روی باران کشیده میشن)
-        renderer.render(foregroundLayers);
 
-        // ۵. دوباره باز کردن بتچ برای رسم کاراکترها و انمی‌ها
-        batch.begin();
-        for (EntityRenderer r : renderers) {
-
-               r.render(batch);
-
-        }
-
-        // در نهایت بتچ رو باز می‌ذاریم بمونه تا کلاس GameView خودش متد end() رو برای پایان فریم صدا بزنه
     }
 
     public Room getRoom() {

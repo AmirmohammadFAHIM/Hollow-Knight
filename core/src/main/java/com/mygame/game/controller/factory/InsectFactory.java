@@ -16,7 +16,7 @@ public class InsectFactory {
             case 0 -> LinearEnemy(name, position);
             case 1 -> AiEnemy(name, position);
             case 2 -> SkilledAiEnemy(name, position);
-          //  case 3 -> boss(position);
+            case 3 -> boss(position);
             default -> null;
         };
     }
@@ -37,8 +37,7 @@ public class InsectFactory {
     }
 
     private Entity  boss(Vector2 position){
-        Entity e = new FalseKnight(position.x, position.y);
 
-        return e;
+        return new FalseKnight(position.x, position.y);
     }
 }

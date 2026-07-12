@@ -28,6 +28,7 @@ public class MapManager {
                 room.setName(chunk + i);
                 setBlocks(room.getMap() , room);
                 loadEnemies(room);
+                room.setDoors();
                 MapManager.chunk.add(room);
             }
 
@@ -65,11 +66,11 @@ public class MapManager {
             room.getBlocks().add(new SolidBlock(obj));
         }
 
-        for (RectangleMapObject x : map.getLayers().get("Spikes").getObjects()
+        /*for (RectangleMapObject x : map.getLayers().get("Spikes").getObjects()
             .getByType(RectangleMapObject.class)){
             Rectangle r = x.getRectangle();
             room.getSpikes().add(new Spike(r));
-        }
+        }*/
     }
 
 
