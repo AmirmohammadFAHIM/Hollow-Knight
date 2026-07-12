@@ -3,6 +3,7 @@ package com.mygame.game.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.charms.Charm;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.boss.FalseKnight;
@@ -90,6 +91,7 @@ public class Vessel{
         this.hp = hp;
         if(hp <= 0){
             setState(States.Death);
+            SaveManager.save.died += 1;
         }
     }
 
@@ -233,7 +235,7 @@ public class Vessel{
         death();
         if(state == States.Death) return;
         if(vengfull(delta)) return;
-      if(freeze <= 0 && !hurt)  update_physics(delta , Game.getCurrent_room().getBlocks());
+      if(freeze <= 0)  update_physics(delta , Game.getCurrent_room().getBlocks());
         updateSlashBounds();
 
         updateCooldowns(delta);
@@ -263,6 +265,7 @@ public class Vessel{
         fall();
         updateSafety();
         spike();
+        damage();
 
         if(state == States.WALL_SIDE){
             velocityY = -100;
@@ -289,32 +292,25 @@ public class Vessel{
 
 
     private void update_physics(float delta, ArrayList<SolidBlock> blocks) {
-        // -----------------------------------------------------------------
-        // ۱. حرکت محور X و بررسی دیوارها
-        // -----------------------------------------------------------------
+
         if(is_ground) velocityY = 0;
         else if(state != States.DASH && state != States.FIREBALL) velocityY -= gravity;
 
         x += velocityX * delta;
         bounds.x = x;
 
-        // رفع باگ تلپورت (باگ شماره ۳):
-        // فقط کف پا را ۲ پیکسل بالا می‌آوریم تا با زمین درگیر نشود.
-        // سقفِ سر (Top) را دست‌نخورده رها می‌کنیم تا بالاتنه کاملاً دیوارها را تشخیص دهد.
         bounds.y = y + 2f;
-        bounds.height = height - 2f; // اینگونه بالای هیت‌باکس دقیقاً سر جایش می‌ماند (y + height)
+        bounds.height = height - 2f;
 
         for (SolidBlock sb : blocks) {
             Rectangle blockRect = sb.getBlock();
             if (blockRect.overlaps(bounds)) {
-                // برخورد افقی با دیوار
                 if (velocityX > 0) {
                     x = blockRect.x - width;
                 } else if (velocityX < 0) {
                     x = blockRect.x + blockRect.width;
                 }
 
-                // ورود به حالت وال‌اسلاید (فقط در هوا و در حال سقوط)
                 if (!is_ground && velocityY < 0) {
                     setState(States.WALL_SIDE);
                     double_jump = true;
@@ -326,13 +322,10 @@ public class Vessel{
             }
         }
 
-        // برگرداندن هیت‌باکس به ابعاد واقعی برای محاسبات محور Y
         bounds.y = y;
         bounds.height = height;
 
-        // -----------------------------------------------------------------
-        // ۲. حرکت محور Y و بررسی زمین/سقف
-        // -----------------------------------------------------------------
+
         y += velocityY * delta;
         bounds.y = y;
 
@@ -340,7 +333,6 @@ public class Vessel{
             Rectangle blockRect = sb.getBlock();
             if (blockRect.overlaps(bounds)) {
                 if (velocityY < 0) {
-                    // فرود موفقیت‌آمیز روی زمین
                     y = blockRect.y + blockRect.height;
 
                     if (state == States.FALLING || state == States.WALL_SIDE) {
@@ -349,7 +341,6 @@ public class Vessel{
                     is_ground = true;
                     double_jump = true;
                 } else if (velocityY > 0) {
-                    // اصابت سر به سقف
                     y = blockRect.y - height;
                 }
 
@@ -359,9 +350,6 @@ public class Vessel{
             }
         }
 
-        // -----------------------------------------------------------------
-        // ۳. رادار تشخیص زمین و رفع باگ وال‌اسلاید
-        // -----------------------------------------------------------------
         bounds.y = y - 1f;
         boolean grounded = false;
         for (SolidBlock sb : blocks) {
@@ -373,26 +361,23 @@ public class Vessel{
         bounds.y = y;
         is_ground = grounded;
 
-        // رفع باگ وال‌اسلاید (باگ شماره ۱):
-        // اگر در حالت وال‌اسلاید هستیم، چک می‌کنیم آیا هنوز دیواری در نزدیکی هست؟
         if (state == States.WALL_SIDE) {
             boolean wallPresent = false;
 
-            // چک کردن دیوار در سمت چپ (با فاصله ناچیز ۱ پیکسلی)
+
             bounds.x = x - 1f;
             for (SolidBlock sb : blocks) {
                 if (sb.getBlock().overlaps(bounds)) { wallPresent = true; break; }
             }
 
-            // چک کردن دیوار در سمت راست (با فاصله ناچیز ۱ پیکسلی)
+
             bounds.x = x + 1f;
             for (SolidBlock sb : blocks) {
                 if (sb.getBlock().overlaps(bounds)) { wallPresent = true; break; }
             }
 
-            bounds.x = x; // برگرداندن موقعیت اصلی هیت‌باکس
+            bounds.x = x;
 
-            // اگر دیواری نبود یا بازیکن به زمین رسید، از حالت وال‌اسلاید خارج شو
             if (!wallPresent || is_ground) {
                 setState(States.FALLING);
             }
@@ -596,13 +581,29 @@ public class Vessel{
     }
 
 
+    private void damage(){
+        for (Entity x : Game.getCurrent_room().getEnemies()){
+            if(this.bounds.overlaps(x.getBounds()) && !hurt){
+                setHurt(true);
+                setHp(hp - 1);
+            }
+        }
+    }
+
+
     float freeze = 0;
     float knockBackTime = 1.2f;
     private void hurt(float delta){
         if(freeze <= 0){
-            velocityY = 700;
-            velocityX = 450 * (right? -1 : 1);
-            hurt = false;
+           if(knockBackTime <= 0){
+               System.out.println("please");
+               setState(States.IDLE);
+               setHurt(false);
+           }
+           else{
+               knockBackTime -= delta;
+           }
+
         }
         else{
             freeze -= delta;
@@ -610,9 +611,16 @@ public class Vessel{
     }
 
     public void setHurt(boolean hurt) {
-        freeze = 0.4f;
-        knockBackTime = 1.2f;
         this.hurt = hurt;
+        if(hurt){
+                velocityY = 700;
+                velocityX = 450 * (right? -1 : 1);
+            knockBackTime = 0.7f;
+            freeze = 0.3f;
+        }
+        else{
+            freeze = -0.1f;
+        }
     }
 
     public float healing_time = 1.5f;

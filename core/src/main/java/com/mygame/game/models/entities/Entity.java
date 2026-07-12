@@ -3,6 +3,7 @@ package com.mygame.game.models.entities;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.entities.linearEnemies.LinearEnemy;
 import com.mygame.game.models.map.SolidBlock;
@@ -124,6 +125,7 @@ public class Entity {
         if(hp <= 0){
             state = Entity_States.DEAD;
             alive = false;
+            SaveManager.save.enemiesKilled += 1;
         }
     }
 

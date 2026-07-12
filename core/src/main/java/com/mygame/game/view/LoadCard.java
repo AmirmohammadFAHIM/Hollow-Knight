@@ -48,18 +48,12 @@ public class LoadCard extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 LoadCard This = (LoadCard) event.getListenerActor();
-                System.out.println("kikiki");
                 super.clicked(event, x, y);
                 GameView gameView;
 
-                if(New){
-                    gameView = new GameView();
-                    SaveManager.save = new Save();
-                    SaveManager.save.setSlotIndex(This.slot);
-                }
-                else{
+
                     gameView = new GameView(SaveManager.load(This.slot));
-                }
+
                 UiManager.setScreen(gameView);
             }
         });

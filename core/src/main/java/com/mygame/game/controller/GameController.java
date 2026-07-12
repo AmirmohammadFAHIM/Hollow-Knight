@@ -61,6 +61,8 @@ public class GameController {
 
         transition();
         BossRoom(game);
+
+        if(!paused) SaveManager.save.timePlay += delta;
     }
 
 
@@ -72,12 +74,10 @@ public class GameController {
 
 
         for (MapObject mapObject : transitionLayer.getObjects()){
-            System.out.println(mapObject.getProperties().get("type"));
             if(mapObject instanceof RectangleMapObject &&
             mapObject.getProperties().get("type") != null && mapObject.getProperties()
                 .get("type").equals("Door")){
 
-                System.out.println("here");
                 RectangleMapObject rect = (RectangleMapObject) mapObject;
                 if(rect.getRectangle().overlaps(knight.getBounds())){
                     if(mapObject.getProperties().get("newChunk" , Boolean.class)){

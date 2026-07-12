@@ -9,13 +9,13 @@ import com.mygame.game.models.skill.*;
 
 public enum ENEMIES {
 
-    CRYSTALLIZED(400 , 50 , 128 , 190){
+    CRYSTALLIZED(500 , 100 , 128 , 190){
 
         {
 
             move = new LazyMove(0 , 5);
             skill = new Laser(3.5f);
-            attack = new Rage(90 , 5 , false);
+            attack = new Rage(130 , 5 , false);
 
 
             TextureAtlas spriteSheet = new TextureAtlas("enemies/Crystallized/Idle.atlas");

@@ -1,6 +1,7 @@
 package com.mygame.game.models.details;
 
 import com.badlogic.gdx.utils.Json;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.boss.FalseKnight;
@@ -55,6 +56,9 @@ public class Achievement {
         if(!achievements.contains(Type.BossDefeat)){
             BossDefeated();
         }
+        if(!achievements.contains(Type.SpeedRun)){
+            speedRun(game);
+        }
     }
 
     private void Vengeful(Game game){
@@ -74,6 +78,11 @@ public class Achievement {
         }
     }
 
+    private void speedRun(Game game){
+        if(achievements.contains(Type.BossDefeat)){
+            if(SaveManager.save.timePlay <= 180) achievements.add(Type.SpeedRun);
+        }
+    }
 
     private void observeDefeatedEnemies(){
         if(DefeatedEnemies.size() >= 4) return;

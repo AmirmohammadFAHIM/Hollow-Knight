@@ -15,6 +15,9 @@ public class GameInputProcessor extends InputAdapter {
     public GameInputProcessor( Vessel vessel) {
         this.vessel = vessel;
     }
+    public GameInputProcessor(){
+
+    }
 
     public void processInput(float delta){ /// for holding buttons : A D F
         if(vessel.getState().getPriority()) return;

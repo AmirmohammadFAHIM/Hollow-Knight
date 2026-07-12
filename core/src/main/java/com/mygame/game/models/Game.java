@@ -21,8 +21,7 @@ public class Game {
     public  Game(){
         vessel = new Vessel();
         current_chunk = new Chunk();
-       MapManager.loadChunk("CityOfTears" , 1); //we commented it because the saveManager has done the loading
-        MapManager.loadRoom(0);
+
     }
 
     public static Vessel getVessel() {

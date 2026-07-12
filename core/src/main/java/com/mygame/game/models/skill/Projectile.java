@@ -16,6 +16,7 @@ public class Projectile {
         float range;
         boolean right;
         boolean proved = false;
+        boolean timer;
         boolean enemy;
        public float stateTime = 0;
     final private Animation<TextureAtlas.AtlasRegion> start;
@@ -33,6 +34,7 @@ public class Projectile {
             end = type.getEnd();
             currAnim = start;
             this.enemy = type.enemy;
+            this.timer = type.timer;
     }
 
     public void move(Game game){
@@ -43,7 +45,8 @@ public class Projectile {
             if(range <= 0){
                 proved = true;
             }
-            checkCollision(game);
+             checkCollision(game);
+            if(timer) timerProjectile(Gdx.graphics.getDeltaTime());
 
             if(proved && state == States.MOVING){
                 stateTime = 0;
@@ -64,6 +67,17 @@ public class Projectile {
 
     }
 
+    float t = 3.5f;
+    private void timerProjectile(float delta){
+        if(t <= 0){
+            proved = true;
+        }
+        else{
+            t -= delta;
+        }
+    }
+
+
     private void checkCollision(Game game){
        if(enemy) {
            for (Entity x : Game.getCurrent_room().getEnemies()) {
@@ -76,11 +90,10 @@ public class Projectile {
            }
        }
        else{
-          if(!Game.getVessel().hurt){
-              bounds.overlaps(Game.getVessel().getBounds());
+          if(!Game.getVessel().hurt && bounds.overlaps(Game.getVessel().getBounds())){
            Game.getVessel().setHurt(true);
            Game.getVessel().setHp(Game.getVessel().getHp() - 1);
-           this.proved = true;
+          if(!timer) this.proved = true;
           }
 
        }

@@ -75,9 +75,10 @@ public class MapManager {
 
 
 
-    public static void loadRoom(int index){
+    public static Room loadRoom(int index){
         Game.setCurrent_room(chunk.get(index));
        if(GameView.getCurrentRoomView() != null) GameView.setCurrentRoomView(new RoomView(chunk.get(index)));
+       return chunk.get(index);
     }
 
     public static InsectFactory getFactory() {

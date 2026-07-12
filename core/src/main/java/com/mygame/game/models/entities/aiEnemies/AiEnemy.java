@@ -109,7 +109,8 @@ return true;
                 currentAnimation = type.getDeathLand();
                 break;
             case START_ATTACK:
-                currentAnimation = type.getAttackStart();
+               if(type != ENEMIES.MOSQUITO) currentAnimation = type.getAttackStart();
+               else if(velocityY != 0) currentAnimation = type.getAttackStart();
                 break;
             case Attack:
                 currentAnimation = type.getAttackLung();

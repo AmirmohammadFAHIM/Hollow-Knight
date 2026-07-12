@@ -17,6 +17,7 @@ public class Rage implements Attack {
     }
     public Rage(float speed , float time , boolean endless) {
         this.time = time;
+        this.t = time;
         this.endless = endless;
         this.speed = speed;
     }

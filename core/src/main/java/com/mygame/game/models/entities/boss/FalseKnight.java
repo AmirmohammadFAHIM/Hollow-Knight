@@ -340,7 +340,7 @@ public class FalseKnight extends Entity {
             System.out.println("knock");
             setAction(Action.KNOCK);
             float x = this.x + (right ? this.width : -165);
-            hammer = new Rectangle(x , 0 , 200 , 165);
+            hammer = new Rectangle(x , this.y , 200 , 165);
             return true;
         }
 
@@ -352,8 +352,9 @@ public class FalseKnight extends Entity {
 
         knockTimer -= delta;
 
-        if(Game.getVessel().getBounds().overlaps(hammer)){
-            Game.getVessel().hurt = true;
+        if(Game.getVessel().getBounds().overlaps(hammer) && knockTimer <= 0.25f &&
+        !Game.getVessel().hurt){
+            Game.getVessel().setHurt(true);
             Game.getVessel().setHp(Game.getVessel().getHp() - 1); /// take one of the masks
         }
 
@@ -365,6 +366,7 @@ public class FalseKnight extends Entity {
         if(action == Action.IDLE){
             System.out.println("jump_knock");
             setAction(Action.JUMP_KNOCK);
+            hammer = new Rectangle(x , this.y , 200 , 165);
             return  true;
         }
 
@@ -375,6 +377,10 @@ public class FalseKnight extends Entity {
         }
         jumpTimer -= delta;
         if(jumpTimer <= 0.2f){
+            if(hammer.overlaps(Game.getVessel().getBounds())&& !Game.getVessel().hurt){
+                Game.getVessel().setHurt(true);
+                Game.getVessel().setHp(Game.getVessel().getHp() - 1);
+            }
             float x = this.x + (right ? this.width : -200);
             game.getProjectiles().add(new Projectile(ProjectileTypes.SHOCKWAVE,this.right,x,this.y));
         }

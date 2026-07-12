@@ -8,6 +8,9 @@ public class Save {
     String chunkName;
     int slotIndex;
     float progress;
+    public int enemiesKilled = 0;
+    public int died = 0;
+    public float timePlay = 0;
 
     public Vessel getVesel() {
         return vesel;

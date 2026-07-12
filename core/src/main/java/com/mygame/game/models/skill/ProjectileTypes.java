@@ -28,12 +28,28 @@ public enum ProjectileTypes {
                 Animation.PlayMode.LOOP);
 
         }
+    },
+
+
+    LASER(120,800,18,0){
+        {
+            timer = true;
+            TextureAtlas spriteSheet = new TextureAtlas("enemies/Crystallized/Laser.atlas");
+            start = new Animation<>(0.09f , spriteSheet.findRegions("crystalLaserStart"));
+            moving = new  Animation<>(0.09f , spriteSheet.findRegions("crystalLaser"),
+                Animation.PlayMode.LOOP);
+            end = new Animation<>(0.09f ,  spriteSheet.findRegions("crystalLaserEnd"));
+        }
     };
 
 
 
 
 
+    boolean timer = false;
+    public boolean timer(){
+        return timer;
+    }
     boolean enemy =  false;
     TextureAtlas spriteSheet;
     float range;

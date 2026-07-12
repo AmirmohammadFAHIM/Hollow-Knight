@@ -1,6 +1,7 @@
 package com.mygame.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -35,7 +36,9 @@ public class RoomView {
     private int[] back;
     private  int[] fore;
 
+    private Music backgroundMusic;
     public RoomView(Room room) {
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sfx/background.mp3"));
         ArrayList<Integer> backgroundLayers = new ArrayList<>();
         ArrayList<Integer> foregroundLayers =  new ArrayList<>();
 
@@ -92,23 +95,17 @@ public class RoomView {
         }
     }
 
-    public void render(OrthographicCamera camera, SpriteBatch batch) {
-        renderer.setView(camera);
 
-        if(room.getName().contains("CityOfTears")){
-            renderRain(camera, batch);
-        }
-        else{
-            renderer.render();
-        }
-
-
-
-
-
-    }
+    Room.State previousState;
 
     public void renderBackGround(OrthographicCamera camera,  SpriteBatch batch) {
+        if(previousState == Room.State.NORMAL && room.currentState == Room.State.BOSS_FIGHT){
+            backgroundMusic.play();
+        }
+        else if(room.currentState == Room.State.NORMAL){
+            backgroundMusic.stop();
+        }
+        previousState = room.currentState;
         renderer.setView(camera);
        renderer.render(back);
        if(room.getName().contains("CityOfTears")){
@@ -119,6 +116,7 @@ public class RoomView {
             r.render(batch);
 
         }
+
     }
     public void renderForeground(OrthographicCamera camera){
         renderer.setView(camera);
@@ -165,6 +163,10 @@ public class RoomView {
 
         // ۴. رسم لایه‌های پیش‌زمینه (پلتفرم‌ها حالا دقیقاً روی باران کشیده میشن)
 
+    }
+
+    public void dispose() {
+        backgroundMusic.dispose();
     }
 
     public Room getRoom() {

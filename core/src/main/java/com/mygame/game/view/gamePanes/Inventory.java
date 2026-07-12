@@ -23,14 +23,16 @@ public class Inventory extends Table {
         this.setBackground(UiManager.style.getDrawable("bgDark"));
         this.top();
        // this.add(label).colspan(2).row();
-        this.add(image).row();
+        Table bg = new Table();
+        bg.add(image);
+        this.add(bg).row();
         this.add(quickSlash);
         this.add(Dashmaster);
         this.add(quickFocus).row();
         this.add(HeavyBlow);
         this.add(SoulCatcher);
 
-
+this.debug();
 
 
     }

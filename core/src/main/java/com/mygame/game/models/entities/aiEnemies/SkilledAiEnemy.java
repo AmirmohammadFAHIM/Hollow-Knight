@@ -28,15 +28,13 @@ public class SkilledAiEnemy extends AiEnemy{
     @Override
     public boolean update(float delta, Game game) {
 
-        // ۱. کلید حل مشکل: به جریان انداختن زمان برای انیمیشن‌ها!
         stateTime += delta;
 
-        // ۲. تنظیم انیمیشنِ درست برای همین فریم
         setAnimation();
 
 
+        if(state == Entity_States.DEAD_END) return false;
 
-        // ۳. آپدیت فیزیک
         if(state == Entity_States.DEATH_LANDING && is_grounded){
             setState(Entity_States.DEAD_END);
             return false;
@@ -45,15 +43,14 @@ public class SkilledAiEnemy extends AiEnemy{
            super.update_physics(delta , Game.getCurrent_room().getBlocks());
            return false;
        }
+       update_physics(delta , Game.getCurrent_room().getBlocks());
 
         if(Hurt(delta)){
             return true;
         }
 
-        // ۴. روشن کردن رادار
         detect();
 
-        // ۵. مدیریت منطقِ کمبوها
         if(state == Entity_States.Skill){
             if(!skill.execute(this , game)){
                 setState(Entity_States.END_SKILL);
@@ -66,7 +63,6 @@ public class SkilledAiEnemy extends AiEnemy{
             movingLogic.move(this);
         }
 
-        // ۶. جادوی زنجیره کردن (Combo Chain)
         if(state.hasNextState() && currentAnimation.isAnimationFinished(stateTime)){
             if (state != Entity_States.Attack && state != Entity_States.Skill) {
 
@@ -89,16 +85,19 @@ public class SkilledAiEnemy extends AiEnemy{
         /// if detected , set the state to Skill , not attack!
         float dx = Math.abs(Game.getVessel().getX() - this.x);
         float dy = Math.abs(Game.getVessel().getY() - this.y);
-        if(dx < range && dy < 10){
+        //System.out.println("range :" + range + "\n dx :" + dx + "\n dy :" + dy);
+        if(dx < range && dy < 30){
+            if(state == Entity_States.Attack || state == Entity_States.START_SKILL){
+                this.right = Game.getVessel().getX() > this.x;
+                if((right && velocityX < 0) || (!right && velocityX > 0)) velocityX *= -1;
+            }
           if(!angerStates.contains(state) && remaining <= 0)  setState(Entity_States.START_SKILL);
           else if(!angerStates.contains(state)){
               remaining -= Gdx.graphics.getDeltaTime();
           }
 
         }
-        else if(angerStates.contains(state)){
-            setState(Entity_States.NORMAL);
-        }
+
 
 
     }
@@ -106,6 +105,8 @@ public class SkilledAiEnemy extends AiEnemy{
     @Override
     protected void combat(Game game) {
         if(!attack.attack(this , game)){
+            System.out.println("combat finished , setted the cooldown , and ended the attack ");
+            System.out.println("vX " + velocityX);
             remaining = cooldown;
             setState(Entity_States.END_ATTACK);
         }

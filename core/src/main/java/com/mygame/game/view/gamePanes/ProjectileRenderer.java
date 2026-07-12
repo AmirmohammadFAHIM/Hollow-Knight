@@ -13,7 +13,7 @@ public class ProjectileRenderer {
         checkDirRight(frame , projectile.isRight());
         batch.draw(projectile.currAnim.getKeyFrame(projectile.stateTime) ,
             projectile.getBounds().x,
-            projectile.getBounds().y);
+            projectile.getBounds().y , projectile.getBounds().width ,  projectile.getBounds().height );
     }
 
     private void checkDirRight(TextureAtlas.AtlasRegion frame , boolean right){

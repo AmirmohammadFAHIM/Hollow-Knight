@@ -16,8 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
 import com.mygame.game.controller.GameInputProcessor;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.mygame.game.models.details.Save;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
 import com.mygame.game.models.skill.Projectile;
@@ -43,14 +45,11 @@ public class GameView implements Screen {
     private HUD hud;
 
     public GameView(Game game){
-         processor = new GameInputProcessor(Game.getVessel());
+         processor = new GameInputProcessor();
         GameView.game = new GameController(game , processor);
     }
 
-    public GameView(){
-         processor = new GameInputProcessor(Game.getVessel());
-        GameView.game = new GameController(new Game(),processor);
-    }
+
 
 
 
@@ -100,11 +99,12 @@ public class GameView implements Screen {
         stage.addActor(hud);
         currentRoomView = new RoomView(Game.getCurrent_room());
         processor.setVessel(Game.getVessel());
+        processor.setGame(game.getGame());
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(processor);
         Gdx.input.setInputProcessor(multiplexer);
-        processor.setGame(game.getGame());
+
 
 
 
@@ -130,7 +130,7 @@ public class GameView implements Screen {
         stateTime += delta;
 
         if(Game.getCurrent_room().currentState == Room.State.VICTORY && winScreenTime==8){
-            mainStack.add(new VictoryMenu());
+            mainStack.add(new VictoryMenu(SaveManager.save));
         }
         else if(Game.getCurrent_room().currentState == Room.State.VICTORY){
           if(winScreenTime <= 0){
@@ -187,6 +187,7 @@ public class GameView implements Screen {
     @Override
     public void dispose() {
         vesselRender.dispose();
+        currentRoomView.dispose();
 
     }
 

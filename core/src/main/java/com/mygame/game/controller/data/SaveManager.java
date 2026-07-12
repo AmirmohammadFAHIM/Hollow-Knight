@@ -20,8 +20,7 @@ public class SaveManager {
     public static Achievement achievements;
     private static final Json json = new Json();
     static {
-        // در کلاس SaveManager این تنظیمات را به json اضافه کن
-        json.setUsePrototypes(false); // این خط باعث می‌شود متغیرهای با مقدار صفر هم در جیسون نوشته شوند
+        json.setUsePrototypes(false);
     }
 
     public static void loadAchievements(){
@@ -43,7 +42,8 @@ public class SaveManager {
             save.setSlotIndex(slot);
             MapManager.loadChunk("CityOfTears", 1);
             game = new Game();
-            PointMapObject spawnPoint = (PointMapObject) GameView.getCurrentRoomView().getRoom().getMap().getLayers().get("Collisions").
+
+            PointMapObject spawnPoint = (PointMapObject) MapManager.loadRoom(0).getMap().getLayers().get("Collisions").
                 getObjects().get("SpawnPoint");
             float x = spawnPoint.getProperties().get("x" , Float.class);
             float y = spawnPoint.getProperties().get("y" , Float.class);
