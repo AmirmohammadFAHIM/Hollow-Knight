@@ -66,6 +66,8 @@ public enum States {
     FIREBALL(new TextureAtlas("knight/FireballCast.atlas") , "Fireball Cast"
 ,0.09f , null , true ),
 
+    SCREAM(new TextureAtlas("knight/Scream.atlas") , "Scream" , 0.09f , null , true),
+
     JUMPING(new TextureAtlas("knight/jump.atlas") , "Airborne",
  0.09f , FALLING , false),
 

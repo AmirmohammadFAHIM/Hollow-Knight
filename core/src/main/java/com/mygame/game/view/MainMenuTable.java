@@ -99,5 +99,13 @@ public class MainMenuTable extends Table {
                 screen.getRootTable().add(new AchievementsTable());
             }
         });
+
+        guide.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                screen.getRootTable().clearChildren();
+                screen.getRootTable().add(new GuidMenu());
+            }
+        });
     }
 }

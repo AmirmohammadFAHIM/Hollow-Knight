@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygame.game.Main;
 import com.mygame.game.view.GameView;
@@ -49,6 +50,9 @@ public class UiManager {
         style.load(Gdx.files.internal("ui/Hollow Knight skin.json"));
 
     }
+
+
+    public static Stack mainStack;
 
     public UiManager(Main main) {
         this.main = main;

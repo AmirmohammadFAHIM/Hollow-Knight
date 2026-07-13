@@ -95,6 +95,11 @@ public class GameInputProcessor extends InputAdapter {
         else if(keycode == Input.Keys.J){
             if(vessel.getSoul() < 33) return super.keyDown(keycode);
 
+            if(Gdx.input.isKeyPressed(Input.Keys.W)){
+                vessel.setState(States.SCREAM);
+                vessel.setSoul(vessel.getSoul() - 33);
+                return super.keyDown(keycode);
+            }
             vessel.setState(States.FIREBALL);
             float x;
              if (vessel.isRight()) {

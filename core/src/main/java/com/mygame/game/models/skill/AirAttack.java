@@ -64,11 +64,9 @@ public class AirAttack implements Attack {
     }
 
     private void setSpeeds(AiEnemy self, float dx , float dy){
-        // محاسبه فاصله کل بین پشه و نایت
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
 
         if (distance > 0) {
-            // محاسبه سرعت استاندارد در هر دو جهت
             self.setVelocityX((dx / distance) * MaxSpeed);
             self.setVelocityY((dy / distance) * MaxSpeed);
 

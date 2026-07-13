@@ -86,7 +86,7 @@ return true;
     protected void combat(Game game) {
         boolean done = attack.attack(this , game);
         if(!done){
-            System.out.println("Rey");
+
             attack.reset();
             setState(Entity_States.NORMAL);
             remaining = attack.getCoolDown();

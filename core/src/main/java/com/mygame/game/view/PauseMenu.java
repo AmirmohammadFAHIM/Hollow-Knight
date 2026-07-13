@@ -60,6 +60,20 @@ public class PauseMenu extends Table {
             }
         });
 
+        options.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                UiManager.mainStack.clearChildren();
+                UiManager.mainStack.add(new OptionMenu());
+            }
+        });
+
+        guid.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                UiManager.mainStack.clearChildren();
+                UiManager.mainStack.add(new GuidMenu());
+            }
+        });
 
 
     }

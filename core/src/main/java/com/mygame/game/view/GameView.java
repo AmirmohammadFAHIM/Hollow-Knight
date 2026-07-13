@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
 import com.mygame.game.controller.GameInputProcessor;
+import com.mygame.game.controller.UiManager;
 import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -91,6 +92,7 @@ public class GameView implements Screen {
             }
         });
         mainStack = new Stack();
+        UiManager.mainStack = mainStack;
         mainStack.setFillParent(true);
         stage.addActor(mainStack);
 
@@ -119,6 +121,10 @@ public class GameView implements Screen {
         camera.update();
       //  batch.setProjectionMatrix(camera.combined);
         //viewport.setScreenPosition(0 , 0);
+        StringBuilder str = new StringBuilder(Game.getCurrent_room().getName());
+        str.delete(str.length() - 1 ,  str.length());
+        AudioManager.getAudioManager().changeMusic(Gdx.audio.newMusic(Gdx.files.internal("sfx/"+ str.toString() + ".wav")));
+
 
     }
 
@@ -129,7 +135,7 @@ public class GameView implements Screen {
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
 
-        if(Game.getCurrent_room().currentState == Room.State.VICTORY && winScreenTime==8){
+        if(Game.getCurrent_room().currentState == Room.State.VICTORY && Math.abs(winScreenTime - 8) < 0.001){
             mainStack.add(new VictoryMenu(SaveManager.save));
         }
         else if(Game.getCurrent_room().currentState == Room.State.VICTORY){
@@ -202,10 +208,8 @@ public class GameView implements Screen {
 
 
 
-// ... بقیه کدهای GameView ...
 
          void updateCamera() {
-            // ۱. گرفتن ابعاد نقشه (مپ Tiled) بر حسب پیکسل
             MapProperties prop = currentRoomView.getRoom().getMap().getProperties();
             int mapWidth = prop.get("width", Integer.class);
             int tilePixelWidth = prop.get("tilewidth", Integer.class);
@@ -215,21 +219,16 @@ public class GameView implements Screen {
             int tilePixelHeight = prop.get("tileheight", Integer.class);
             int mapPixelHeight = mapHeight * tilePixelHeight;
 
-            // ۲. محاسبه نصف عرض و ارتفاع دوربینی که الان داره رندر میشه
-            // استفاده از viewport.getWorldWidth باعث میشه موقع ریسایز شدن پنجره هم همه‌چی درست بمونه
             float cameraHalfWidth = viewport.getWorldWidth() / 2f;
             float cameraHalfHeight = viewport.getWorldHeight() / 2f;
 
-            // ۳. پیدا کردن موقعیت هدف (بهتره دوربین روی مرکزِ نایت فوکوس کنه نه گوشه‌ی پایینِ چپش)
             float targetX = Game.getVessel().getX() + (Game.getVessel().getWidth() / 2f);
             float targetY = Game.getVessel().getY() + (Game.getVessel().getHeight() / 2f);
 
-            // ۴. محدود کردن (Clamp) مختصات X و Y
-            // فرمول: MathUtils.clamp(مقدار فعلی, حداقل مقدار ممکن, حداکثر مقدار ممکن)
+
             float clampedX = MathUtils.clamp(targetX, cameraHalfWidth, mapPixelWidth - cameraHalfWidth);
             float clampedY = MathUtils.clamp(targetY, cameraHalfHeight, mapPixelHeight - cameraHalfHeight);
 
-            // ۵. اعمال مختصات جدید به دوربین
             camera.position.set(clampedX, clampedY, 0);
             if(Game.getCurrent_room().currentState == Room.State.BOSS_FIGHT){
                 Rectangle rect = Game.getCurrent_room().bossArea;
