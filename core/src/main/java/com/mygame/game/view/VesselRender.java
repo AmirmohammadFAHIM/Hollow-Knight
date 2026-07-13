@@ -27,6 +27,7 @@ public class VesselRender {
     private Animation<TextureAtlas.AtlasRegion> upSlashEffect;
     private Animation<TextureAtlas.AtlasRegion> downSlashEffect;
     private Animation<TextureAtlas.AtlasRegion> blast;
+    private Animation<TextureAtlas.AtlasRegion> scream;
     private Sound slashSound;
     private Sound focusGet;
     private Music focusCharging;
@@ -46,7 +47,8 @@ public class VesselRender {
         downSlashEffect = new Animation<>(0.06f , effect.findRegions("DownSlashEffect"));
         effect = new TextureAtlas("knight/Blast.atlas");
         blast = new Animation<>(0.06f , effect.findRegions("Blast"));
-
+        effect = new TextureAtlas("knight/SoulScream.atlas");
+        scream = new Animation<>(0.06f, effect.getRegions());
 
         slashSound = Gdx.audio.newSound(Gdx.files.internal("sfx/knight/slash.wav"));
         focusGet = Gdx.audio.newSound(Gdx.files.internal("sfx/knight/focusGet.wav"));
@@ -87,12 +89,35 @@ public class VesselRender {
         float drawY = vessel.getY();
 
         checkDir(frame);
+
+        if (vessel.hurt) {
+            float alpha = ((int)(vessel.getStateTime() * 15) % 2 == 0) ? 0.3f : 1f;
+            batch.setColor(1, 1, 1, alpha);
+        } else {
+            batch.setColor(1, 1, 1, 1);
+        }
+
+
+
+
         batch.draw(frame , drawX , drawY);
+        batch.setColor(1, 1, 1, 1);
+
         renderSlash(batch);
         renderBlast(batch);
+        soulScream(batch);
 
 
 
+    }
+
+    float screamTime = 0;
+    private void soulScream(SpriteBatch batch){
+        if(vessel.getState() == States.SCREAM){
+            screamTime +=  Gdx.graphics.getDeltaTime();
+            batch.draw(scream.getKeyFrame(screamTime) , vessel.soulScram.x , vessel.soulScram.y);
+        }
+        else screamTime = 0;
     }
 
     private void checkDir(TextureAtlas.AtlasRegion frame){
@@ -132,6 +157,7 @@ public class VesselRender {
     }
 
 
+
     private void renderSlash(SpriteBatch batch){
         slashStateTime += Gdx.graphics.getDeltaTime();
         Rectangle rect = vessel.getSlashBounds();
@@ -144,7 +170,7 @@ public class VesselRender {
         if(vessel.getState() == States.SLASH){
             slashFrame = slashEffect.getKeyFrame(slashStateTime);
             checkDir(slashFrame);
-            batch.draw(slashFrame, rect.x, rect.y);
+            batch.draw(slashFrame, rect.x + (vessel.isRight()? -35 : 20), rect.y);
         }
         else if(vessel.getState() == States.UP_SLASH){
             slashFrame = upSlashEffect.getKeyFrame(slashStateTime);

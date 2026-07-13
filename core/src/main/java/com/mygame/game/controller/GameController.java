@@ -1,5 +1,6 @@
 package com.mygame.game.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PointMapObject;
@@ -12,10 +13,12 @@ import com.mygame.game.models.Vessel;
 import com.mygame.game.models.details.Save;
 import com.mygame.game.models.entities.Entity;
 import com.mygame.game.models.entities.Entity_States;
+import com.mygame.game.models.entities.boss.FalseKnight;
 import com.mygame.game.models.map.Door;
 import com.mygame.game.models.map.MapManager;
 import com.mygame.game.models.map.Room;
 import com.mygame.game.models.skill.Projectile;
+import com.mygame.game.view.AudioManager;
 
 import java.util.Objects;
 
@@ -48,13 +51,14 @@ public class GameController {
 
 
 
-        if(!Game.getVessel().getState().getPriority() || !Game.getVessel().hurt)  gameInputProcessor.processInput(delta);
+        if(!Game.getVessel().getState().getPriority() && !Game.getVessel().hurt)  gameInputProcessor.processInput(delta);
         Game.getVessel().update(delta , game);
         for (Entity c :Game.getCurrent_room().getEnemies()){
            if(c.getState() != Entity_States.DEAD_END) c.update(delta , game);
 
         }
         updateProjectiles();
+
 
 
         SaveManager.achievements.observe(game);/// observing achievements
@@ -89,6 +93,11 @@ public class GameController {
                     int index = mapObject.getProperties().get("Room" , Integer.class);
                     MapManager.loadRoom(index);
                     spawn();
+
+                    StringBuilder str = new StringBuilder(Game.getCurrent_room().getName());
+                    str.delete(str.length() - 1 ,  str.length());
+                    AudioManager.getAudioManager().changeMusic(Gdx.audio.newMusic(Gdx.files.internal("sfx/"+ str.toString() + ".wav")));
+
                 }
 
 
@@ -133,9 +142,13 @@ public class GameController {
 
 
     private void BossRoom(Game game){
+        FalseKnight knight = null;
+        for (Entity c :Game.getCurrent_room().getEnemies()){
+            if(c instanceof FalseKnight) knight = (FalseKnight) c;
+        }
         Vessel vessel = Game.getVessel();
         Rectangle bossRoom = Game.getCurrent_room().bossArea;
-        if(bossRoom != null){
+        if(bossRoom != null && knight != null && knight.isAlive()){
             if(vessel.getX() > bossRoom.x + 450 &&
                 Game.getCurrent_room().currentState == Room.State.NORMAL){
                 Game.getCurrent_room().currentState = Room.State.BOSS_FIGHT;
@@ -151,6 +164,13 @@ public class GameController {
 
         for (Door door : Game.getCurrent_room().getDoors()){
             door.collision();
+        }
+
+
+        if(Game.getCurrent_room().currentState == Room.State.BOSS_FIGHT){
+            if(!knight.isAlive()){
+                Game.getCurrent_room().currentState = Room.State.VICTORY;
+            }
         }
     }
 }

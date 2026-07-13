@@ -159,9 +159,10 @@ public class Entity {
 
     public void setHurt(boolean hurt) {
         this.hurt = hurt;
+        boolean charm = Game.getVessel().getCharms().containsKey("Heavy Blow");
         if(hurt){
-            velocityY = LinearEnemy.getvY();
-            velocityX = 230 * (right ? -1 : 1);
+            velocityY = charm ? 90 : 50 ;
+            velocityX = (charm ? 300 :230) * (right ? -1 : 1);
             is_grounded = false;
         }
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class Room {
     private String name;
+    public String chunkName;
     private ArrayList<SolidBlock> blocks =  new ArrayList<>();
     private TiledMap  map;
     private ArrayList<Entity> enemies = new ArrayList<>();
@@ -24,6 +25,7 @@ public class Room {
         this.name = name;
         blocks = new ArrayList<>();
         this.map = map;
+
 
 
     }

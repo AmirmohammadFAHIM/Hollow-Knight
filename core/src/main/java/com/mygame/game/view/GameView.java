@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygame.game.controller.GameController;
 import com.mygame.game.controller.GameInputProcessor;
+import com.mygame.game.controller.UiManager;
 import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.Game;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -91,6 +92,7 @@ public class GameView implements Screen {
             }
         });
         mainStack = new Stack();
+        UiManager.mainStack = mainStack;
         mainStack.setFillParent(true);
         stage.addActor(mainStack);
 
@@ -119,6 +121,10 @@ public class GameView implements Screen {
         camera.update();
       //  batch.setProjectionMatrix(camera.combined);
         //viewport.setScreenPosition(0 , 0);
+        StringBuilder str = new StringBuilder(Game.getCurrent_room().getName());
+        str.delete(str.length() - 1 ,  str.length());
+        AudioManager.getAudioManager().changeMusic(Gdx.audio.newMusic(Gdx.files.internal("sfx/"+ str.toString() + ".wav")));
+
 
     }
 
@@ -129,7 +135,7 @@ public class GameView implements Screen {
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
 
-        if(Game.getCurrent_room().currentState == Room.State.VICTORY && winScreenTime==8){
+        if(Game.getCurrent_room().currentState == Room.State.VICTORY && Math.abs(winScreenTime - 8) < 0.001){
             mainStack.add(new VictoryMenu(SaveManager.save));
         }
         else if(Game.getCurrent_room().currentState == Room.State.VICTORY){

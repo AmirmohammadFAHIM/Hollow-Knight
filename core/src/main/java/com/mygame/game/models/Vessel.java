@@ -234,6 +234,7 @@ public class Vessel{
         stateTime += Gdx.graphics.getDeltaTime();
         death();
         if(state == States.Death) return;
+        soulScream();
         if(vengfull(delta)) return;
       if(freeze <= 0)  update_physics(delta , Game.getCurrent_room().getBlocks());
         updateSlashBounds();
@@ -293,8 +294,7 @@ public class Vessel{
 
     private void update_physics(float delta, ArrayList<SolidBlock> blocks) {
 
-        if(is_ground) velocityY = 0;
-        else if(state != States.DASH && state != States.FIREBALL) velocityY -= gravity;
+         if(state != States.DASH && state != States.FIREBALL) velocityY -= gravity;
 
         x += velocityX * delta;
         bounds.x = x;
@@ -339,6 +339,7 @@ public class Vessel{
                         setState(States.LANDING);
                     }
                     is_ground = true;
+                    velocityY = 0;
                     double_jump = true;
                 } else if (velocityY > 0) {
                     y = blockRect.y - height;
@@ -450,6 +451,18 @@ public class Vessel{
     }
 
 
+    public Rectangle soulScram = new Rectangle();
+    private void soulScream(){
+        soulScram.set(this.x , this.y + this.height , 330 , 280);
+        if(state == States.SCREAM){
+            for (Entity e : Game.getCurrent_room().getEnemies()) {
+                if(!e.isHurt() && e.getBounds().overlaps(soulScram)){
+                    e.setHurt(true);
+                    e.setHp(e.getHp() - 25);
+                }
+            }
+        }
+    }
     private boolean vengfull(float delta){
         if(state == States.FIREBALL){
             if(VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
@@ -525,20 +538,15 @@ public class Vessel{
             float sx;
             float sy;
 
-            // محاسبه X بر اساس جهت نگاه کردن
             if (isRight()) {
-                // اگر راست می‌بینه: هیت‌باکس رو بنداز سمت راستِ هیت‌باکس شوالیه
-                // (میتونی یه مقدار کمی هم ببریش داخل هیت باکس خود کاراکتر که دشمنانی که خیلی چسبیدن هم دمیج بخورن)
-                sx = this.x + this.width/2;
+
+                sx = this.x + this.width;
             } else {
-                // اگر چپ می‌بینه: هیت‌باکس رو بنداز سمت چپ
                 sx = this.x - slashWidth;
             }
 
-            // محاسبه Y (وسط چین کردن هیت‌باکس شمشیر نسبت به قد شوالیه)
             sy = this.y + (this.height / 2f) - (slashHeight / 2f);
 
-            // اعمال مختصات به مستطیل
             slashBounds.set(sx, sy, slashWidth, slashHeight);
         }
         else if(state == States.UP_SLASH){
@@ -577,13 +585,14 @@ public class Vessel{
             x = safeLoc.getX();
             y = safeLoc.getY();
             setState(States.IDLE);
+            setHurt(false);
         }
     }
 
 
     private void damage(){
         for (Entity x : Game.getCurrent_room().getEnemies()){
-            if(this.bounds.overlaps(x.getBounds()) && !hurt){
+            if(this.bounds.overlaps(x.getBounds()) && !hurt && x.isAlive()){
                 setHurt(true);
                 setHp(hp - 1);
             }
@@ -613,9 +622,9 @@ public class Vessel{
     public void setHurt(boolean hurt) {
         this.hurt = hurt;
         if(hurt){
-                velocityY = 700;
-                velocityX = 450 * (right? -1 : 1);
-            knockBackTime = 0.7f;
+                velocityY = 500;
+                velocityX = 400 * (right? -1 : 1);
+            knockBackTime = 0.6f;
             freeze = 0.3f;
         }
         else{
