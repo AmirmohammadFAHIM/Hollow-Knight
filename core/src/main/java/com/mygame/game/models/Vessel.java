@@ -233,10 +233,16 @@ public class Vessel{
     public void update(float delta , Game game) {
         stateTime += Gdx.graphics.getDeltaTime();
         death();
-        if(state == States.Death) return;
+        if(state == States.Death) {
+            return;
+        }
         soulScream();
-        if(vengfull(delta)) return;
-      if(freeze <= 0)  update_physics(delta , Game.getCurrent_room().getBlocks());
+        if(vengfull(delta)) {
+            return;
+        }
+      if(freeze <= 0) {
+          update_physics(delta , Game.getCurrent_room().getBlocks());
+      }
         updateSlashBounds();
 
         updateCooldowns(delta);
@@ -533,7 +539,6 @@ public class Vessel{
     }
 
     private void updateSlashBounds() {
-        // فقط وقتی در حالت اسلش هستیم نیازه که هیت‌باکس آپدیت بشه
         if (state == States.SLASH) {
             float sx;
             float sy;
@@ -582,6 +587,7 @@ public class Vessel{
     private void death(){
         if(state == States.Death && VesselRender.getCurrentAnimation().isAnimationFinished(stateTime)){
             hp = 5;
+
             x = safeLoc.getX();
             y = safeLoc.getY();
             setState(States.IDLE);
