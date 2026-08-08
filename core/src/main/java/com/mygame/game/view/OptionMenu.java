@@ -2,8 +2,10 @@ package com.mygame.game.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.mygame.game.controller.GameController;
@@ -29,6 +31,7 @@ public class OptionMenu extends Table {
 
         Slider musicSlider = new Slider(0, 1, 0.1f, false, UiManager.style, "default-horizontal");
         musicSlider.setValue(AudioManager.masterVolume); // مقدار فعلی را نشان دهد
+
 
         // ساخت دکمه‌های Mute با استفاده از اسکین دکمه‌های بازی
         final TextButton muteMusicBtn = new TextButton(AudioManager.isMusicMuted ? "Music: MUTED" : "Music: ON", UiManager.skin);
@@ -65,6 +68,14 @@ public class OptionMenu extends Table {
             public void clicked(InputEvent event, float x, float y) {
                 AudioManager.isSfxMuted = !AudioManager.isSfxMuted;
                 muteSfxBtn.setText(AudioManager.isSfxMuted ? "SFX: MUTED" : "SFX: ON");
+            }
+        });
+
+        musicSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                float value = musicSlider.getValue();
+                AudioManager.getAudioManager().setMasterVolume(value);
             }
         });
 
