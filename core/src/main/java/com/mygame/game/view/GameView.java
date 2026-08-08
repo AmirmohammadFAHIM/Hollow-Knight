@@ -135,14 +135,13 @@ public class GameView implements Screen {
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
 
-        if(Game.getCurrent_room().currentState == Room.State.VICTORY && Math.abs(winScreenTime - 8) < 0.001){
+        if(Game.getCurrent_room().currentState == Room.State.VICTORY && Math.abs(winScreenTime - 5) < 0.001){
             mainStack.add(new VictoryMenu(SaveManager.save));
         }
         else if(Game.getCurrent_room().currentState == Room.State.VICTORY){
           if(winScreenTime <= 0){
               mainStack.clearChildren();
               Game.getCurrent_room().currentState = Room.State.NORMAL;
-              winScreenTime = 8;
           }
           else winScreenTime -= delta;
         }

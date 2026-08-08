@@ -146,6 +146,9 @@ public class GameController {
         for (Entity c :Game.getCurrent_room().getEnemies()){
             if(c instanceof FalseKnight) knight = (FalseKnight) c;
         }
+        if(knight == null){
+            return;
+        }
         Vessel vessel = Game.getVessel();
         Rectangle bossRoom = Game.getCurrent_room().bossArea;
         if(bossRoom != null && knight != null && knight.isAlive()){
@@ -157,7 +160,10 @@ public class GameController {
                 }
             }
             else if(vessel.getX() < bossRoom.x){
-                Game.getCurrent_room().currentState = Room.State.NORMAL;
+                if(Game.getCurrent_room().currentState == Room.State.BOSS_FIGHT){
+                    vessel.setX(bossRoom.x + 15);
+                }
+                else Game.getCurrent_room().currentState = Room.State.NORMAL;
             }
 
         }
@@ -168,7 +174,8 @@ public class GameController {
 
 
         if(Game.getCurrent_room().currentState == Room.State.BOSS_FIGHT){
-            if(!knight.isAlive()){
+            if(knight != null &&
+            knight.getState() == Entity_States.DEAD_END){
                 Game.getCurrent_room().currentState = Room.State.VICTORY;
             }
         }

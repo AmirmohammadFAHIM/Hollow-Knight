@@ -11,21 +11,26 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygame.game.models.Game;
 
 public class SoulOrb extends Actor {
-    private TextureRegion vesselFrame;      // قاب شیشه‌ای دور
-    private TextureRegion vesselInnerMask;  // 👈 دایره توپر برای مشخص کردن محدوده مجاز مایع
-    private Animation<TextureAtlas.AtlasRegion> liquidAnim;
+    private TextureRegion emptyOrbMask;  // دایره مشکی (پس‌زمینه و ماسک)
+    private TextureRegion orbEyes;       // چشم‌های نایت
+    private TextureRegion vesselFrame;   // قاب شیشه‌ای دور مخزن
+    private Animation<TextureRegion> liquidAnim;
     private float stateTime = 0f;
     private final float MAX_SOUL = 99f;
 
     public SoulOrb() {
-        TextureAtlas frameAtlas = new TextureAtlas("ui/vessel/VesselFrame.atlas");
-        vesselFrame = new  TextureRegion(new Texture("menus/HealthBar_005.png"));
-        //vesselInnerMask = frameAtlas.findRegion("vessel_mask"); // 👈 لود کردن عکس دایره توپر داخلی
+        // ۱. لود کردن عکس‌های جدیدی که دادی
+        emptyOrbMask = new TextureRegion(new Texture("menus/SoulOrb_Empty.png"));
+        orbEyes = new TextureRegion(new Texture("menus/SoulOrb_Eye.png"));
 
-        TextureAtlas liquidAtlas = new TextureAtlas("ui/vessel/SoulLiquid.atlas");
-        liquidAnim = new Animation<>(0.05f, liquidAtlas.getRegions(), Animation.PlayMode.LOOP);
+        // قاب قبلی رو نگه داشتم تا افکت شیشه‌ای از بین نره
+        // (اگر کلاً قاب نمی‌خوای، می‌تونی این خط رو پاک کنی)
 
-        // 👈 صلاخ ۱: بزرگتر کردن سایز پیش‌فرض مخزن روح متناسب با ماسک‌ها
+        // ۲. لود کردن انیمیشن مایع روح از اطلس
+        TextureAtlas liquidAtlas = new TextureAtlas("menus/Soulorb.atlas");
+        liquidAnim = new Animation<>
+            (0.08f, liquidAtlas.getRegions(), Animation.PlayMode.LOOP);
+
         this.setSize(150, 150);
     }
 
@@ -42,50 +47,47 @@ public class SoulOrb extends Actor {
         float currentSoul = Game.getVessel().getSoul();
         float percent = currentSoul / MAX_SOUL;
 
-        // اگر روحی نبود، فقط قاب خالی را بکش و خارج شو
-        if (currentSoul <= 0) {
-            batch.draw(vesselFrame, getX(), getY(), getWidth(), getHeight());
-            return;
+        batch.draw(emptyOrbMask, getX(), getY(), getWidth(), getHeight());
+
+        if (currentSoul > 0) {
+            batch.flush();
+
+            Gdx.gl.glColorMask(false, false, false, true);
+            batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ZERO);
+            batch.draw(emptyOrbMask, getX(), getY(), getWidth(), getHeight());
+            batch.flush();
+
+            Gdx.gl.glColorMask(true, true, true, true);
+            batch.setBlendFunction(GL20.GL_DST_ALPHA, GL20.GL_ONE_MINUS_DST_ALPHA);
+
+            TextureRegion currentFrame = liquidAnim.getKeyFrame(stateTime);
+            int fullSrcHeight = currentFrame.getRegionHeight();
+            int fullSrcWidth = currentFrame.getRegionWidth();
+
+            int clippedSrcHeight = (int) (fullSrcHeight * percent);
+            int clippedSrcY = currentFrame.getRegionY() + (fullSrcHeight - clippedSrcHeight);
+
+            batch.draw(
+                currentFrame.getTexture(),
+                getX(), getY(), getWidth(), getHeight() * percent,
+                currentFrame.getRegionX(), clippedSrcY, fullSrcWidth, clippedSrcHeight,
+                false, false
+            );
+            batch.flush();
+
+            batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         }
 
-        // ---- شروع جادوی ماسک کردن گرافیکی ----
-        // خروجی‌های قبلی بچ را رسم کن تا با ماسک ما تداخل پیدا نکنند
-        batch.flush();
 
-        // ۱. غیرفعال کردن رنگ‌ها و فعال کردن کانال آلفا (شفافیت) برای کشیدن محدوده دایره
-        Gdx.gl.glColorMask(false, false, false, true);
-        batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ZERO);
+        float eyeW = getWidth() * 0.5f;
+        float eyeH = eyeW * ((float) orbEyes.getRegionHeight() / orbEyes.getRegionWidth());
+        float eyeX = getX() + (getWidth() - eyeW) / 2f;
+        float eyeY = getY() + (getHeight() - eyeH) / 2f;
 
-        // رسم دایره ماسک (این دایره دیده نمیشه، فقط به کارت گرافیک میگه کجاها مجازه)
-        batch.draw(vesselInnerMask, getX(), getY(), getWidth(), getHeight());
-        batch.flush();
+        batch.draw(orbEyes, eyeX, eyeY, eyeW, eyeH);
 
-        // ۲. مجدداً کانال‌های رنگی را فعال کن
-        Gdx.gl.glColorMask(true, true, true, true);
-
-        // ۳. تنظیم مپینگ بچ به شکلی که رنگ‌ها رو فقط جایی رندر کنه که آلفای دایره ماسک وجود داره
-        batch.setBlendFunction(GL20.GL_DST_ALPHA, GL20.GL_ONE_MINUS_DST_ALPHA);
-
-        // حالا فریم انیمیشن مایع رو طبق فرمول قبلی برش عمودی می‌زنیم
-        TextureRegion currentFrame = liquidAnim.getKeyFrame(stateTime);
-        int fullSrcHeight = currentFrame.getRegionHeight();
-        int fullSrcWidth = currentFrame.getRegionWidth();
-        int clippedSrcHeight = (int) (fullSrcHeight * percent);
-        int clippedSrcY = currentFrame.getRegionY() + (fullSrcHeight - clippedSrcHeight);
-
-        // رسم مایع روح (این بار لبه‌های مربعی‌اش توسط ماسک دایره‌ای کاملاً قیچی می‌شن!)
-        batch.draw(
-            currentFrame.getTexture(),
-            getX(), getY(), getWidth(), getHeight() * percent,
-            currentFrame.getRegionX(), clippedSrcY, fullSrcWidth, clippedSrcHeight,
-            false, false
-        );
-        batch.flush();
-
-        // ۴. ریست کردن وضعیت سیستم بلندیگ لایب‌جی‌دی‌ایکس به حالت پیش‌فرض بازی
-        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        // ۵. در نهایت قاب شیشه‌ای و جزییات دور مخزن را روی مایع رسم می‌کنیم تا لبه‌ها تمیز بپوشند
-        batch.draw(vesselFrame, getX(), getY(), getWidth(), getHeight());
+        if (vesselFrame != null) {
+            batch.draw(vesselFrame, getX(), getY(), getWidth(), getHeight());
+        }
     }
 }

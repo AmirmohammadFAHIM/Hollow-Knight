@@ -20,12 +20,12 @@ public class HUD extends Table {
           }
       }
       Table orbTable = new Table();
-      //SoulOrb orb = new SoulOrb();
-      //orbTable.add(orb).size(450 , 300);
+      SoulOrb orb = new SoulOrb();
+      orbTable.add(orb).size(200 , 200);
       this.setFillParent(true);
       this.top().left();
-      //this.defaults().padRight(5);
-     // this.add(orbTable);
+      this.defaults().padRight(5);
+      this.add(orbTable);
       //this.debug();
       for (Mask mask : masks) {
           this.add(mask).size(120 , 140).padTop(15);

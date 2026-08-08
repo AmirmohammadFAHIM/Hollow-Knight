@@ -39,6 +39,14 @@ public class RoomView {
     private Music backgroundMusic;
     public RoomView(Room room) {
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sfx/background.mp3"));
+        if(room.getName().matches("CityOfTears\\d+")){
+            Music music = Gdx.audio.newMusic(Gdx.files.internal("sfx/CityOfTears.wav"));
+            AudioManager.getAudioManager().changeMusic(music);
+        }
+        else{
+            Music music = Gdx.audio.newMusic(Gdx.files.internal("sfx/ForgottenCrossRoads.wav"));
+            AudioManager.getAudioManager().changeMusic(music);
+        }
         ArrayList<Integer> backgroundLayers = new ArrayList<>();
         ArrayList<Integer> foregroundLayers =  new ArrayList<>();
 

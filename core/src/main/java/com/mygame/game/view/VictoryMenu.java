@@ -12,10 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mygame.game.controller.UiManager;
+import com.mygame.game.controller.data.SaveManager;
 import com.mygame.game.models.details.Save;
 
 
 public class VictoryMenu extends Table {
+
 
 
 
@@ -78,6 +81,8 @@ public class VictoryMenu extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Menu", "Going back to Main Menu...");
+                SaveManager.save();
+                UiManager.setScreen(new MainScreen());
             }
         });
 
