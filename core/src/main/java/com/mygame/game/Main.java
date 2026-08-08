@@ -25,7 +25,7 @@ public class Main extends Game {
         setScreen(new MainScreen());
         shapeRenderer = new ShapeRenderer();
         SaveManager.loadAchievements();
-        AudioManager.getAudioManager().changeMusic(Gdx.audio.newMusic(Gdx.files.internal("sfx/main.wav")));
+        AudioManager.getAudioManager().changeMusic(UiManager.music);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class FalseKnight extends Entity {
     record phaseTwoConstants(float velocityX , float cooldown){}
     phaseOneConstants one = new phaseOneConstants(300 , 5);
     phaseTwoConstants two = new phaseTwoConstants(450 , 3f);
-    private final float nearRange = 100f;
+    private final float nearRange = 230f;
     private final float farRange = 850f;
     public Action action = Action.IDLE;
     KnightPosition knightPosition;
@@ -179,7 +179,6 @@ public class FalseKnight extends Entity {
 
 
     private void decide(float delta , Game game){
-        System.out.println("LeBron James");
         whereIsKnight(); /// look where is the knight
         boolean underIntenseAttack = damageTakenRecently >= 3; /// am I taking a lot of damage?
         Action spam = checkLast2Action();
@@ -191,7 +190,6 @@ public class FalseKnight extends Entity {
             defensive_jump(delta, game);
         }
         else if(phase == 2 && spam != Action.JUMP_KNOCK){
-            /// jump knock function
         jump_knock(delta, game);
         }
         else if(near && spam != Action.KNOCK) {

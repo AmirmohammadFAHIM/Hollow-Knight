@@ -2,6 +2,7 @@ package com.mygame.game.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -74,4 +75,6 @@ public class UiManager {
     public static GameView getGameView() {
         return gameView;
     }
+
+    public static Music music = Gdx.audio.newMusic(Gdx.files.internal("sfx/main.wav"));
 }

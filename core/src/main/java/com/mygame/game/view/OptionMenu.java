@@ -88,7 +88,8 @@ public class OptionMenu extends Table {
                     UiManager.mainStack.add(new PauseMenu());
                 } else {
                     UiManager.getGameView().getMainStack().clearChildren();
-                    UiManager.setScreen(new MainScreen()); // یا بازگشت به روت تیبل MainMenuTable
+                    UiManager.setScreen(new MainScreen());
+                    AudioManager.getAudioManager().changeMusic(UiManager.music);
                 }
             }
         });

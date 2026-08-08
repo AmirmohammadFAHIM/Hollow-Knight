@@ -83,6 +83,7 @@ public class VictoryMenu extends Table {
                 Gdx.app.log("Menu", "Going back to Main Menu...");
                 SaveManager.save();
                 UiManager.setScreen(new MainScreen());
+                AudioManager.getAudioManager().changeMusic(UiManager.music);
             }
         });
 
