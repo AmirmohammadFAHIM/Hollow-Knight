@@ -1,6 +1,7 @@
 package com.mygame.game.view.gamePanes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -60,7 +61,7 @@ public class FalseKnightRenderer extends EntityRenderer {
     void goNext(float stateTime , FalseKnightRenderer renderer){
             if(next != null && renderer.animS.animation.isAnimationFinished(stateTime)){
                 renderer.setAnimS(next);
-                System.out.println(next);
+
                 //renderer.currAnime = next.animation;
             }
         }
@@ -70,6 +71,8 @@ public class FalseKnightRenderer extends EntityRenderer {
     Animation<TextureAtlas.AtlasRegion> idle;
 
 
+    Sound land = Gdx.audio.newSound(Gdx.files.internal("sfx/enemy/land.wav"));
+    Sound jump = Gdx.audio.newSound(Gdx.files.internal("sfx/enemy/jump.wav"));
     private void attackAnimation(){
         FalseKnight.Action action = boss.action;
         if(animS == AnimationState.IDLE && action == FalseKnight.Action.KNOCK){
@@ -80,6 +83,7 @@ public class FalseKnightRenderer extends EntityRenderer {
     private void jump_attackAnimation(){
         if(boss.action == FalseKnight.Action.JUMP_KNOCK && animS == AnimationState.IDLE){
             setAnimS(AnimationState.JUMP_ATTACK);
+            jump.play();
         }
     }
 
@@ -88,15 +92,18 @@ public class FalseKnightRenderer extends EntityRenderer {
         if (animS == AnimationState.IDLE && (action == FalseKnight.Action.AGGRESSIVE_JUMP ||
             action == FalseKnight.Action.DEFENSIVE_JUMP)) {
             setAnimS(AnimationState.JUMP);
+            jump.play();
         }
         else if(animS == AnimationState.JUMP && action == FalseKnight.Action.IDLE){
             setAnimS(AnimationState.LAND);
+            land.play();
         }
     }
 
     ArrayList<AnimationState> deaths = new ArrayList<>(Arrays.asList(AnimationState.DEATH_AIR,
         AnimationState.DEATH_LAND, AnimationState.DEATH_HIT,AnimationState.BODY));
 
+    Sound sound = Gdx.audio.newSound(Gdx.files.internal("sfx/enemy/hurt.wav"));
     private void DeathAnimation(){
         FalseKnight.Action action = boss.action;
         if(!deaths.contains(animS) && action == FalseKnight.Action.DEAD){
@@ -104,6 +111,7 @@ public class FalseKnightRenderer extends EntityRenderer {
         }
         else if(animS == AnimationState.BODY && boss.isHurt()){
             setAnimS(AnimationState.DEATH_HIT);
+            sound.play();
             boss.setHurt(false);
         }
         else if(animS == AnimationState.BODY && action == FalseKnight.Action.IDLE){

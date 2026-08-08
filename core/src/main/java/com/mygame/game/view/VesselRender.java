@@ -60,14 +60,24 @@ public class VesselRender {
     private void update_rendering(float delta) {
         if(currentAnimation != vessel.getState().getAnimation()){
             if(vessel.getState() == States.SLASH || vessel.getState() == States.UP_SLASH ||
-            vessel.getState() == States.DOWN_SLASH) slashSound.play();
+            vessel.getState() == States.DOWN_SLASH) {
+                if(!AudioManager.isSfxMuted){
+                    slashSound.play();
+                }
+            }
              if(vessel.getState() == States.FOCUS && !focusCharging.isPlaying()){
-                 focusCharging.play();
+                 if(!AudioManager.isSfxMuted){
+                     focusCharging.play();
+                 }
              }
              else{
                  focusCharging.stop();
              }
-             if(vessel.getState() == States.FOCUS_GET) focusGet.play();
+             if(vessel.getState() == States.FOCUS_GET){
+                 if(!AudioManager.isSfxMuted){
+                     focusGet.play();
+                 }
+             }
         }
       currentAnimation =  vessel.getState().getAnimation();
 
@@ -134,16 +144,13 @@ public class VesselRender {
         if(vessel.getState() == States.FIREBALL){
             blastStateTime += Gdx.graphics.getDeltaTime();
 
-            // اول فریم رو می‌گیریم تا بتونیم جهت رو اصلاح کنیم و عرض عکس رو داشته باشیم
             TextureAtlas.AtlasRegion blastFrame = blast.getKeyFrame(blastStateTime);
             checkDirRight(blastFrame);
 
             float x;
             if (vessel.isRight()) {
-                // شلیک به راست: فایربال از لبه‌ی راست نایت شروع به رسم شدن می‌کنه
                 x = vessel.getX() + vessel.getWidth();
             } else {
-                // شلیک به چپ: نقطه شروعِ رسم رو به اندازه عرض فایربال به عقب می‌بریم
                 x = vessel.getX() - blastFrame.getRegionWidth();
             }
 
