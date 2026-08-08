@@ -175,7 +175,10 @@ public class GameController {
 
         if(Game.getCurrent_room().currentState == Room.State.BOSS_FIGHT){
             if(knight != null &&
-            knight.getState() == Entity_States.DEAD_END){
+            !knight.isAlive()){
+                for (Door x :  Game.getCurrent_room().getDoors()){
+                    x.setOpen(true);
+                }
                 Game.getCurrent_room().currentState = Room.State.VICTORY;
             }
         }

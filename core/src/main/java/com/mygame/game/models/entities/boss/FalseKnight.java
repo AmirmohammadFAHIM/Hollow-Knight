@@ -107,7 +107,6 @@ public class FalseKnight extends Entity {
 
         HeatBox.set(right ? this.x - 120 : this.x + this.width , 0 , 120 , 120);
         if(Game.getVessel().getState() == States.SLASH && this.action == Action.DEAD && alive){
-            /// the hitbox
             if(Game.getVessel().getSlashBounds().overlaps(HeatBox)){
                 setHurt(true);
             }
@@ -130,7 +129,7 @@ public class FalseKnight extends Entity {
     public boolean turned = false;
     @Override
     public boolean update(float delta , Game game){
-        System.out.println(hp);
+
         update_physics(delta, game);
         if(!alive || Math.abs(Game.getVessel().getX() - this.x) > 1800){
             return false;

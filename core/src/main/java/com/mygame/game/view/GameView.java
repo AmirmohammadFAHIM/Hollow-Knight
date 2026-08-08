@@ -128,7 +128,7 @@ public class GameView implements Screen {
 
     }
 
-    float winScreenTime = 8;
+    float winScreenTime = 5;
     @Override
     public void render(float delta) {
        Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -136,9 +136,10 @@ public class GameView implements Screen {
         stateTime += delta;
 
         if(Game.getCurrent_room().currentState == Room.State.VICTORY && Math.abs(winScreenTime - 5) < 0.001){
+            System.out.println("Game Over");
             mainStack.add(new VictoryMenu(SaveManager.save));
         }
-        else if(Game.getCurrent_room().currentState == Room.State.VICTORY){
+         if(Game.getCurrent_room().currentState == Room.State.VICTORY){
           if(winScreenTime <= 0){
               mainStack.clearChildren();
               Game.getCurrent_room().currentState = Room.State.NORMAL;

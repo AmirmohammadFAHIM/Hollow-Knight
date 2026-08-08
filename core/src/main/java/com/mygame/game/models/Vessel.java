@@ -240,7 +240,9 @@ public class Vessel{
         if(state == States.Death) {
             return;
         }
-        soulScream();
+        if(soulScream()){
+            return;
+        }
         if(vengfull(delta)) {
             return;
         }
@@ -462,16 +464,19 @@ public class Vessel{
 
 
     public Rectangle soulScram = new Rectangle();
-    private void soulScream(){
+    private boolean soulScream(){
         soulScram.set(this.x , this.y + this.height , 330 , 280);
         if(state == States.SCREAM){
             for (Entity e : Game.getCurrent_room().getEnemies()) {
-                if(!e.isHurt() && e.getBounds().overlaps(soulScram)){
+                if(!e.isHurt() && e.getBounds().overlaps(soulScram)
+                && e.isAlive()){
                     e.setHurt(true);
                     e.setHp(e.getHp() - 25);
                 }
             }
+            return true;
         }
+        return false;
     }
     private boolean vengfull(float delta){
         if(state == States.FIREBALL){
