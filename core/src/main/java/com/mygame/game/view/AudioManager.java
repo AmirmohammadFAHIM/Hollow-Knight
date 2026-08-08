@@ -3,6 +3,8 @@ package com.mygame.game.view;
 import com.badlogic.gdx.audio.Music;
 
 public class AudioManager {
+    public static boolean isMusicMuted = false;
+    public static boolean isSfxMuted = false;
     private static AudioManager audioManager = new AudioManager();
 
     private AudioManager() {}
@@ -29,9 +31,13 @@ public class AudioManager {
         // اگر موزیکی نداریم، نیازی به آپدیت نیست
         if (currentMusic == null) return;
 
-        // اگر در حال Fade نیستیم، همیشه صدای موزیک را با تنظیمات آپشنز هماهنگ کن
+
         if (!isFading) {
-            currentMusic.setVolume(masterVolume);
+            if (isMusicMuted) {
+                currentMusic.setVolume(0);
+            } else {
+                currentMusic.setVolume(masterVolume);
+            }
             return;
         }
 

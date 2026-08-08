@@ -31,6 +31,7 @@ public class Main extends Game {
     @Override
     public void render() {
         super.render();
+        AudioManager.getAudioManager().update(Gdx.graphics.getDeltaTime());
 
 
     }
