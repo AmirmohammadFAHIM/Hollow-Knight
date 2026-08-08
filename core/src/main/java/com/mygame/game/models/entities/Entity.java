@@ -161,7 +161,7 @@ public class Entity {
         this.hurt = hurt;
         boolean charm = Game.getVessel().getCharms().containsKey("Heavy Blow");
         if(hurt){
-            velocityY = charm ? 90 : 50 ;
+            velocityY = charm ? 180 : 120 ;
             velocityX = (charm ? 300 :230) * (right ? -1 : 1);
             is_grounded = false;
         }
@@ -199,12 +199,14 @@ public class Entity {
                velocityX = defaultSpeed * (right ? 1 : -1);
                velocityY = 0;
                setHurt(false);
-              // setState(Entity_States.NORMAL);
+               setState(Entity_States.NORMAL);
                hurtTime = 1;
            }
            else {
                velocityX += 5 * (right ? 1 : -1);
-               if(flying) velocityY = 4;
+               if(flying){
+                   velocityY = 4;
+               }
                hurtTime -= delta;
            }
             return true;

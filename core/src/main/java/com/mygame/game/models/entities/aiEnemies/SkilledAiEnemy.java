@@ -33,13 +33,16 @@ public class SkilledAiEnemy extends AiEnemy{
         setAnimation();
 
 
-        if(state == Entity_States.DEAD_END) return false;
+        if(state == Entity_States.DEAD_END) {
+            return false;
+        }
 
         if(state == Entity_States.DEATH_LANDING && is_grounded){
             setState(Entity_States.DEAD_END);
             return false;
         }
-       if(state == Entity_States.DEATH_LANDING){
+       if(state == Entity_States.DEATH_LANDING
+       || state == Entity_States.DEAD){
            super.update_physics(delta , Game.getCurrent_room().getBlocks());
            return false;
        }

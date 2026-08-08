@@ -67,7 +67,7 @@ public class Projectile {
 
     }
 
-    float t = 3.5f;
+    float t = 3f;
     private void timerProjectile(float delta){
         if(t <= 0){
             proved = true;
@@ -83,7 +83,7 @@ public class Projectile {
            for (Entity x : Game.getCurrent_room().getEnemies()) {
                if (this.bounds.overlaps(x.getBounds())) {
                    x.setHurt(true);
-                   /// to do : deal the damage to the enemy
+                   x.setHp(x.getHp() - 40);
                    this.proved = true;
                    break;
                }
@@ -93,7 +93,9 @@ public class Projectile {
           if(!Game.getVessel().hurt && bounds.overlaps(Game.getVessel().getBounds())){
            Game.getVessel().setHurt(true);
            Game.getVessel().setHp(Game.getVessel().getHp() - 1);
-          if(!timer) this.proved = true;
+          if(!timer){
+              this.proved = true;
+          }
           }
 
        }

@@ -90,8 +90,12 @@ public class Vessel{
     public void setHp(float hp) {
         this.hp = hp;
         if(hp <= 0){
+            hp = 0;
             setState(States.Death);
             SaveManager.save.died += 1;
+        }
+        if(hp >= 5){
+            hp = 5;
         }
     }
 
