@@ -1,33 +1,26 @@
-# Hollow Knight
+# Hollow Knight - LibGDX Clone 🗡️
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+This project is a 2D demo clone of the game **Hollow Knight**, developed using **Java** and the **libGDX** framework. The base project structure and Gradle configurations were generated using [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+## 👨‍💻 Developer Information
+* **Developer:** Amirmohammad Fahimi
+* **University:** Sharif University of Technology
+* **Department:** Computer Engineering
+* **Student ID:** 404106174
 
-## Platforms
+## 🛠 Technologies & Tools
+* **Programming Language:** Java
+* **Framework:** libGDX
+* **Project Generator:** gdx-liftoff
+* **Build System:** Gradle
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+## 📊 Development Process & AI Usage
+This game was developed with a focus on learning 2D game architecture and independent implementation:
+* **80% Solo Development:** The core game logic, physics, animations, and gameplay mechanics were written entirely by the author.
+* **20% AI Assistance:** AI was utilized as a coding assistant, primarily to help design the User Interface (UI), implement Scene2D, and structure the game menus.
 
-## Gradle
+## 🚀 How to Run
+To run this project on your local machine (desktop version), open a terminal in the root directory of the project and execute the following command:
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+```bash
+./gradlew lwjgl3:run
