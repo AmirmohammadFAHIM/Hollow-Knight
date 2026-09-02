@@ -43,7 +43,7 @@ public enum ENEMIES {
         }
     },
 
-    HUSK_HORNHEAD(300 , 100 , 100 , 190){
+    HUSKHORNHEAD(300 , 100 , 100 , 190){
         {
             move = new LazyMove(3 , 2.5f);
             attack = new Rage(150 , 4 , true);

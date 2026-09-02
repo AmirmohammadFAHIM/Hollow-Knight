@@ -2058,7 +2058,7 @@
   <object id="7" name="Platform" type="SolidBlock" x="1590" y="1326" width="102" height="72"/>
   <object id="8" name="Platform" type="SolidBlock" x="1750" y="1166" width="104" height="74"/>
   <object id="9" name="Platform" type="SolidBlock" x="1573" y="987" width="102" height="68"/>
-  <object id="12" name="SpawnPoint" type="SpawnPoint" x="2944.67" y="1580.67">
+  <object id="12" name="SpawnPoint" type="SpawnPoint" x="1366.67" y="916.67">
    <point/>
   </object>
   <object id="18" name="tiktik" type="EnemySpawnPoint" x="555.701" y="929.056">

@@ -110,7 +110,8 @@ public class RoomView {
         if(previousState == Room.State.NORMAL && room.currentState == Room.State.BOSS_FIGHT){
             backgroundMusic.play();
         }
-        else if(room.currentState == Room.State.NORMAL){
+        else if(room.currentState == Room.State.NORMAL ||
+        room.currentState == Room.State.VICTORY){
             backgroundMusic.stop();
         }
         previousState = room.currentState;
