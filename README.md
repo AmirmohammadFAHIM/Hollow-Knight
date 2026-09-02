@@ -1,5 +1,7 @@
 # Hollow Knight - LibGDX Clone 🗡️
 
+![Hollow Knight Poster](poster.png)
+
 This project is a 2D demo clone of the game **Hollow Knight**, developed using **Java** and the **libGDX** framework. The base project structure and Gradle configurations were generated using [gdx-liftoff](https://github.com/tommyettinger/gdx-liftoff).
 
 ## 👨‍💻 Developer Information
@@ -16,7 +18,7 @@ This project is a 2D demo clone of the game **Hollow Knight**, developed using *
 
 ## 📊 Development Process & AI Usage
 This game was developed with a focus on learning 2D game architecture and independent implementation:
-* **80% Solo Development:** The core game logic, physics, animations, and gameplay mechanics were written entirely by the author.
+* **80% Solo Development:** The core game logic, player movement state machines, physics, animations, and gameplay mechanics were written entirely by the author.
 * **20% AI Assistance:** AI was utilized as a coding assistant, primarily to help design the User Interface (UI), implement Scene2D, and structure the game menus.
 
 ## 🚀 How to Run
